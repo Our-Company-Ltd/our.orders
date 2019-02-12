@@ -11,7 +11,7 @@ e-shop on .net core
 ### **Our Orders** is a new, fully featured, cross-platform e-Comerce solution running on .Net. 
  
 Implement a shop in minutes on an existing website. 
-With a easy and intuitive user interface, Our Orders allows to be used both as a **vending platform** in a **physical shop** and as an **online** sales tool. Aiming to be a full featured tools, it has been designed to be easily extended to fit all possible scenario.
+With an easy and intuitive user interface, Our Orders can be used both as a **vending platform** in a **physical shop** and as an **online** sales tool. Aiming to be a full featured tools, it has been designed to be easily extended to fit all possible scenario.
 
 ### Features
 - Dashboard implementing graphs to understand the sales over time
