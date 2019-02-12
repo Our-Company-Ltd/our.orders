@@ -10,24 +10,24 @@ e-shop on .net core
 
 ### **Our Orders** is a new, fully featured, cross-platform e-Comerce solution running on .Net. 
  
-Our orders implements a shop in minutes on an existing website. 
-With a easy and intuitive user interface, it allows to be used both as a **vending platform** in a **physical shop** and as a sales managing tools. Aiming to be a full featured tools, it has been designed to be easily extended to fit all possible scenario.
+Implement a shop in minutes on an existing website. 
+With a easy and intuitive user interface, Our Orders allows to be used both as a **vending platform** in a **physical shop** and as an **online** sales tool. Aiming to be a full featured tools, it has been designed to be easily extended to fit all possible scenario.
 
 ### Features
 - Dashboard implementing graphs to understand the sales over time
-- Products, subproducts and options support.
-- General and per product included and excluded taxes.
+- Products, subproducts and options.
+- Taxes: global and per product included and excluded taxes.
 - Multiple shipping methods
 - Multiple currencies
 - Multiple database format: all supported by Entity Framework (SQL, SQLite, etc...), MongoDB, etc...
 - Multiple payment platforms: Cash, Paypal, Stripe, PostFinace etc... out of the box and possibility to add custom of your choice
 - Dispatch and stock management
 - User management, assigned sales and roles support
-- Multiple Shops and multiple warehouses support
-- Vouchers creation and payment support
-- Reciept, invoice and other sales documents export using custom templates
+- Multiple shops and warehouses
+- Vouchers management
+- Reciept, invoice and other sales documents export using **custom templates**
 - HTML5 Web app support, no page reload, optimised for touch screen.
-- Web API and Cart management
+- Web API and cart support
 
 ### Installation
 
