@@ -5,8 +5,7 @@
 Our Orders ♥
 </h1>
 <div align="center">
-e-shop on .net core<br/>
-badges
+e-shop on .net core
 </div>
 
 ### **Our Orders** is a new, fully featured, cross-platform e-Comerce solution running on .Net. 
@@ -36,7 +35,7 @@ With a easy and intuitive user interface, it allows to be used both as a **vendi
   Use the `Our.Orders` NuGet package manager inside Visual Studio, Xamarin Studio, or run the following command:
   Package Manager Console:
   ```
-  PM> Install-Package TaxJar
+  PM> Install-Package Our.Orders
   ```
   .Net CLI:
   ```
