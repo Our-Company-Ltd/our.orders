@@ -1,6 +1,6 @@
 <h1 align="center">
 
-<img src="https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/logo/logo.192.png" alt="Our Orders logo" width="192"/>
+<img src="https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/logo/OO_Logo_512x385.png" alt="Our Orders logo" width="192"/>
 <br/>
 Our Orders ♥
 </h1>
