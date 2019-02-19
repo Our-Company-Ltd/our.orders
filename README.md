@@ -73,4 +73,4 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
 
 ### Screens
 
-<img src="https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/logo/OO_screens.gif" alt="Our Order screens" width="100%"/>
+<img src="https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/OO_screens.gif" alt="Our Order screens" width="100%"/>
