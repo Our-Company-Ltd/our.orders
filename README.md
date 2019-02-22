@@ -14,15 +14,16 @@ Implement a shop in minutes on an existing website.
 With an easy and intuitive user interface, Our Orders can be used both as a **vending platform** in a **physical shop** and as an **online** sales tool. Aiming to be a full featured tools, it has been designed to be easily extended to fit all possible scenario.
 
 ### Features
-- Dashboard implementing graphs to understand the sales over time
+- Dashboard with clean graphs to understand the sales over time
 - Products, subproducts and options.
 - Taxes: global and per product included and excluded taxes.
 - Multiple shipping methods
 - Multiple currencies
 - Multiple database format: all supported by Entity Framework (SQL, SQLite, etc...), MongoDB, etc...
-- Multiple payment platforms: Cash, Paypal, Stripe, PostFinace etc... out of the box and possibility to add custom of your choice
+- Multiple payment platforms: Cash, [Paypal](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments-services#paypal), [Stripe](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments-services#stripe), [PostFinace](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments-services#postfinance) etc... out of the box and possibility to add custom of your choice
 - Dispatch and stock management
 - User management, assigned sales and roles support
+- One click add to [MailChimp](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#mailchimp), [Campaign monitor](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#campaignmonitor) or [other](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#custom) newsletter services
 - Multiple shops and warehouses
 - Vouchers management
 - Reciept, invoice and other sales documents export using **custom templates**
