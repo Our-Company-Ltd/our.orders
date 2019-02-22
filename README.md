@@ -29,7 +29,7 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
 - HTML5 Web app support, no page reload, optimised for touch screen.
 - Web API and cart support
 
-### Installation
+## Installation
 
 1. **Install Package**   
   Use the `Our.Orders` NuGet package manager inside Visual Studio, Xamarin Studio, or run the following command:
@@ -64,7 +64,7 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
 3. **First run**   
   launch the webiste and access Our Orders on the path `/orders` create the first user and you are good to go !
   
-### Configuration
+## Configuration
 The configuration can be modified either using the `appsettings.json` file by sending an `IConfiguration` (typicaly injected in the Startup.cs constructor) or using a configuration lambda passed upon adding Our Orders in `ConfigureServices`.
 
 **using appsettings.json**
@@ -129,9 +129,9 @@ The configuration can be modified either using the `appsettings.json` file by se
    ...
  }
  ```
-### Add newsletter, Paypal, Stripe, custom invoices…
+## Add newsletter, Paypal, Stripe, custom invoices…
 [Check the wiki for documentation about configuring in depth Our Orders…](https://github.com/Our-Company-Ltd/our.orders/wiki)
 
-### Screens
+## Screens
 
 <img src="https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/OO_screens.gif" alt="Our Order screens" width="100%"/>
