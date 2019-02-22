@@ -63,9 +63,70 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
   launch the webiste and access Our Orders on the path `/orders` create the first user and you are good to go !
   
 ### Configuration
+The configuration can be modified either using the `appsettings.json` file by sending an `IConfiguration` (typicaly injected in the Startup.cs constructor) or using a configuration lambda passed upon adding Our Orders in `ConfigureServices`.
 
-1. setup path, currencies, weight, tax rates, etc...
+**using appsettings.json**
+ ``` json
+ // appsettings.json
+ {
+  "our-orders" : {
+   "Path": "my-custom-path",
+   "JwtSecret": "my custom secret key"
+  }
+ }
+ ```
+ ``` csharp
+ // Startup.cs
+ public class Startup
+ {
+   ...
+   public IConfiguration Configuration { get; }
+   ...
+   public Startup(IConfiguration configuration , ...)
+   {
+     ...
+     Configuration = configuration;
+     ...
+   }
+   ...
+   public void ConfigureServices(IServiceCollection services)
+   {
+     ...
+     services.AddOurOrders(Configuration);
+     ...
+   }
+   ...
+ }
+ ```
+**using lambda**
+ ``` csharp
+ // Startup.cs
+ public class Startup
+ {
+   ...
+   public IConfiguration Configuration { get; }
+   ...
+   public Startup(IConfiguration configuration , ...)
+   {
+     ...
+     Configuration = configuration;
+     ...
+   }
+   ...
+   public void ConfigureServices(IServiceCollection services)
+   {
+     ...
+     services.AddOurOrders((settings) => {
+       settings.Path = "my-custom-path";
+       settings.JwtSecret = "my custom secret key";
+     });
+     ...
+   }
+   ...
+ }
+ ```
 2. Add newsletter tool...
+
 3. Add payment providers
 4. Setup Database
 5. Intergate with Website
