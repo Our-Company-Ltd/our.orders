@@ -48,7 +48,9 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
   public void ConfigureServices(IServiceCollection services)
   {
     ...
-    services.AddOurOrders();
+    services
+      .AddOurOrders()
+      .UseEntityFramework(options => options.UseSqlite("Data Source=our.orders.db"));
     ...
   }
   
@@ -92,7 +94,8 @@ The configuration can be modified either using the `appsettings.json` file by se
    public void ConfigureServices(IServiceCollection services)
    {
      ...
-     services.AddOurOrders(Configuration);
+     services
+        .AddOurOrders(Configuration)
      ...
    }
    ...
@@ -116,21 +119,21 @@ The configuration can be modified either using the `appsettings.json` file by se
    public void ConfigureServices(IServiceCollection services)
    {
      ...
-     services.AddOurOrders((settings) => {
-       settings.Path = "my-custom-path";
-       settings.JwtSecret = "my custom secret key";
-     });
+     services
+       .AddOurOrders((settings) => {
+         settings.Path = "my-custom-path";
+         settings.JwtSecret = "my custom secret key";
+       })
      ...
    }
    ...
  }
  ```
-2. Add newsletter tool...
-
-3. Add payment providers
-4. Setup Database
-5. Intergate with Website
-6. Add random content
+### Add more features
+1. newsletter tool
+2. Add payment providers
+3. Intergate with Website
+4. Add random content
 
 ### Screens
 
