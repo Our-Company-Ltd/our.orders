@@ -129,11 +129,8 @@ The configuration can be modified either using the `appsettings.json` file by se
    ...
  }
  ```
-### Add more features
-1. newsletter tool
-2. Add payment providers
-3. Intergate with Website
-4. Add random content
+### Add newsletter, Paypal, Stripe, custom invoices…
+[Check the wiki for documentation about configuring in depth Our Orders…](https://github.com/Our-Company-Ltd/our.orders/wiki)
 
 ### Screens
 
