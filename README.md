@@ -20,7 +20,7 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
 - Multiple shipping methods
 - Multiple currencies
 - Multiple database format: all supported by Entity Framework (SQL, SQLite, etc...), MongoDB, etc...
-- Multiple payment platforms: Cash, [Paypal](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments-services#paypal), [Stripe](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments-services#stripe), [PostFinace](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments-services#postfinance) etc... out of the box and possibility to add custom of your choice
+- Multiple payment platforms: Cash, [Paypal](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments#paypal), [Stripe](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments#stripe), [PostFinace](https://github.com/Our-Company-Ltd/our.orders/wiki/Payments#postfinance) etc... out of the box and possibility to add custom of your choice
 - Dispatch and stock management
 - User management, assigned sales and roles support
 - One click add to [MailChimp](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#mailchimp), [Campaign monitor](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#campaignmonitor) or [other](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#custom) newsletter services
