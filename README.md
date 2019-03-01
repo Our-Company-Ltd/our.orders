@@ -14,22 +14,23 @@ Implement a shop in minutes on an existing website.
 With an easy and intuitive user interface, Our Orders can be used both as a **vending platform** in a **physical shop** and as an **online** sales tool. Aiming to be a full featured tools, it has been designed to be easily extended to fit all possible scenario.
 
 ### Features
-- Dashboard implementing graphs to understand the sales over time
+- Dashboard with clean graphs to understand the sales over time
 - Products, subproducts and options.
 - Taxes: global and per product included and excluded taxes.
 - Multiple shipping methods
 - Multiple currencies
 - Multiple database format: all supported by Entity Framework (SQL, SQLite, etc...), MongoDB, etc...
-- Multiple payment platforms: Cash, Paypal, Stripe, PostFinace etc... out of the box and possibility to add custom of your choice
+- Multiple payment platforms: Cash, [Paypal](https://github.com/Our-Company-Ltd/our.orders/wiki/💰-Payments#paypal), [Stripe](https://github.com/Our-Company-Ltd/our.orders/wiki/💰-Payments#stripe), [PostFinace](https://github.com/Our-Company-Ltd/our.orders/wiki/💰-Payments#postfinance) etc... out of the box and possibility to add custom of your choice
 - Dispatch and stock management
 - User management, assigned sales and roles support
+- One click add to [MailChimp](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#mailchimp), [Campaign monitor](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#campaignmonitor) or [other](https://github.com/Our-Company-Ltd/our.orders/wiki/Newsletter-tools#custom) newsletter services
 - Multiple shops and warehouses
 - Vouchers management
 - Reciept, invoice and other sales documents export using **custom templates**
 - HTML5 Web app support, no page reload, optimised for touch screen.
 - Web API and cart support
 
-### Installation
+## Installation
 
 1. **Install Package**   
   Use the `Our.Orders` NuGet package manager inside Visual Studio, Xamarin Studio, or run the following command:
@@ -48,7 +49,9 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
   public void ConfigureServices(IServiceCollection services)
   {
     ...
-    services.AddOurOrders();
+    services
+      .AddOurOrders()
+      .UseEntityFramework(options => options.UseSqlite("Data Source=our.orders.db"));
     ...
   }
   
@@ -62,15 +65,74 @@ With an easy and intuitive user interface, Our Orders can be used both as a **ve
 3. **First run**   
   launch the webiste and access Our Orders on the path `/orders` create the first user and you are good to go !
   
-### Configuration
+## Configuration
+The configuration can be modified either using the `appsettings.json` file by sending an `IConfiguration` (typicaly injected in the Startup.cs constructor) or using a configuration lambda passed upon adding Our Orders in `ConfigureServices`.
 
-1. setup path, currencies, weight, tax rates, etc...
-2. Add newsletter tool...
-3. Add payment providers
-4. Setup Database
-5. Intergate with Website
-6. Add random content
+**using appsettings.json**
+ ``` json
+ // appsettings.json
+ {
+  "our-orders" : {
+   "Path": "my-custom-path",
+   "JwtSecret": "my custom secret key"
+  }
+ }
+ ```
+ ``` csharp
+ // Startup.cs
+ public class Startup
+ {
+   ...
+   public IConfiguration Configuration { get; }
+   ...
+   public Startup(IConfiguration configuration , ...)
+   {
+     ...
+     Configuration = configuration;
+     ...
+   }
+   ...
+   public void ConfigureServices(IServiceCollection services)
+   {
+     ...
+     services
+        .AddOurOrders(Configuration)
+     ...
+   }
+   ...
+ }
+ ```
+**using lambda**
+ ``` csharp
+ // Startup.cs
+ public class Startup
+ {
+   ...
+   public IConfiguration Configuration { get; }
+   ...
+   public Startup(IConfiguration configuration , ...)
+   {
+     ...
+     Configuration = configuration;
+     ...
+   }
+   ...
+   public void ConfigureServices(IServiceCollection services)
+   {
+     ...
+     services
+       .AddOurOrders((settings) => {
+         settings.Path = "my-custom-path";
+         settings.JwtSecret = "my custom secret key";
+       })
+     ...
+   }
+   ...
+ }
+ ```
+## Add newsletter, Paypal, Stripe, custom invoices…
+[Check the wiki for documentation about configuring in depth Our Orders…](https://github.com/Our-Company-Ltd/our.orders/wiki)
 
-### Screens
+## Screens
 
 <img src="https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/OO_screens.gif" alt="Our Order screens" width="100%"/>
