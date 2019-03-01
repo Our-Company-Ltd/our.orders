@@ -29,5 +29,5 @@ install:
 script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
   - dotnet tool install -g Cake.Tool --version 0.31.0
-  - dotnet cake Publish/build.cake --bootstrap
-  - dotnet cake Publish/build.cake --pack
+  - dotnet cake publish/build.cake --bootstrap
+  - dotnet cake publish/build.cake --pack
