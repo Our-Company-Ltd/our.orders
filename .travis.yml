@@ -14,7 +14,7 @@ matrix:
       install:
         - sudo apt-get install apt-transport-https
         - sudo apt-get update
-        - sudo apt-get install dotnet-runtime-2.0.9
+        - sudo apt-get install dotnet-sdk-2.0.9
     - os: osx
       sudo: required
       # .NET Core 2.2 requires OSX 10.12+
