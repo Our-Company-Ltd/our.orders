@@ -28,14 +28,26 @@ Task("Clean")
             Configuration = configuration
         };
 
-        DotNetCoreClean(corePath, settings);
+        GetFiles(corePath)
+                .ToList()
+                .ForEach(f => DotNetCoreClean(f.FullPath, settings));
+
+        GetFiles(coreTestPath)
+                .ToList()
+                .ForEach(f => DotNetCoreClean(f.FullPath, settings));
     });
 
 Task("Restore")
     .IsDependentOn("Clean")
     .Does(() =>
     {
-        DotNetCoreRestore(corePath);
+        GetFiles(corePath)
+                .ToList()
+                .ForEach(f => DotNetCoreRestore(f.FullPath));
+
+        GetFiles(coreTestPath)
+                .ToList()
+                .ForEach(f => DotNetCoreRestore(f.FullPath));
     });
 
 Task("SemVer")
