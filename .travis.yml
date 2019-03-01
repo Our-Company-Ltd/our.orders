@@ -10,11 +10,11 @@ matrix:
       # The default vesion in Travis CI is currently 14.04 (Trusty)
       dist: xenial
       sudo: required
-      # install runtime 2.0.5 as well
+      # install runtime 2.0.9 as well
       install:
         - sudo apt-get install apt-transport-https
         - sudo apt-get update
-        - sudo apt-get install dotnet-runtime-2.0.5
+        - sudo apt-get install dotnet-runtime-2.0.9
     - os: osx
       sudo: required
       # .NET Core 2.2 requires OSX 10.12+
