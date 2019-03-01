@@ -17,7 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\lib\core.csproj" />
-    <ProjectReference Include="..\..\repositories\mongodb\mongodb.csproj" />
+    <ProjectReference Include="..\..\repositories\MongoDB\MongoDB.csproj" />
     <ProjectReference Include="..\..\helpers\helpers.csproj" />
   </ItemGroup>
 </Project>
