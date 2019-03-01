@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>our.orders.Payments.Stripe</AssemblyName>
     <OutputType>Library</OutputType>
     <DefaultItemExcludes>node_modules\**;$(DefaultItemExcludes)</DefaultItemExcludes>

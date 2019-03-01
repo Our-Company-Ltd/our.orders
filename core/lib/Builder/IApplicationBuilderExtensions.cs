@@ -58,39 +58,42 @@ namespace our.orders.Builder
                 configureEvents(appEvents);
             }
 
-            MakeWebHost<Startup>(builder, appsettings, appEvents);
+            var env = hostServiceProvider.GetRequiredService<IHostingEnvironment>();
+            var startup = hostServiceProvider.GetService<Startup>();
+            var client = MakeWebHost(builder, appsettings, appEvents, env, startup);
+            appEvents.Services = client.Services;
+
+            new WebHostStartup(builder, hostServiceProvider, client, startup);
         }
 
 
-        internal class WebHostStartup<TStartup> : IStartup where TStartup : class
+        internal class WebHostStartup
         {
-            private readonly StartupMethods _methods;
 
             private readonly IAppSettings _appSettings;
 
             private readonly IServiceProvider _hostServiceProvider;
-
-            private readonly IServiceProvider _clientServiceProvider;
-
+            private readonly IWebHost client;
+            private readonly Startup startup;
             private RequestDelegate _RequestDelegate;
-            public WebHostStartup(IApplicationBuilder hostApp, IServiceProvider hostServiceProvider, IServiceProvider clientServiceProvider)
+            public WebHostStartup(IApplicationBuilder hostApp, IServiceProvider hostServiceProvider, IWebHost client, Startup startup)
             {
                 var env = hostServiceProvider.GetRequiredService<IHostingEnvironment>();
 
-                var appSettings = clientServiceProvider.GetService<IAppSettings>();
-
-                _methods = StartupLoader.LoadMethods(clientServiceProvider, typeof(TStartup), env.EnvironmentName);
+                var appSettings = client.Services.GetService<IAppSettings>();
 
                 _appSettings = appSettings;
                 _hostServiceProvider = hostServiceProvider;
-                _clientServiceProvider = clientServiceProvider;
-
+                this.client = client;
+                this.startup = startup;
                 var cleanPath = _appSettings.Path.Trim('/');
                 var path = new PathString($"/{cleanPath}");
+
 
                 // map the path to the requestDelegate
                 hostApp.Map(path, mappedbuilder =>
                 {
+                    Configure(mappedbuilder);
                     mappedbuilder.Use(async (context, next) =>
                     {
                         await _RequestDelegate(context);
@@ -101,9 +104,8 @@ namespace our.orders.Builder
             public void Configure(IApplicationBuilder app)
             {
 
-                var serverFeatures = app.ServerFeatures;
-                var appServices = app.ApplicationServices;
-                var hostLifetime = _hostServiceProvider.GetService<IApplicationLifetime>();
+                var serverFeatures = client.ServerFeatures;
+                var appServices = client.Services;
 
                 var appBuilderFactory = appServices.GetRequiredService<IApplicationBuilderFactory>();
                 var factory = appServices.GetRequiredService<IServiceScopeFactory>();
@@ -121,41 +123,21 @@ namespace our.orders.Builder
                     }
                 });
 
-                // var clientLifetime = branchBuilder.ApplicationServices.GetService<IApplicationLifetime>();
-                // clientLifetime.ApplicationStarted.Register(() =>
-                // {
-
-                // });
-
-                _methods.ConfigureDelegate(branchBuilder);
+                startup.Configure(branchBuilder, client.Services);
 
                 _RequestDelegate = branchBuilder.Build();
 
 
             }
 
-            public IServiceProvider ConfigureServices(IServiceCollection services)
-            {
-                try
-                {
-                    return _methods.ConfigureServicesDelegate(services);
-                }
-                catch (Exception ex)
-                {
-                    if (ex is TargetInvocationException)
-                    {
-                        ExceptionDispatchInfo.Capture(ex.InnerException).Throw();
-                    }
-
-                    throw;
-                }
-            }
         }
 
 
-        internal static IWebHost MakeWebHost<TStartup>(IApplicationBuilder builder, IAppSettings appSettings, AppEvents appEvents) where TStartup : class
+        internal static IWebHost MakeWebHost(IApplicationBuilder builder, IAppSettings appSettings, AppEvents appEvents, IHostingEnvironment env, Startup startup)
         {
+
             var hostServiceProvider = builder.ApplicationServices;
+
             var appKey = typeof(Startup).GetTypeInfo().Assembly.FullName;
             return WebHost
                 .CreateDefaultBuilder()
@@ -175,16 +157,18 @@ namespace our.orders.Builder
                     // using IAppEvents and the implementation type
                     s.TryAddSingleton<IAppEvents>(appEvents);
                     s.TryAddSingleton<AppEvents>(appEvents);
+                    startup.ConfigureServices(s);
 
-
-
-                    s.AddSingleton<IStartup>(clientServiceProvider =>
-                        new WebHostStartup<TStartup>(builder, hostServiceProvider, clientServiceProvider)
-                    );
                 })
                 .UseSetting(WebHostDefaults.ApplicationKey, appKey)
+                .UseStartup<EmptyStartup>()
                 .Build();
         }
+        private class EmptyStartup
+        {
+            public void ConfigureServices(IServiceCollection services) { }
 
+            public void Configure(IApplicationBuilder app) { }
+        }
     }
 }

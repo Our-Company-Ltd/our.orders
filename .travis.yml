@@ -4,28 +4,16 @@ dotnet: 2.2.103
 mono: none
 matrix:
   include:
-    - os: linux
+     - os: linux
       # .NET Core 2.2 requires Ubuntu 16.04+ (Xenial)
       # https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2-supported-os.md#linux
       # The default vesion in Travis CI is currently 14.04 (Trusty)
       dist: xenial
-      sudo: required
-      # install runtime 2.0.9 as well
-      install:
-        - sudo apt-get install apt-transport-https
-        - sudo apt-get update
-        - sudo apt-get install dotnet-sdk-2.0.9
     - os: osx
-      sudo: required
       # .NET Core 2.2 requires OSX 10.12+
       # https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2-supported-os.md#macos
       # The default version in Travis CI is currently OS X 10.13 so nothing needs to be done
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
-      install:
-        - ulimit -n8192  
-        - sudo curl -L https://download.microsoft.com/download/3/a/3/3a3bda26-560d-4d8e-922e-6f6bc4553a84/dotnet-runtime-2.0.9-osx-x64.pkg -o dotnet-runtime.pkg
-        - sudo installer -pkg dotnet-runtime.pkg -target /
-        - dotnet --info 
 branches:
   only:
     - master

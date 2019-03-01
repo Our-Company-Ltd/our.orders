@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "demo",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/demo/bin/Debug/netcoreapp2.0/our.orders.demo.dll",
+            "program": "${workspaceFolder}/demo/bin/Debug/netcoreapp2.2/our.orders.demo.dll",
             "args": [],
             "cwd": "${workspaceFolder}/demo",
             "stopAtEntry": false,

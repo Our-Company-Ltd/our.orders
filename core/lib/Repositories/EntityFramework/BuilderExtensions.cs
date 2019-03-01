@@ -19,7 +19,7 @@ namespace our.orders.Repositories.EntityFramework
         {
             var appsettings = builder.AppSettings;
 
-            builder.HostServices.AddDbContext<EFDbContext>(config);
+            //builder.HostServices.AddDbContext<EFDbContext>(config);
 
             builder.AppEvents.Configure += (sender, services) =>
               {
@@ -42,7 +42,7 @@ namespace our.orders.Repositories.EntityFramework
                   services.AddScoped<IRepository<User>>((s) => s.GetService<EFDbContext>().GetUsers());
                   services.AddScoped<IUserStore<User>, RepositoryUserStore>();
 
-                   
+
 
                   var identityBuilder = services
                         .AddIdentity<User, Role>()
@@ -52,7 +52,10 @@ namespace our.orders.Repositories.EntityFramework
               };
             builder.appEvents.ApplicationStarting += (sender, services) =>
             {
-                services.GetService<EFDbContext>().Database.EnsureCreated();
+                using (var scope = services.CreateScope())
+                {
+                    scope.ServiceProvider.GetService<EFDbContext>().Database.EnsureCreated();
+                }
             };
             return builder;
         }

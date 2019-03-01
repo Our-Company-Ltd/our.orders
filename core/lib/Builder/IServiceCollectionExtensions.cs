@@ -64,6 +64,8 @@ namespace our.orders.Builder
                 configure(appSettings);
             }
             
+            services.AddSingleton<Startup>();
+
             services.AddSingleton<IAppSettings>(appSettings);
 
             var appEvents = new AppEvents();

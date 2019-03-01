@@ -94,7 +94,7 @@ Task("Build")
 
         if (IsRunningOnLinuxOrDarwin())
         {
-            settings.Framework = "netcoreapp2.0";
+            settings.Framework = "netcoreapp2.2";
 
             GetFiles(corePath)
                 .ToList()
@@ -125,7 +125,7 @@ Task("Test")
         {
             argumentsBuilder
                 .Append("-framework")
-                .Append("netcoreapp2.0");
+                .Append("netcoreapp2.2");
         }
 
         var projectFiles = GetFiles(coreTestPath);
@@ -166,7 +166,7 @@ Task("Pack")
 
         if (IsRunningOnLinuxOrDarwin())
         {
-            settings.MSBuildSettings.WithProperty("TargetFrameworks", "netcoreapp2.0");
+            settings.MSBuildSettings.WithProperty("TargetFrameworks", "netcoreapp2.2");
         }
 
         // DotNetCorePack(corePath, settings);

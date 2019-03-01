@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Linq;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 
 [assembly: InternalsVisibleTo("core.test")]
 
@@ -231,7 +232,8 @@ namespace our.orders
                     manager.FeatureProviders.Add(new ExternalControllerFeatureProvider(AppSettings));
                 });
 
-            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetAssembly(this.GetType()), "api");
+
+            var embeddedProvider = new ManifestEmbeddedFileProvider(Assembly.GetAssembly(this.GetType()));
             services.AddSingleton<IFileProvider>(embeddedProvider);
 
             // configure DI for application services
@@ -239,16 +241,13 @@ namespace our.orders
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime, IServiceProvider serviceProvider, IAppSettings appSettings)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
             AppEvents.OnApplicationStarting(serviceProvider);
-            if (env.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
 
             // global cors policy
             app.UseCors(x => x
@@ -256,17 +255,23 @@ namespace our.orders
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
+            var fileProvider = serviceProvider.GetService<IFileProvider>();
+            app.UseDefaultFiles(new DefaultFilesOptions
+            {
+                RequestPath = PathString.Empty,
+                FileProvider = fileProvider,
+                DefaultFileNames = new List<string> { "index.html", "index.htm", "home.html", "home.htm", "default.html", "default.html" }
+            });
+        
 
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = serviceProvider.GetService<IFileProvider>(),
-                OnPrepareResponse = r => r.Context.Response.Headers.Add("Expires", DateTime.Now.AddDays(7).ToUniversalTime().ToString("r"))
+                RequestPath = PathString.Empty,
+                FileProvider = fileProvider,
+                OnPrepareResponse = r => r.Context.Response.Headers.Add("Expires", DateTime.Now.AddDays(7).ToUniversalTime().ToString("r")),
+                ServeUnknownFileTypes = true
             });
-            app.UseDefaultFiles(new DefaultFilesOptions
-            {
-                FileProvider = serviceProvider.GetService<IFileProvider>(),
-                DefaultFileNames = new List<string> { "index.html" }
-            });
+
 
 
             app.UseAuthentication();
