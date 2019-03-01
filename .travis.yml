@@ -4,7 +4,7 @@ dotnet: 2.2.103
 mono: none
 matrix:
   include:
-     - os: linux
+    - os: linux
       # .NET Core 2.2 requires Ubuntu 16.04+ (Xenial)
       # https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2-supported-os.md#linux
       # The default vesion in Travis CI is currently 14.04 (Trusty)
@@ -16,8 +16,8 @@ matrix:
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
 branches:
   only:
-    - master
-    - develop
+  - master
+  - develop
   # We'll also build whenever there is a new commit on any branch starting with `features/`
   # - /features\/.+/
 install:
@@ -29,5 +29,6 @@ install:
 script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
   - dotnet tool install -g Cake.Tool --version 0.31.0
-  - dotnet cake publish/build.cake --bootstrap
-  - dotnet cake publish/build.cake --pack
+  - cd publish
+  - dotnet cake build.cake --bootstrap
+  - dotnet cake build.cake --pack
