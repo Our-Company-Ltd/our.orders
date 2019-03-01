@@ -7,8 +7,9 @@ branches:
     # Nightly build for dev
     - develop
 build_script:
-  - ps: dotnet cake .\publish\build.cake --bootstrap
-  - ps: dotnet cake .\publish\build.cake --pack
+  - ps: cd publish
+  - ps: dotnet cake build.cake --bootstrap
+  - ps: dotnet cake build.cake --pack
 assembly_info:
   # We'll version the binaries and the NuGet package in the build script
   patch: false
