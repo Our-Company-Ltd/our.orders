@@ -7,13 +7,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Bogus" Version="22.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.2" />
     <PackageReference Include="Mongo2Go" Version="2.2.1" />
     <PackageReference Include="Moq" Version="4.8.2" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.0.0" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
