@@ -8,7 +8,7 @@ matrix:
       # .NET Core 2.2 requires Ubuntu 16.04+ (Xenial)
       # https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2-supported-os.md#linux
       # The default vesion in Travis CI is currently 14.04 (Trusty)
-      dist: trusty
+      dist: xenial
       sudo: required
       # install runtime 2.0.5 as well
       install:
