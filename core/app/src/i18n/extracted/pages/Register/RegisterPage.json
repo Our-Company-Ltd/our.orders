@@ -1,0 +1,67 @@
+[
+  {
+    "id": "pages.register.loginpage.usernamePlaceholder",
+    "description": "Username input field placeholder when no value",
+    "defaultMessage": "Username placeholder"
+  },
+  {
+    "id": "pages.register.loginpage.usernameTitle",
+    "description": "Username input field title",
+    "defaultMessage": "Username"
+  },
+  {
+    "id": "pages.register.loginpage.passwordTitle",
+    "description": "Password input field title",
+    "defaultMessage": "Password"
+  },
+  {
+    "id": "pages.register.loginpage.rememberMe",
+    "description": "Text for remember checkbox",
+    "defaultMessage": "remember me"
+  },
+  {
+    "id": "pages.register.loginpage.backBtn",
+    "description": "Back button",
+    "defaultMessage": "Back"
+  },
+  {
+    "id": "pages.register.loginpage.loadingText",
+    "description": "Loading button",
+    "defaultMessage": "Loading"
+  },
+  {
+    "id": "pages.register.loginpage.forgot",
+    "description": "Forgot password",
+    "defaultMessage": "forgot your {password_link}?"
+  },
+  {
+    "id": "pages.register.loginpage.passwordLink",
+    "description": "Password link text",
+    "defaultMessage": "password"
+  },
+  {
+    "id": "pages.register.loginpage.resetBtn",
+    "description": "Reset link text",
+    "defaultMessage": "Reset"
+  },
+  {
+    "id": "pages.register.loginpage.submitBtn",
+    "description": "Submit link text",
+    "defaultMessage": "Submit"
+  },
+  {
+    "id": "pages.register.loginpage.error.failed",
+    "description": "Error message when lofgin filled",
+    "defaultMessage": "Please check your credentials"
+  },
+  {
+    "id": "pages.register.loginpage.error.imcomplete",
+    "description": "Error message when email or password not filled",
+    "defaultMessage": "Please fill all information"
+  },
+  {
+    "id": "pages.register.loginpage.mainTitle",
+    "description": "Welcome Message",
+    "defaultMessage": "Login"
+  }
+]

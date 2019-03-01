@@ -1,0 +1,22 @@
+[
+  {
+    "id": "src.components.client.clientDetail.actionPrint",
+    "description": "Legend for dialog action print",
+    "defaultMessage": "Print"
+  },
+  {
+    "id": "src.components.client.clientDetail.dialogTitle",
+    "description": "Legend for dialog title",
+    "defaultMessage": "Select template"
+  },
+  {
+    "id": "src.components.client.clientDetail.inputLegend",
+    "description": "Legend for legend input",
+    "defaultMessage": "Template"
+  },
+  {
+    "id": "src.components.client.clientDetail.deleteConfirm",
+    "description": "Default messege for confirm if user are sure about deleting the client",
+    "defaultMessage": "Are you sure you want to delete this client?"
+  }
+]

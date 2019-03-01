@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>our.orders.Payments.Paypal</AssemblyName>
+    <OutputType>Library</OutputType>
+    <DefaultItemExcludes>node_modules\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+  </PropertyGroup>
+  <ItemGroup>
+      <PackageReference Include="PayPal" Version="2.0.0-rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\lib\core.csproj" />
+  </ItemGroup>
+</Project>

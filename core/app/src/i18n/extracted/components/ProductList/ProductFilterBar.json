@@ -1,0 +1,7 @@
+[
+  {
+    "id": "src.components.productList.interactiveTitle",
+    "description": "Legend for interactive title",
+    "defaultMessage": "{search} with {filters} sorted by {sortDropdown}"
+  }
+]

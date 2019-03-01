@@ -1,0 +1,7 @@
+[
+  {
+    "id": "src.components.forms.Dispatch.DispatchList.addItem",
+    "description": "Legend for add item button",
+    "defaultMessage": "add item"
+  }
+]

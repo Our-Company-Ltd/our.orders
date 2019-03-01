@@ -1,0 +1,12 @@
+[
+  {
+    "id": "src.views.orders.orderListItem.paidDatePrefix",
+    "description": "Prefix text for date when order paid",
+    "defaultMessage": "paid on:"
+  },
+  {
+    "id": "src.views.orders.orderListItem.dispatchedPrefix",
+    "description": "Prefix text for dispatched date",
+    "defaultMessage": "dispatched on:"
+  }
+]

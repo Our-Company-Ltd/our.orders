@@ -1,0 +1,12 @@
+{
+  "stylesheets": ["/themes/blue/theme.css"],
+  "logo": "/themes/blue/logo.svg",
+  "dashboard": { "icon": "/themes/blue/dashboard.svg" },
+  "orders": { "icon": "/themes/blue/orders.svg" },
+  "kasse": { "icon": "/themes/blue/kasse.svg" },
+  "clients": { "icon": "/themes/blue/clients.svg" },
+  "deliveries": { "icon": "/themes/blue/deliveries.svg" },
+  "discounts": { "icon": "/themes/blue/discounts.svg" },
+  "vouchers": { "icon": "/themes/blue/vouchers.svg" },
+  "more": { "icon": "/themes/blue/more.svg" }
+}

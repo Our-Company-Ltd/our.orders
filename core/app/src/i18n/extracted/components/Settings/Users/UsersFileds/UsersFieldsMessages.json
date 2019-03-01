@@ -1,0 +1,32 @@
+[
+  {
+    "id": "src.components.settings.users.firstName",
+    "description": "Legend for First Name field in users submenu of settings",
+    "defaultMessage": "First name"
+  },
+  {
+    "id": "src.components.settings.users.lastName",
+    "description": "Legend for Last name field in users submenu of settings",
+    "defaultMessage": "Last name"
+  },
+  {
+    "id": "src.components.settings.users.email",
+    "description": "Legend for Email field in users submenu of settings",
+    "defaultMessage": "Email"
+  },
+  {
+    "id": "src.components.settings.users.userName",
+    "description": "Legend for User name field in users submenu of settings",
+    "defaultMessage": "User name"
+  },
+  {
+    "id": "src.components.settings.users.phoneNumber",
+    "description": "Legend for Phone number code field in users submenu of settings",
+    "defaultMessage": "Phone number"
+  },
+  {
+    "id": "src.components.settings.users.roles",
+    "description": "Legend for role field in users",
+    "defaultMessage": "Role"
+  }
+]

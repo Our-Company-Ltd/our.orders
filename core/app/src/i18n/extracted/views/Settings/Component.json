@@ -1,0 +1,47 @@
+[
+  {
+    "id": "src.views.settings.me",
+    "description": "Title for Me section in settings",
+    "defaultMessage": "Me"
+  },
+  {
+    "id": "src.views.settings.users",
+    "description": "Title for Users section in settings",
+    "defaultMessage": "Users"
+  },
+  {
+    "id": "src.views.settings.admins",
+    "description": "Title for administrators section in settings",
+    "defaultMessage": "administrators"
+  },
+  {
+    "id": "src.views.settings.changePassword",
+    "description": "Legend for Change Password field in settings",
+    "defaultMessage": "Change Password"
+  },
+  {
+    "id": "src.views.settings.confirmPassword",
+    "description": "Legend for Confirm Password field in settings",
+    "defaultMessage": "Confirm Password"
+  },
+  {
+    "id": "src.views.settings.currentPassword",
+    "description": "Legend for Current Password field in settings",
+    "defaultMessage": "Current Password"
+  },
+  {
+    "id": "src.views.settings.saveNewPassword",
+    "description": "Legend for Save Password field in settings",
+    "defaultMessage": "Save Password"
+  },
+  {
+    "id": "src.views.settings.registerUserEmail",
+    "description": "Legend for new user email field in settings",
+    "defaultMessage": "new user email"
+  },
+  {
+    "id": "src.views.settings.registerUser",
+    "description": "Legend for register user btn in settings",
+    "defaultMessage": "register user"
+  }
+]

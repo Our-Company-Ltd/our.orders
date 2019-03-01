@@ -1,0 +1,87 @@
+[
+  {
+    "id": "src.components.forms.order.updateCLient",
+    "description": "Legend for update client switch",
+    "defaultMessage": "Update client"
+  },
+  {
+    "id": "src.components.forms.order.createCLient",
+    "description": "Legend for create client switch",
+    "defaultMessage": "Create client"
+  },
+  {
+    "id": "src.components.forms.order.ShipToClient",
+    "description": "Legend for ShipToClient switch",
+    "defaultMessage": "Devilery Client Address"
+  },
+  {
+    "id": "src.components.forms.order.items",
+    "description": "Legend for Items section",
+    "defaultMessage": "Items"
+  },
+  {
+    "id": "src.components.forms.order.discounts",
+    "description": "Legend for Discounts section",
+    "defaultMessage": "Discounts"
+  },
+  {
+    "id": "src.components.forms.order.dispatches",
+    "description": "Legend for Dispatches section",
+    "defaultMessage": "Dispatches"
+  },
+  {
+    "id": "src.components.forms.order.cost",
+    "description": "Legend for cost section",
+    "defaultMessage": "Cost"
+  },
+  {
+    "id": "src.components.forms.order.paymentList",
+    "description": "Legend for Payment List section",
+    "defaultMessage": "Payments"
+  },
+  {
+    "id": "src.components.forms.order.shippingTitle",
+    "description": "Legend for Shipping section title",
+    "defaultMessage": "Shipping"
+  },
+  {
+    "id": "src.components.forms.order.shipmentInfos",
+    "description": "Legend for Shipment Infos section",
+    "defaultMessage": "Shipment Infos"
+  },
+  {
+    "id": "src.components.forms.order.shop",
+    "description": "Legend for Shop dropdown",
+    "defaultMessage": "Shop"
+  },
+  {
+    "id": "src.components.forms.order.currency",
+    "description": "Legend for Currency dropdown",
+    "defaultMessage": "Currency"
+  },
+  {
+    "id": "src.components.forms.order.note",
+    "description": "Legend for Note section",
+    "defaultMessage": "Note"
+  },
+  {
+    "id": "src.components.forms.order.pay",
+    "description": "Legend for Pay actions section",
+    "defaultMessage": "Pay with"
+  },
+  {
+    "id": "src.components.forms.order.canceled",
+    "description": "Legend for canceled switch",
+    "defaultMessage": "Cancelled"
+  },
+  {
+    "id": "src.components.forms.order.shippingOptions",
+    "description": "Legend for Shipping Options select",
+    "defaultMessage": "Shipping Options"
+  },
+  {
+    "id": "src.components.forms.order.paidAmount",
+    "description": "Legend for Paid amount of the order",
+    "defaultMessage": "Paid amount"
+  }
+]

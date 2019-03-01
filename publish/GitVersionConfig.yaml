@@ -1,0 +1,18 @@
+assembly-informational-format: '{NuGetVersion}'
+mode: ContinuousDeployment
+branches:
+  master:
+    tag: s
+  release:
+    tag: rc
+  feature:
+    tag: useBranchName
+    increment: Minor
+  pull-request:
+    tag: pr
+  hotfix:
+    tag: rc
+  support:
+    tag: s
+  develop:
+    tag: beta

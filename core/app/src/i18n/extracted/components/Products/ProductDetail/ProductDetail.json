@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ProductDetail.subItems",
+    "description": "Title for product collumn - Sub items",
+    "defaultMessage": "Sub items"
+  },
+  {
+    "id": "ProductDetail.addSubItem",
+    "description": "Title for product collumn - add Sub item",
+    "defaultMessage": "add sub item"
+  },
+  {
+    "id": "ProductDetail.removeSubItem",
+    "description": "remove Sub item btn",
+    "defaultMessage": "remove"
+  },
+  {
+    "id": "ProductDetail.closeSubItem",
+    "description": "close Sub item btn",
+    "defaultMessage": "close"
+  }
+]

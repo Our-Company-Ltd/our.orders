@@ -1,0 +1,72 @@
+@import url("../node_modules/material-design-icons/iconfont/material-icons.css");
+@import url("../node_modules/@fortawesome/fontawesome-free-webfonts/css/fontawesome.css");
+@import url("../node_modules/@fortawesome/fontawesome-free-webfonts/css/fa-regular.css");
+@import url("../node_modules/@fortawesome/fontawesome-free-webfonts/css/fa-brands.css");
+@import url("../node_modules/@fortawesome/fontawesome-free-webfonts/css/fa-solid.css");
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: "circular", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 16px;
+}
+@media (-webkit-max-device-pixel-ratio: 2) {
+  html,
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+}
+a {
+  color: inherit;
+  cursor: pointer;
+}
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+}
+body .material-icons {
+  font-size: inherit;
+  vertical-align: middle;
+}
+#root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.icon-loading {
+  animation: spin 2s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@keyframes spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+.form-input {
+  font-size: 1rem;
+  border: 0;
+  width: 100%;
+  padding-bottom: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.form-input:focus {
+  outline: 0;
+}
+/*# sourceMappingURL=index.css.map */

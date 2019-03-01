@@ -1,0 +1,12 @@
+[
+  {
+    "id": "src.components.forms.orderitem.list.addItem",
+    "description": "Legend for add item button",
+    "defaultMessage": "Add item"
+  },
+  {
+    "id": "src.components.forms.orderitem.list.newProduct",
+    "description": "Title for New product item in product list",
+    "defaultMessage": "Add product"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "id": "src.components.settings.shops.name",
+    "description": "Legend for Name field in users submenu of settings",
+    "defaultMessage": "Name"
+  },
+  {
+    "id": "src.components.settings.shops.address",
+    "description": "Legend for Address field in users submenu of settings",
+    "defaultMessage": "Address"
+  },
+  {
+    "id": "src.components.settings.shops.city",
+    "description": "Legend for City field in users submenu of settings",
+    "defaultMessage": "City"
+  },
+  {
+    "id": "src.components.settings.shops.countryIso",
+    "description": "Legend for Country Iso field in users submenu of settings",
+    "defaultMessage": "Country Iso"
+  },
+  {
+    "id": "src.components.settings.shops.email",
+    "description": "Legend for Email field in users submenu of settings",
+    "defaultMessage": "Email"
+  },
+  {
+    "id": "src.components.settings.shops.organizationName",
+    "description": "Legend for Organization name field in users submenu of settings",
+    "defaultMessage": "Organization name"
+  },
+  {
+    "id": "src.components.settings.shops.phone",
+    "description": "Legend for Phone field in users submenu of settings",
+    "defaultMessage": "Phone"
+  },
+  {
+    "id": "src.components.settings.shops.postalCode",
+    "description": "Legend for Postal code field in users submenu of settings",
+    "defaultMessage": "Postal code"
+  },
+  {
+    "id": "src.components.settings.shops.state",
+    "description": "Legend for State field in users submenu of settings",
+    "defaultMessage": "State"
+  },
+  {
+    "id": "src.components.settings.shops.vatNumber",
+    "description": "Legend for VAT number field in users submenu of settings",
+    "defaultMessage": "VAT number"
+  },
+  {
+    "id": "src.components.settings.shops.deleteConfirm",
+    "description": "Default messege for confirm if user are sure about deleting the shop",
+    "defaultMessage": "Are you sure you want to delete this shop?"
+  }
+]

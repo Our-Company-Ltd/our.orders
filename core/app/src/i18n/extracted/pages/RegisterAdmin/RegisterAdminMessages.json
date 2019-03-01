@@ -1,0 +1,72 @@
+[
+  {
+    "id": "pages.login.loginpage.mainTitle",
+    "description": "Register admin screen main title",
+    "defaultMessage": "Register Admin"
+  },
+  {
+    "id": "pages.login.loginpage.usernamePlaceholder",
+    "description": "Username input field placeholder when no value",
+    "defaultMessage": "Username placeholder"
+  },
+  {
+    "id": "pages.login.loginpage.name",
+    "description": "Name input field title",
+    "defaultMessage": "Name"
+  },
+  {
+    "id": "pages.login.loginpage.passwordTitle",
+    "description": "Password input field title",
+    "defaultMessage": "Password"
+  },
+  {
+    "id": "pages.login.loginpage.confirmPasswordTitle",
+    "description": "Confirm password input field title",
+    "defaultMessage": "Confirm password"
+  },
+  {
+    "id": "pages.login.loginpage.email",
+    "description": "Email input field title",
+    "defaultMessage": "Email"
+  },
+  {
+    "id": "pages.login.loginpage.backBtn",
+    "description": "Back button",
+    "defaultMessage": "Back"
+  },
+  {
+    "id": "pages.login.loginpage.loadingText",
+    "description": "Loading button",
+    "defaultMessage": "Loading"
+  },
+  {
+    "id": "pages.login.loginpage.forgot",
+    "description": "Forgot password",
+    "defaultMessage": "forgot your {password_link}?"
+  },
+  {
+    "id": "pages.login.loginpage.passwordLink",
+    "description": "Password link text",
+    "defaultMessage": "password"
+  },
+  {
+    "id": "pages.login.loginpage.resetBtn",
+    "description": "Reset link text",
+    "defaultMessage": "Reset"
+  },
+  {
+    "id": "pages.login.loginpage.submitBtn",
+    "description": "Submit link text",
+    "defaultMessage": "Submit"
+  },
+  {
+    "id": "pages.login.loginpage.error.failed",
+    "description": "Error message when lofgin filled",
+    "defaultMessage": "Please check your credentials"
+  },
+  {
+    "id": "pages.login.loginpage.error.imcomplete",
+    "description": "Error message when email or password not filled",
+    "defaultMessage": "Please fill all information"
+  }
+]

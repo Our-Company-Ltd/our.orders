@@ -1,0 +1,27 @@
+[
+  {
+    "id": "OrderStatus.Empty",
+    "description": "Legend for order item whem is status is empty",
+    "defaultMessage": "Empty"
+  },
+  {
+    "id": "OrderStatus.Canceled",
+    "description": "Legend for order item whem is status is canceled",
+    "defaultMessage": "Canceled"
+  },
+  {
+    "id": "OrderStatus.PendingPayment",
+    "description": "Legend for order item whem is status is pending payment",
+    "defaultMessage": "Awaiting payment"
+  },
+  {
+    "id": "OrderStatus.ToDispatch",
+    "description": "Legend for order item whem is status is paid",
+    "defaultMessage": "ToDispatch"
+  },
+  {
+    "id": "OrderStatus.Done",
+    "description": "Legend for order item whem is status is done",
+    "defaultMessage": "Done"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "src.components.orders.orderList.sortBtn",
+    "description": "Legend for sort and filters button on side bar",
+    "defaultMessage": "Sort and Filters"
+  },
+  {
+    "id": "src.components.orders.orderList.firstName",
+    "description": "Legend for First Name filter",
+    "defaultMessage": "First Name"
+  },
+  {
+    "id": "src.components.orders.orderList.lastName",
+    "description": "Legend for Last Name filter",
+    "defaultMessage": "Last Name"
+  },
+  {
+    "id": "src.components.orders.orderList.toDispatch",
+    "description": "Legend for Email filter",
+    "defaultMessage": "Email"
+  },
+  {
+    "id": "src.components.orders.orderList.payments",
+    "description": "Legend for Telephone filter",
+    "defaultMessage": "Telephone"
+  },
+  {
+    "id": "src.components.orders.orderList.sort",
+    "description": "Legend for Sort filter",
+    "defaultMessage": "Sort"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "src.components.settings.configuration.showWeight",
+    "description": "Default text to show weight switch in configuration",
+    "defaultMessage": "Show weight"
+  },
+  {
+    "id": "src.components.settings.configuration.showTaxRateIncluded",
+    "description": "Default text to show weight switch in configuration",
+    "defaultMessage": "Show tax rate included"
+  },
+  {
+    "id": "src.components.settings.configuration.showTaxRateExcluded",
+    "description": "Default text to show weight switch in configuration",
+    "defaultMessage": "Show tax rate excluded"
+  },
+  {
+    "id": "src.components.settings.configuration.taxRateIncluded",
+    "description": "Default text to show weight switch in configuration",
+    "defaultMessage": "Tax rate included value"
+  },
+  {
+    "id": "src.components.settings.configuration.taxRateExcluded",
+    "description": "Default text to show weight switch in configuration",
+    "defaultMessage": "Tax rate excluded value"
+  },
+  {
+    "id": "src.components.settings.configuration.bankTransferSentence",
+    "description": "Default text to for bank transference",
+    "defaultMessage": "Bank transfer message"
+  }
+]

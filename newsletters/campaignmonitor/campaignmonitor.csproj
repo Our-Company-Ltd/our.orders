@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+   <AssemblyName>our.orders.Newsletters.CampaignMonitor</AssemblyName>
+    <OutputType>Library</OutputType>
+    <DefaultItemExcludes>node_modules\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+  </PropertyGroup>
+  <ItemGroup>
+      <PackageReference Include="campaignmonitor-api-dotnet-standard" Version="4.2.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\lib\core.csproj" />
+  </ItemGroup>
+
+</Project>

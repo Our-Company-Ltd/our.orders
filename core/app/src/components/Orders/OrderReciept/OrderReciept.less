@@ -1,0 +1,64 @@
+@import "../../../_variables.less";
+
+.order-reciept {
+  position: relative;
+  font-family: "Courier New", Courier, monospace;
+
+  color: #444;
+  background: white;
+
+  box-sizing: border-box;
+  margin: 0 auto;
+
+   
+  
+  &__header-line--name {
+    font-weight: bold;
+  }
+
+  &__section--shop,
+  &__section--items-title,
+  &__section--payments-title,
+  &__section--dispatches-title {
+    color: black;
+  }
+  &__section {
+    padding: 0.25cm 0;
+    border-bottom: 1px solid #444;
+  }
+  &__section--shop {
+    text-align: center;
+  }
+  &__price {
+    text-align: right;
+  }
+  &__sub-section {
+    border-top: 1px dashed #444;
+  }
+
+  &__sub-items {
+    padding-left: 0.2cm;
+  }
+  &__sub-items {
+    padding-left: 0.2cm;
+  }
+  &__item {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  &__sub-items {
+    width: 100%;
+  }
+  &__quantity {
+    &:after {
+      content: "–";
+      margin-left: 0.1cm;
+      margin-right: 0.1cm;
+    }
+  }
+  &__price {
+    flex-grow: 1;
+    text-align: right;
+  }
+}

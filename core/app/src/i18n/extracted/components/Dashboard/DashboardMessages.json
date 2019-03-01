@@ -1,0 +1,117 @@
+[
+  {
+    "id": "src.components.dashboard.amount",
+    "description": "Legend for Amount metric in dashboard",
+    "defaultMessage": "Amount"
+  },
+  {
+    "id": "src.components.dashboard.sales",
+    "description": "Legend for Sales metric in dashboard",
+    "defaultMessage": "Sales"
+  },
+  {
+    "id": "src.components.dashboard.units",
+    "description": "Legend for Units metric in dashboard",
+    "defaultMessage": "Units"
+  },
+  {
+    "id": "src.components.dashboard.chart",
+    "description": "Legend for Chart toggler in dashboard",
+    "defaultMessage": "Chart"
+  },
+  {
+    "id": "src.components.dashboard.pie",
+    "description": "Legend for pie toggler in dashboard",
+    "defaultMessage": "Pie"
+  },
+  {
+    "id": "src.components.orders.orderList.shopsBtn",
+    "description": "Legend for Shops button on side bar",
+    "defaultMessage": "Shops"
+  },
+  {
+    "id": "src.components.orders.orderList.usersBtn",
+    "description": "Legend for Users button on side bar",
+    "defaultMessage": "Users"
+  },
+  {
+    "id": "src.components.orders.orderList.productsBtn",
+    "description": "Legend for Products button on side bar",
+    "defaultMessage": "Products"
+  },
+  {
+    "id": "src.components.dashboard.today",
+    "description": "Legend for today",
+    "defaultMessage": "Today"
+  },
+  {
+    "id": "src.components.dashboard.yesterday",
+    "description": "Legend for yesterday",
+    "defaultMessage": "Yesterday"
+  },
+  {
+    "id": "src.components.dashboard.thisweek",
+    "description": "Legend for thisweek",
+    "defaultMessage": "This week"
+  },
+  {
+    "id": "src.components.dashboard.lastweek",
+    "description": "Legend for lastweek",
+    "defaultMessage": "Last week"
+  },
+  {
+    "id": "src.components.dashboard.thismonth",
+    "description": "Legend for thismonth",
+    "defaultMessage": "This month"
+  },
+  {
+    "id": "src.components.dashboard.lastmonth",
+    "description": "Legend for lastmonth",
+    "defaultMessage": "Last month"
+  },
+  {
+    "id": "src.components.dashboard.thisyear",
+    "description": "Legend for thisyear",
+    "defaultMessage": "This year"
+  },
+  {
+    "id": "src.components.dashboard.lastyear",
+    "description": "Legend for lastyear",
+    "defaultMessage": "Last year"
+  },
+  {
+    "id": "src.components.dashboard.last7days",
+    "description": "Legend for last7days",
+    "defaultMessage": "Last 7 days"
+  },
+  {
+    "id": "src.components.dashboard.last30days",
+    "description": "Legend for last30days",
+    "defaultMessage": "Last 30 days"
+  },
+  {
+    "id": "src.components.dashboard.last5years",
+    "description": "Legend for yesterday",
+    "defaultMessage": "Last 5 years"
+  },
+  {
+    "id": "src.components.dashboard.customTimePeriodTitle",
+    "description": "Legend for custom time period dialog title",
+    "defaultMessage": "Pick a range"
+  },
+  {
+    "id": "src.components.dashboard.customTimePeriodFrom",
+    "description": "Legend for custom time period dialog from field",
+    "defaultMessage": "From"
+  },
+  {
+    "id": "src.components.dashboard.customTimePeriodTo",
+    "description": "Legend for custom time period dialog to field",
+    "defaultMessage": "To"
+  },
+  {
+    "id": "src.components.dashboard.customTimePeriodSubmit",
+    "description": "Legend for custom time period dialog submit button",
+    "defaultMessage": "ok"
+  }
+]

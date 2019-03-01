@@ -1,0 +1,97 @@
+[
+  {
+    "id": "src.view.productsView.fields.items",
+    "description": "Title for product collumn - Items",
+    "defaultMessage": "Items"
+  },
+  {
+    "id": "src.view.productsView.fields.subItems",
+    "description": "Title for product collumn - Sub items",
+    "defaultMessage": "Sub items"
+  },
+  {
+    "id": "src.view.productsView.fields.sku",
+    "description": "Legend for SKU field",
+    "defaultMessage": "SKU"
+  },
+  {
+    "id": "src.view.productsView.fields.description",
+    "description": "Legend for Description field",
+    "defaultMessage": "Description"
+  },
+  {
+    "id": "src.view.productsView.fields.title",
+    "description": "Legend for title field",
+    "defaultMessage": "Title"
+  },
+  {
+    "id": "src.view.productsView.fields.price",
+    "description": "Legend for price field",
+    "defaultMessage": "Base price"
+  },
+  {
+    "id": "src.view.productsView.fields.weight",
+    "description": "Legend for Weight field",
+    "defaultMessage": "Weight"
+  },
+  {
+    "id": "src.view.productsView.fields.minQuantity",
+    "description": "Legend for Min Quantity field",
+    "defaultMessage": "Min Quantity"
+  },
+  {
+    "id": "src.view.productsView.fields.maxQuantity",
+    "description": "Legend for Max Quantity field",
+    "defaultMessage": "Max Quantity"
+  },
+  {
+    "id": "src.view.productsView.fields.taxRateExcluded",
+    "description": "Legend for Max quantaty field",
+    "defaultMessage": "Tax rate excluded"
+  },
+  {
+    "id": "src.view.productsView.fields.taxRateIncluded",
+    "description": "Legend for Tax rate included field",
+    "defaultMessage": "Tax rate included"
+  },
+  {
+    "id": "src.view.productsView.fields.applyGlobalTaxes",
+    "description": "Legend for apply Global Taxes field",
+    "defaultMessage": "apply Global Taxes"
+  },
+  {
+    "id": "src.view.productsView.fields.optionListTitle",
+    "description": "Title for Options List",
+    "defaultMessage": "Title for Options List"
+  },
+  {
+    "id": "src.view.productsView.fields.optionsTitle",
+    "description": "Name for option",
+    "defaultMessage": "Option name"
+  },
+  {
+    "id": "src.view.productsView.fields.optionsSku",
+    "description": "Legend for apply optionsSku field",
+    "defaultMessage": "optionsSku"
+  },
+  {
+    "id": "src.view.productsView.fields.optionsPrice",
+    "description": "Legend for apply optionsPrice field",
+    "defaultMessage": "optionsPrice"
+  },
+  {
+    "id": "src.view.productsView.fields.optionsRemoveOption",
+    "description": "Legend for remove option button",
+    "defaultMessage": "remove option"
+  },
+  {
+    "id": "src.view.productsView.fields.optionsAddOption",
+    "description": "Legend for add option button",
+    "defaultMessage": "add option"
+  },
+  {
+    "id": "src.view.productsView.fields.optionsAddList",
+    "description": "Legend for add list button",
+    "defaultMessage": "add options list"
+  }
+]

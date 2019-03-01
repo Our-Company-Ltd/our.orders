@@ -1,0 +1,22 @@
+[
+  {
+    "id": "src.views.settings.users",
+    "description": "Title for Me section in settings",
+    "defaultMessage": "Me"
+  },
+  {
+    "id": "src.views.orders.orderListItem.me",
+    "description": "Title for Users section in settings",
+    "defaultMessage": "Users"
+  },
+  {
+    "id": "src.views.orders.orderListItem.changePassord",
+    "description": "Legend for Change Password field in settings",
+    "defaultMessage": "Change Password"
+  },
+  {
+    "id": "src.views.orders.orderListItem.confirmPassord",
+    "description": "Legend for Confirm Password field in settings",
+    "defaultMessage": "Conform Password"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "src.components.forms.Payment.PaymentList.addPayment",
+    "description": "Legend for add payment button",
+    "defaultMessage": "add payment"
+  },
+  {
+    "id": "src.components.forms.orderitem.title",
+    "description": "Order item title",
+    "defaultMessage": "Title"
+  },
+  {
+    "id": "src.components.forms.orderitem.reference",
+    "description": "Order item Reference",
+    "defaultMessage": "Reference"
+  },
+  {
+    "id": "src.components.forms.orderitem.description",
+    "description": "Order item Description",
+    "defaultMessage": "Description"
+  },
+  {
+    "id": "src.components.forms.orderitem.amount",
+    "description": "Order item Amount",
+    "defaultMessage": "Amount"
+  },
+  {
+    "id": "src.components.forms.orderitem.date",
+    "description": "Order item Date",
+    "defaultMessage": "Date"
+  },
+  {
+    "id": "src.components.forms.orderitem.paymentMethod",
+    "description": "Order item Payment Method",
+    "defaultMessage": "Payment Method"
+  },
+  {
+    "id": "src.components.forms.orderitem.status",
+    "description": "Order item Status",
+    "defaultMessage": "Status"
+  },
+  {
+    "id": "src.components.forms.orderitem.provider",
+    "description": "Order item Provider",
+    "defaultMessage": "Provider"
+  },
+  {
+    "id": "src.components.forms.orderitem.currency",
+    "description": "Order item Currency",
+    "defaultMessage": "Currency"
+  },
+  {
+    "id": "src.components.forms.orderitem.details",
+    "description": "Order item Details",
+    "defaultMessage": "Details"
+  },
+  {
+    "id": "src.components.forms.orderitem.lightboxTitle",
+    "description": "Order item title",
+    "defaultMessage": "Payment: {Title}"
+  }
+]

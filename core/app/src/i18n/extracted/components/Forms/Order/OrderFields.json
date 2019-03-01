@@ -1,0 +1,17 @@
+[
+  {
+    "id": "src.components.forms.order.fields.totalAmount",
+    "description": "Legend for the Total amount of the order",
+    "defaultMessage": "Total"
+  },
+  {
+    "id": "src.components.forms.order.fields.tax",
+    "description": "Legend for the Tax amount of the order",
+    "defaultMessage": "Incl. Tax"
+  },
+  {
+    "id": "src.components.forms.order.fields.shipping",
+    "description": "Legend for the Shipping amount of the order",
+    "defaultMessage": "Incl. Shipping"
+  }
+]

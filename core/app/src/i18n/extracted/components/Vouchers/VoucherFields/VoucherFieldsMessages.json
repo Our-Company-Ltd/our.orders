@@ -1,0 +1,42 @@
+[
+  {
+    "id": "src.components.forms.vouchers.initialValue",
+    "description": "Legend for voucher initial value",
+    "defaultMessage": "Initial value"
+  },
+  {
+    "id": "src.components.forms.vouchers.currentValue",
+    "description": "Legend for value on a voucher",
+    "defaultMessage": "Current value"
+  },
+  {
+    "id": "src.components.forms.vouchers.code",
+    "description": "Legend for voucher code",
+    "defaultMessage": "Code"
+  },
+  {
+    "id": "src.components.forms.vouchers.expiration",
+    "description": "Legend for expiration date of a voucher",
+    "defaultMessage": "Expiration date"
+  },
+  {
+    "id": "src.components.forms.vouchers.multipleUse",
+    "description": "Legend for multiple use switch",
+    "defaultMessage": "Allow multiple uses"
+  },
+  {
+    "id": "src.components.forms.vouchers.canceled",
+    "description": "Legend for canceled attribute in voucher",
+    "defaultMessage": "Canceled"
+  },
+  {
+    "id": "src.components.forms.vouchers.usedVoucher",
+    "description": "Legend for used attribute in voucher",
+    "defaultMessage": "Used"
+  },
+  {
+    "id": "src.components.forms.vouchers.currency",
+    "description": "Legend for currency legend",
+    "defaultMessage": "Currency"
+  }
+]

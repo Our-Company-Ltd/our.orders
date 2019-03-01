@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+   <AssemblyName>our.orders.Repositories.MongoDB</AssemblyName>
+    <OutputType>Library</OutputType>
+    <DefaultItemExcludes>node_modules\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.5.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\lib\core.csproj" />
+  </ItemGroup>
+
+</Project>

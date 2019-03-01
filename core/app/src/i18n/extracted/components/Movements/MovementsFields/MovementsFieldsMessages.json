@@ -1,0 +1,32 @@
+[
+  {
+    "id": "src.components.forms.movements.shop",
+    "description": "Legend for shop",
+    "defaultMessage": "Shop"
+  },
+  {
+    "id": "src.components.forms.movements.user",
+    "description": "Legend for user",
+    "defaultMessage": "User"
+  },
+  {
+    "id": "src.components.forms.movements.note",
+    "description": "Legend for multiple use switch",
+    "defaultMessage": "Note"
+  },
+  {
+    "id": "src.components.forms.movements.archived",
+    "description": "Legend for Archived switch",
+    "defaultMessage": "Archived"
+  },
+  {
+    "id": "src.components.forms.movements.currency",
+    "description": "Legend for Currency",
+    "defaultMessage": "Currency"
+  },
+  {
+    "id": "src.components.forms.movements.amount",
+    "description": "Legend for Amount",
+    "defaultMessage": "Amount"
+  }
+]

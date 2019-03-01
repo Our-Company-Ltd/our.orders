@@ -1,0 +1,57 @@
+[
+  {
+    "id": "pages.register.registerpage.mainTitle",
+    "description": "mainTitle",
+    "defaultMessage": "Register"
+  },
+  {
+    "id": "pages.register.registerpage.passwordTitle",
+    "description": "Password input field title",
+    "defaultMessage": "Password"
+  },
+  {
+    "id": "pages.register.registerpage.backBtn",
+    "description": "Back button",
+    "defaultMessage": "Back"
+  },
+  {
+    "id": "pages.register.registerpage.loadingText",
+    "description": "Loading button",
+    "defaultMessage": "Loading"
+  },
+  {
+    "id": "pages.register.registerpage.forgot",
+    "description": "Forgot password",
+    "defaultMessage": "forgot your {password_link}?"
+  },
+  {
+    "id": "pages.register.registerpage.passwordLink",
+    "description": "Password link text",
+    "defaultMessage": "password"
+  },
+  {
+    "id": "pages.register.registerpage.resetBtn",
+    "description": "Reset link text",
+    "defaultMessage": "Reset"
+  },
+  {
+    "id": "pages.register.registerpage.submitBtn",
+    "description": "Submit link text",
+    "defaultMessage": "Submit"
+  },
+  {
+    "id": "pages.register.registerpage.error.failed",
+    "description": "Error message when lofgin filled",
+    "defaultMessage": "Please check your credentials"
+  },
+  {
+    "id": "pages.register.registerpage.error.incomplete",
+    "description": "Error message when email or password not filled",
+    "defaultMessage": "Please fill all information"
+  },
+  {
+    "id": "pages.register.registerpage.error.different",
+    "description": "Error message when password different",
+    "defaultMessage": "Different password and confirm"
+  }
+]

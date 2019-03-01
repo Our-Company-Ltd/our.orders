@@ -1,0 +1,22 @@
+[
+  {
+    "id": "src.components.forms.client.searchPlaceholder",
+    "description": "Placeholder for search bar client",
+    "defaultMessage": "Choose existing client"
+  },
+  {
+    "id": "src.components.forms.client.closeDetail",
+    "description": "Close btn",
+    "defaultMessage": "Close"
+  },
+  {
+    "id": "src.components.forms.client.updateClient",
+    "description": "update btn",
+    "defaultMessage": "Update Client infos"
+  },
+  {
+    "id": "src.components.forms.client.createClient",
+    "description": "create btn",
+    "defaultMessage": "Create Client"
+  }
+]

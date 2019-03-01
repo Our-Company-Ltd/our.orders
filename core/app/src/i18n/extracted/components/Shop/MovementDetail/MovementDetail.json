@@ -1,0 +1,27 @@
+[
+  {
+    "id": "src.components.MovementForm.title",
+    "description": "Legend for Movement",
+    "defaultMessage": "Movement"
+  },
+  {
+    "id": "src.components.MovementForm.user",
+    "description": "Legend for Movement User",
+    "defaultMessage": "User"
+  },
+  {
+    "id": "src.components.MovementForm.amount",
+    "description": "Legend for Movement amount",
+    "defaultMessage": "Amount"
+  },
+  {
+    "id": "src.components.MovementForm.currency",
+    "description": "Legend for Movement currency",
+    "defaultMessage": "Currency"
+  },
+  {
+    "id": "src.components.MovementForm.shop",
+    "description": "Legend for Movement shop",
+    "defaultMessage": "Shop"
+  }
+]

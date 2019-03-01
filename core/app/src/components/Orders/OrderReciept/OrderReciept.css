@@ -1,0 +1,54 @@
+.order-reciept {
+  position: relative;
+  font-family: "Courier New", Courier, monospace;
+  color: #444;
+  background: white;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.order-reciept__header-line--name {
+  font-weight: bold;
+}
+.order-reciept__section--shop,
+.order-reciept__section--items-title,
+.order-reciept__section--payments-title,
+.order-reciept__section--dispatches-title {
+  color: black;
+}
+.order-reciept__section {
+  padding: 0.25cm 0;
+  border-bottom: 1px solid #444;
+}
+.order-reciept__section--shop {
+  text-align: center;
+}
+.order-reciept__price {
+  text-align: right;
+}
+.order-reciept__sub-section {
+  border-top: 1px dashed #444;
+}
+.order-reciept__sub-items {
+  padding-left: 0.2cm;
+}
+.order-reciept__sub-items {
+  padding-left: 0.2cm;
+}
+.order-reciept__item {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.order-reciept__sub-items {
+  width: 100%;
+}
+.order-reciept__quantity:after {
+  content: "–";
+  margin-left: 0.1cm;
+  margin-right: 0.1cm;
+}
+.order-reciept__price {
+  flex-grow: 1;
+  text-align: right;
+}
+/*# sourceMappingURL=OrderReciept.css.map */

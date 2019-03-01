@@ -1,0 +1,57 @@
+[
+  {
+    "id": "src.components.forms.person.firstName",
+    "description": "Legend for First Name form field",
+    "defaultMessage": "First Name"
+  },
+  {
+    "id": "src.components.forms.person.lastName",
+    "description": "Legend for Last Name form field",
+    "defaultMessage": "Last Name"
+  },
+  {
+    "id": "src.components.forms.person.organizationName",
+    "description": "Legend for Organization Name form field",
+    "defaultMessage": "Organization Name"
+  },
+  {
+    "id": "src.components.forms.person.address",
+    "description": "Legend for Address form field",
+    "defaultMessage": "Address"
+  },
+  {
+    "id": "src.components.forms.person.postalCode",
+    "description": "Legend for Postal Code form field",
+    "defaultMessage": "Postal Code"
+  },
+  {
+    "id": "src.components.forms.person.city",
+    "description": "Legend for City form field",
+    "defaultMessage": "City"
+  },
+  {
+    "id": "src.components.forms.person.state",
+    "description": "Legend for State form field",
+    "defaultMessage": "State"
+  },
+  {
+    "id": "src.components.forms.person.country",
+    "description": "Legend for Country form field",
+    "defaultMessage": "Country"
+  },
+  {
+    "id": "src.components.forms.person.cellPhone",
+    "description": "Legend for Cell Phone form field",
+    "defaultMessage": "Cell Phone"
+  },
+  {
+    "id": "src.components.forms.person.phone",
+    "description": "Legend for Phone form field",
+    "defaultMessage": "Phone"
+  },
+  {
+    "id": "src.components.forms.person.email",
+    "description": "Legend for Email form field",
+    "defaultMessage": "Email"
+  }
+]

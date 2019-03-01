@@ -1,0 +1,75 @@
+.tab:nth-child(1) {
+  order: 1;
+}
+.tab:nth-child(2) {
+  order: 2;
+}
+.tab:nth-child(3) {
+  order: 3;
+}
+.tab:nth-child(4) {
+  order: 4;
+}
+.tab:nth-child(5) {
+  order: 5;
+}
+.tab:nth-child(6) {
+  order: 6;
+}
+.tab:nth-child(7) {
+  order: 7;
+}
+.tab:nth-child(8) {
+  order: 8;
+}
+.tab--more {
+  display: none;
+}
+@media screen and (min-width: 80px) and (max-width: 160px) {
+  .tab--more {
+    order: 0;
+    display: flex;
+  }
+}
+@media screen and (min-width: 160px) and (max-width: 240px) {
+  .tab--more {
+    order: 1;
+    display: flex;
+  }
+}
+@media screen and (min-width: 240px) and (max-width: 320px) {
+  .tab--more {
+    order: 2;
+    display: flex;
+  }
+}
+@media screen and (min-width: 320px) and (max-width: 400px) {
+  .tab--more {
+    order: 3;
+    display: flex;
+  }
+}
+@media screen and (min-width: 400px) and (max-width: 480px) {
+  .tab--more {
+    order: 4;
+    display: flex;
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 560px) {
+  .tab--more {
+    order: 5;
+    display: flex;
+  }
+}
+@media screen and (min-width: 560px) and (max-width: 640px) {
+  .tab--more {
+    order: 6;
+    display: flex;
+  }
+}
+@media screen and (min-width: 640px) and (max-width: 720px) {
+  .tab--more {
+    order: 7;
+  }
+}
+/*# sourceMappingURL=styles.css.map */

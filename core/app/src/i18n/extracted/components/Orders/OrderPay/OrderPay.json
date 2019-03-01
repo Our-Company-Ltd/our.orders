@@ -1,0 +1,12 @@
+[
+  {
+    "id": "src.components.forms.dispatch.screen.title",
+    "description": "Dispatches title",
+    "defaultMessage": "Dispatches"
+  },
+  {
+    "id": "src.components.forms.dispatch.screen.stocks",
+    "description": "Stocks title",
+    "defaultMessage": "Stocks"
+  }
+]

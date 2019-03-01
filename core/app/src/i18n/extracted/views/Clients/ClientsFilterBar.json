@@ -1,0 +1,7 @@
+[
+  {
+    "id": "src.components.filterBar.interactiveTitle",
+    "description": "Legend for interactive title",
+    "defaultMessage": "{search} {filters} {sortby}"
+  }
+]
