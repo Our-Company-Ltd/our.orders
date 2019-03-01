@@ -1,17 +1,17 @@
 language: csharp
 # SDK version, based on the targeted `netstandard` / `netcoreapp` version in the projects
-dotnet: 2.2.103
+dotnet: 2.0
 mono: none
 matrix:
   include:
     - os: linux
-      # .NET Core 2.2 requires Ubuntu 16.04+ (Xenial)
-      # https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2-supported-os.md#linux
+      # .NET Core 2.0 requires Ubuntu 14.04+ (Xenial)
+      # https://github.com/dotnet/core/blob/master/release-notes/2.0/2.0-supported-os.md
       # The default vesion in Travis CI is currently 14.04 (Trusty)
-      dist: xenial
+      # dist: xenial
     - os: osx
-      # .NET Core 2.2 requires OSX 10.12+
-      # https://github.com/dotnet/core/blob/master/release-notes/2.2/2.2-supported-os.md#macos
+      # .NET Core 2.0 requires OSX 10.12+
+      # https://github.com/dotnet/core/blob/master/release-notes/2.0/2.0-supported-os.md
       # The default version in Travis CI is currently OS X 10.13 so nothing needs to be done
       # https://docs.travis-ci.com/user/reference/osx/#OS-X-Version
 branches:
