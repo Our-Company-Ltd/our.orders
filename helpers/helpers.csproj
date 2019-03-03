@@ -10,10 +10,10 @@
     <PackageReference Include="Bogus" Version="22.0.5" />
     
     
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All" />
     
     
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0"/>
     
   </ItemGroup>
   <ItemGroup>

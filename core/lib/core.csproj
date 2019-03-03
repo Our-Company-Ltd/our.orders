@@ -27,7 +27,7 @@
     <PackageReference Include="Handlebars.Net" Version="1.9.5" />
     <PackageReference Include="Innofactor.EfCoreJsonValueConverter" Version="1.25.0" />
     
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.All"/>
   
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />
