@@ -1,0 +1,53 @@
+{
+  "folders": [
+    {
+      "path": "core/lib",
+      "name": "❤️ Core"
+    },
+    {
+      "path": "core/app",
+      "name": "⭐️ App"
+    },
+    {
+      "path": "publish",
+      "name": "🌏 Publish"
+    },
+    {
+      "path": "payments/paypal",
+      "name": "💰 Paypal"
+    },
+    {
+      "path": "payments/stripe",
+      "name": "💰 Stripe"
+    },
+    {
+      "path": "payments/postfinance",
+      "name": "💰 PostFinance"
+    },
+    {
+      "path": "newsletters/mailchimp",
+      "name": "📨 MailChimp"
+    },
+    {
+      "path": "newsletters/campaignmonitor",
+      "name": "📨 CampaignMonitor"
+    },
+    {
+      "path": "core/lib.test",
+      "name": "💥 core.test"
+    },
+    {
+      "path": "demo",
+      "name": "🤸🏽‍ demo"
+    },
+    {
+      "path": "helpers",
+      "name": "🛠 helpers"
+    },
+    {
+      "path": "repositories/MongoDB",
+      "name": "🗄 MongoDB"
+    }
+  ],
+  "settings": {}
+}
