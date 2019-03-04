@@ -197,23 +197,22 @@ namespace our.orders.test.Services
             Assert.Equal(models.Count(u => u.FirstName == name0 || u.LastName == name1), result.Count());
         }
 
-        [Theory]
-        [InlineData(3)]
-        [InlineData(19)]
-        [InlineData(21)]
-        public async Task FindEntriesWithText(int index)
-        {
-            var user = models.ElementAt(index);
-            var firstname = user.FirstName;
+        // [Theory]
+        // [InlineData(3)]
+        // [InlineData(19)]
+        // [InlineData(21)]
+        // public async Task FindEntriesWithText(int index)
+        // {
+        //     var user = models.ElementAt(index);
+        //     var firstname = user.FirstName;
 
+        //     var filter = Filter.Like("FirstName", firstname);
 
-            var filter = Filter.Like("FirstName", firstname);
+        //     var result = await testService.FindAsync(filter, cancellationToken: cancellationToken);
 
-            var result = await testService.FindAsync(filter, cancellationToken: cancellationToken);
+        //     Assert.Contains(result, r => r.FirstName == firstname);
 
-            Assert.Contains(result, r => r.FirstName == firstname);
-
-        }
+        // }
         [Fact]
         public async Task DeleteEntries()
         {
