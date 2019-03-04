@@ -78,7 +78,7 @@ deploy:
       # Encrypted `GitHub` `PAT`
       # https://www.appveyor.com/docs/deployment/github/#provider-settings
       secure: m6r49s7GcXjgrF22gSHdcXKSKqXugyvdf6khfLgdqXW9mUIND/4//kEbAjHYCIyw
-    artifact: .\publish\Artifacts\**\*.nupkg
+    
     draft: false
     prerelease: false
     on:
@@ -117,7 +117,7 @@ deploy:
       secure: MI3IYH1hzPTuOrzmjLzd24MpuONLVx1j/fGzaIG5NevSO/HZJpwVAFzXy5+ouY2/
     skip_symbols: false
     symbol_server: https://www.nuget.org/F/our-orders/api/v2/package
-    artifact: .\publish\Artifacts\**\*.nupkg
+    
     prerelease: false
     on:
       branch: master
@@ -129,7 +129,7 @@ deploy:
       secure: 88pNC0/tQsgK9GcPHAoA/JaZqBkhy7U4kqIQjAo13fwoVud1e0024KiXOUmjgNRP
     skip_symbols: false
     symbol_server: https://www.myget.org/F/our-orders/api/v2/package
-    artifact: .\publish\Artifacts\**\*.nupkg
+    
     prerelease: true
     on:
       branch: develop
