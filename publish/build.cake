@@ -56,15 +56,23 @@ Task("Restore")
 Task("BuildApp")
     .IsDependentOn("Restore")
     .Does(() => {
-        var settings = new NpmInstallSettings 
+        var dir = MakeAbsolute(Directory(appPath));
+        
+        // install typescript globally
+        NpmInstall(settings => {
+            settings.FromPath(dir);
+            settings.AddPackage("typescript").InstallGlobally();
+        });
+        
+        // install all from package.json
+        var installSettings = new NpmInstallSettings 
         {
-            WorkingDirectory = MakeAbsolute(Directory(appPath)),
-            Production = true,
-            LogLevel = NpmLogLevel.Info
+            WorkingDirectory = dir,
+            Production = true
         };
+        NpmInstall(installSettings);
 
-        NpmInstall(settings);
-
+        // build script
         var runSettings = new NpmRunScriptSettings
         {
             ScriptName = "build",
