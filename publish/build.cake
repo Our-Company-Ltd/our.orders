@@ -118,8 +118,7 @@ Task("Test")
 
         var argumentsBuilder = new ProcessArgumentBuilder()
             .Append("-configuration")
-            .Append(configuration)
-            .Append("-nobuild");
+            .Append(configuration);
 
         if (IsRunningOnLinuxOrDarwin())
         {
