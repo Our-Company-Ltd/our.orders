@@ -17,7 +17,7 @@ import { InjectedSettingsProps } from '../../../_context/Settings';
 import { InjectedIntlProps } from 'react-intl';
 import ClientDetail from '../ClientDetail/ClientDetail';
 import { InjectedShopProps, InjectedWarehouseProps, InjectedUsersProps } from 'src/_context';
-import { Client, Roles } from 'src/@types/our-orders';
+import { Client } from 'src/@types/our-orders';
 import Fabs from 'src/components/Fabs/Fabs';
 
 import {
@@ -405,7 +405,7 @@ class ClientList extends React.Component<ClientListProps, State> {
                 <Fabs
                     map={[
                         this.state.fetching ?
-                            'loading' : IsAdminOrInRole(user, Roles.CRUD_Clients) &&
+                            'loading' : IsAdminOrInRole(user, 'CRUD_Clients') &&
                             {
                                 icon: <Add />,
                                 legend: 'add new',

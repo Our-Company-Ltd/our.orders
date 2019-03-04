@@ -10,7 +10,7 @@ import { OrderDetail } from '../../Orders/OrderDetail/OrderDetail';
 import OrderListItem from '../../Orders/OrderListItem/OrderListItem';
 import { InjectedShopProps } from 'src/_context/Shop';
 import { InjectedWarehouseProps, InjectedAuthProps, InjectedSettingsProps, InjectedUsersProps } from 'src/_context';
-import { Client, Order, ModelType, Roles } from 'src/@types/our-orders';
+import { Client, Order } from 'src/@types/our-orders';
 import { Filter } from 'src/_helpers/Filter';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import { InjectedProductProps } from 'src/_context/Product';
@@ -106,7 +106,7 @@ class ClientDetail extends React.Component<ClientProps, State> {
         } = this.state;
 
         const changed = !!Object.keys(changes).length;
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Clients);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Clients');
 
         const saveBtn: FabBtnProps = {
             icon: <Check />,
@@ -141,7 +141,7 @@ class ClientDetail extends React.Component<ClientProps, State> {
 
         const templates = templateCtx
             .templates
-            .filter(t => t.ApplyTo === ModelType.Client);
+            .filter(t => t.ApplyTo === 'client');
 
         const templateBtn = templates.length > 0 && {
             icon: <Print />,

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Movements } from '../../../_services';
 import { InjectedIntlProps, FormattedNumber } from 'react-intl';
 
-import { Movement, Cashbox, Roles } from 'src/@types/our-orders';
+import { Movement, Cashbox } from 'src/@types/our-orders';
 
 import {
     Sort,
@@ -201,7 +201,7 @@ class MovementsList extends React.Component<MovementsListProps, State> {
                     <MaterialList
                         className={classNames(classes.menu)}
                     >
-                        {IsAdminOrInRole(user, Roles.View_Shops_Movements) && 
+                        {IsAdminOrInRole(user, 'View_Shops_Movements') && 
                             shopCtx.Shops.map((s) => {
 
                             const active = activeLabel === s.Id;

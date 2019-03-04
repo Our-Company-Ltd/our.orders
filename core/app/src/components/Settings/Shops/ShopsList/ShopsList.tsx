@@ -12,7 +12,7 @@ import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
 import * as classNames from 'classnames';
 import { InjectedShopProps, InjectedAuthProps } from 'src/_context';
-import { Shop, Roles } from 'src/@types/our-orders';
+import { Shop } from 'src/@types/our-orders';
 import Fabs, { FabBtnProps } from 'src/components/Fabs/Fabs';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
 
@@ -52,7 +52,7 @@ class ShopsList extends React.Component<ShopListProps, State> {
             onClick: this._add
         };
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Shops);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Shops');
 
         return (
             <GridContainer>

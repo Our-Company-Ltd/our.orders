@@ -17,14 +17,14 @@ export class Filter implements IFilter {
 
     public static And(...filters: IFilter[]): Filter {
         return new Filter({
-            Operator: FilterOperator.and,
+            Operator: 'and',
             Children: filters
         });
     }
 
     public static Eq(property: string, value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.eq,
+            Operator: 'eq',
             Property: property,
             Value: value
         });
@@ -32,29 +32,21 @@ export class Filter implements IFilter {
 
     public static IsNull(property: string): Filter {
         return new Filter({
-            Operator: FilterOperator.isnull,
+            Operator: 'isnull',
             Property: property
         });
     }
 
     public static IsNotNull(property: string): Filter {
         return new Filter({
-            Operator: FilterOperator.isnotnull,
+            Operator: 'isnotnull',
             Property: property
         });
     }
     
-    public static Regex(property: string, value: FilterValue): Filter {
-        return new Filter({
-            Operator: FilterOperator.regex,
-            Property: property,
-            Value: value
-        });
-    }
-
     public static Like(property: string, Value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.like,
+            Operator: 'like',
             Property: property,
             Value
         });
@@ -62,14 +54,14 @@ export class Filter implements IFilter {
 
     public static Lt(property: string, Value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.lt,
+            Operator: 'lt',
             Property: property,
             Value
         });
     }
     public static Lte(property: string, Value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.lte,
+            Operator: 'lte',
             Property: property,
             Value
         });
@@ -77,14 +69,14 @@ export class Filter implements IFilter {
 
     public static Gt(property: string, Value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.gt,
+            Operator: 'gt',
             Property: property,
             Value
         });
     }
     public static Gte(property: string, Value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.gte,
+            Operator: 'gte',
             Property: property,
             Value
         });
@@ -92,7 +84,7 @@ export class Filter implements IFilter {
 
     public static Ne(property: string, value: FilterValue): Filter {
         return new Filter({
-            Operator: FilterOperator.ne,
+            Operator: 'ne',
             Property: property,
             Value: value
         });
@@ -100,7 +92,7 @@ export class Filter implements IFilter {
 
     public static Or(...filters: IFilter[]): Filter {
         return new Filter({
-            Operator: FilterOperator.or,
+            Operator: 'or',
             Children: filters
         });
     }
@@ -158,10 +150,10 @@ export class Filter implements IFilter {
 
     public isValid(): boolean {
 
-        if (this.Operator === FilterOperator.and) {
+        if (this.Operator === 'and') {
             return true;
         }
-        if (this.Operator === FilterOperator.or) {
+        if (this.Operator === 'or') {
             return true;
         }
         return this.Property !== undefined && this.Value !== undefined && this.Operator !== undefined;
@@ -169,12 +161,12 @@ export class Filter implements IFilter {
 
     public toString = (intl: InjectedIntl): string => {
         const operator = this.Operator;
-        if (operator === FilterOperator.and) {
+        if (operator === 'and') {
             const children = this.Children;
             if (!children) { return ''; }
             return children.map(c => c.toString(intl)).join(` ${GetLegend(intl, operator)} `);
         }
-        if (operator === FilterOperator.or) {
+        if (operator === 'or') {
             const children = this.Children;
             if (!children) { return ''; }
             return children.map(c => c.toString(intl)).join(` ${GetLegend(intl, operator)} `);

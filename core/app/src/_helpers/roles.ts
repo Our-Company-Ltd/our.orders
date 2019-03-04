@@ -1,7 +1,7 @@
 import { User, Roles } from 'src/@types/our-orders';
 
-export const IsAdminOrInRole = (user?: User, ...roles: string[]) => {
+export const IsAdminOrInRole = (user?: User, ...roles: Roles[]) => {
     return user && (
-        roles.some(role => user.Roles.indexOf(Roles.Admin) >= 0) || 
+        roles.some(role => user.Roles.indexOf('Admin') >= 0) || 
         roles.some(role => user.Roles.indexOf(role) >= 0));
 };

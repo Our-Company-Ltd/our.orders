@@ -5,7 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Countries from 'i18n-iso-countries';
 import * as React from 'react';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
-import { Person, Roles } from 'src/@types/our-orders';
+import { Person } from 'src/@types/our-orders';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import ClientFieldsMessages from './ClientFieldsMessages';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
@@ -56,7 +56,7 @@ export class ClientFields extends React.Component<ClientFieldsProps> {
         const country = CountryIso || '';
 
         const { intl: { formatMessage }, onChange, authCtx: { user } } = this.props;
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Clients);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Clients');
 
         return (
             <GridContainer spacing={24}>

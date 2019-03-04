@@ -14,7 +14,7 @@ import OrderCheckout from '../OrderCheckout/OrderCheckout';
 import {
     LocalShipping, Payment, Check, Close, HowToVote, Delete, Print
 } from '@material-ui/icons';
-import { Order, OrderItem, Dispatch, DispatchStatus, ModelType, DispatchMethod, Roles } from 'src/@types/our-orders';
+import { Order, OrderItem, Dispatch, DispatchStatus, DispatchMethod } from 'src/@types/our-orders';
 import {
     Dialog,
     DialogTitle,
@@ -263,8 +263,8 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
 
         const ownOrder = current.UserId === user!!.Id;
 
-        const hasRights = ownOrder && IsAdminOrInRole(user, Roles.CRUD_Own_Orders) ||
-            IsAdminOrInRole(user, Roles.CRUD_All_Orders);
+        const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_Own_Orders') ||
+            IsAdminOrInRole(user, 'CRUD_All_Orders');
 
         const isOrderType = current.OrderType === 'Order';
         const { Status } = current;
@@ -368,7 +368,7 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
         // };
         const templates = templateCtx
             .templates
-            .filter(t => t.ApplyTo === ModelType.Order);
+            .filter(t => t.ApplyTo === 'order');
 
         const templateBtn = templates.length > 0 && {
             icon: <Print />,

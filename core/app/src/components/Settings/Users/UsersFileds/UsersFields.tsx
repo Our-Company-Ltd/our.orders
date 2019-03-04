@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Input } from '@material-ui/core';
 import { InjectedIntlProps } from 'react-intl';
 import UsersFieldsMessages from './UsersFieldsMessages';
-import { User, Roles } from 'src/@types/our-orders';
+import { User } from 'src/@types/our-orders';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 
 type Props = InjectedIntlProps & {
@@ -28,7 +28,7 @@ class UserFields extends React.Component<Props> {
         // TODO: what to do with this fields:
         // ShopId: string;
         // Token: string;
-        const { Roles: roles } = preview;
+        const { Roles } = preview;
         return (
             <GridContainer>
                 <Grid item={true} xs={12} className="shops-detail__lightbox-field">
@@ -80,7 +80,7 @@ class UserFields extends React.Component<Props> {
                         <Select
                             fullWidth={true}
                             multiple={true}
-                            value={roles}
+                            value={Roles}
                             // tslint:disable-next-line:no-any
                             onChange={(e: any) => this.props.onChange({ Roles: e.target.value })}
                             input={<Input id="select-roles" />}
@@ -107,32 +107,32 @@ class UserFields extends React.Component<Props> {
                             }
                         >
                             {[
-                                Roles.Admin,
-                                Roles.View_Dashboard,
-                                Roles.List_Orders,
-                                Roles.CRUD_Own_Orders,
-                                Roles.CRUD_All_Orders,
-                                Roles.CRUD_Clients,
-                                Roles.CRUD_Products,
-                                Roles.List_Vouchers,
-                                Roles.CRUD_Vouchers,
-                                Roles.View_Shops_Movements,
-                                Roles.CRUD_Shops_Movements,
-                                Roles.CRUD_Stocks_Units_Movements,
-                                Roles.CRUD_Users,
-                                Roles.CRUD_Categories,
-                                Roles.View_Shops,
-                                Roles.CRUD_Shops,
-                                Roles.View_Warehouses,
-                                Roles.CRUD_Warehouses,
-                                Roles.View_Templates,
-                                Roles.CRUD_Templates,
-                                Roles.View_Payments,
-                                Roles.View_Configuration].map(r => (
+                                'Admin',
+                                'View_Dashboard',
+                                'List_Orders',
+                                'CRUD_Own_Orders',
+                                'CRUD_All_Orders',
+                                'CRUD_Clients',
+                                'CRUD_Products',
+                                'List_Vouchers',
+                                'CRUD_Vouchers',
+                                'View_Shops_Movements',
+                                'CRUD_Shops_Movements',
+                                'CRUD_Stocks_Units_Movements',
+                                'CRUD_Users',
+                                'CRUD_Categories',
+                                'View_Shops',
+                                'CRUD_Shops',
+                                'View_Warehouses',
+                                'CRUD_Warehouses',
+                                'View_Templates',
+                                'CRUD_Templates',
+                                'View_Payments',
+                                'View_Configuration'].map(r => (
                                 <MenuItem
                                     value={r}
                                     style={{
-                                        fontWeight: roles.indexOf(r) >= 0 ? 'bold' : 'inherit'
+                                        fontWeight: Roles.indexOf(r) >= 0 ? 'bold' : 'inherit'
                                     }}
                                 >
                                     {r}

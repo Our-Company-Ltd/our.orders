@@ -5,7 +5,7 @@ import { DocumentTemplates } from '../../../../_services';
 import { WithStyles, withStyles, Grid, Avatar } from '@material-ui/core';
 import ItemPreview, { Lines, Line } from 'src/components/ItemPreview/ItemPreview';
 import DocumentTemplateDetail from '../DocumentTemplateDetail/DocumentTemplateDetail';
-import { DocumentTemplate, Roles } from 'src/@types/our-orders';
+import { DocumentTemplate } from 'src/@types/our-orders';
 import SideDialog from 'src/components/SideDialog/SideDialog';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
@@ -48,7 +48,7 @@ class DocumentTemplatesList extends React.Component<DocumentTemplatesProps, Stat
             onClick: this._add
         };
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Templates);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Templates');
 
         return (
             <GridContainer>

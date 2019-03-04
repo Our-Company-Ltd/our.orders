@@ -811,15 +811,15 @@ class Dashboard extends React.Component<dashboardProps, State> {
         const formatDate = (date: string) => {
             const d = moment(date);
             switch (t.interval) {
-                case TimeInterval.Day:
+                case 'Day':
                     return d.format('ddd ll');
-                case TimeInterval.Hour:
+                case 'Hour':
                     return d.format('LT');
-                case TimeInterval.Month:
+                case 'Month':
                     return d.format('MMMM');
-                case TimeInterval.Week:
+                case 'Week':
                     return d.format('ddd ll');
-                case TimeInterval.Year:
+                case 'Year':
                     return d.format('YYYY');
                 default:
                     return '' as never;
@@ -895,7 +895,7 @@ class Dashboard extends React.Component<dashboardProps, State> {
             case 'today':
                 {
                     const start = today;
-                    const interval = TimeInterval.Hour;
+                    const interval = 'Hour';
                     const count = now.diff(start, 'hours') + 1;
                     return { start: start.toDate(), count, interval };
                 }
@@ -903,14 +903,14 @@ class Dashboard extends React.Component<dashboardProps, State> {
                 {
                     const start = today.subtract(1, 'day');
                     const end = start.clone().add(1, 'day');
-                    const interval = TimeInterval.Hour;
+                    const interval = 'Hour';
                     const count = end.diff(start, 'hours') + 1;
                     return { start: start.toDate(), count, interval };
                 }
             case 'thisweek':
                 {
                     const start = today.startOf('week');
-                    const interval = TimeInterval.Day;
+                    const interval = 'Day';
                     const count = now.diff(start, 'days') + 1;
                     return { start: start.toDate(), count, interval };
                 }
@@ -918,14 +918,14 @@ class Dashboard extends React.Component<dashboardProps, State> {
                 {
                     const start = today.subtract(1, 'week').startOf('week');
                     const end = start.clone().add(1, 'week');
-                    const interval = TimeInterval.Day;
+                    const interval = 'Day';
                     const count = end.diff(start, 'days') + 1;
                     return { start: start.toDate(), count, interval };
                 }
             case 'thisyear':
                 {
                     const start = today.clone().dayOfYear(1);
-                    const interval = TimeInterval.Month;
+                    const interval = 'Month';
                     const count = today.clone().diff(start, 'months') + 1;
                     return { start: start.toDate(), count, interval };
                 }
@@ -933,7 +933,7 @@ class Dashboard extends React.Component<dashboardProps, State> {
                 {
                     const start = today.dayOfYear(1).subtract(1, 'years');
                     const end = start.clone().add(1, 'year');
-                    const interval = TimeInterval.Month;
+                    const interval = 'Month';
                     const count = end.diff(start, 'months') + 1;
                     return { start: start.toDate(), count, interval };
                 }
@@ -941,14 +941,14 @@ class Dashboard extends React.Component<dashboardProps, State> {
                 {
                     const start = today.date(1).subtract(1, 'month');
                     const end = start.clone().add(1, 'month');
-                    const interval = TimeInterval.Day;
+                    const interval = 'Day';
                     const count = end.diff(start, 'days') + 1;
                     return { start: start.toDate(), count, interval };
                 }
             case 'thismonth':
                 {
                     const start = today.clone().date(1);
-                    const interval = TimeInterval.Day;
+                    const interval = 'Day';
                     const count = today.clone().diff(start, 'days') + 1;
                     return { start: start.toDate(), count, interval };
                 }
@@ -957,17 +957,17 @@ class Dashboard extends React.Component<dashboardProps, State> {
                     const start = moment.utc(customPeriodFrom);
                     const end = moment.utc(customPeriodTo);
                     const duration = moment.duration(end.diff(start.clone()));
-                    let interval = TimeInterval.Day;
+                    let interval: TimeInterval = 'Day';
                     if (duration.asYears() > 2) {
-                        interval = TimeInterval.Year;
+                        interval = 'Year';
                     } else if (duration.asMonths() > 6) {
-                        interval = TimeInterval.Month;
+                        interval = 'Month';
                     } else if (duration.asWeeks() > 2) {
-                        interval = TimeInterval.Week;
+                        interval = 'Week';
                     } else if (duration.asDays() > 2) {
-                        interval = TimeInterval.Day;
+                        interval = 'Day';
                     } else {
-                        interval = TimeInterval.Hour;
+                        interval = 'Hour';
                     }
                     const count = end.diff(start, interval.toLowerCase() as moment.unitOfTime.Diff) + 1;
                     return { start: customPeriodFrom, count, interval };
@@ -975,21 +975,21 @@ class Dashboard extends React.Component<dashboardProps, State> {
             case 'last7days':
                 {
                     const start = today.subtract(6, 'day');
-                    const interval = TimeInterval.Day;
+                    const interval = 'Day';
                     const count = 7;
                     return { start: start.toDate(), count, interval };
                 }
             case 'last30days':
                 {
                     const start = today.subtract(29, 'day');
-                    const interval = TimeInterval.Day;
+                    const interval = 'Day';
                     const count = 30;
                     return { start: start.toDate(), count, interval };
                 }
             case 'last5years':
                 {
                     const start = today.subtract(4, 'year');
-                    const interval = TimeInterval.Year;
+                    const interval = 'Year';
                     const count = 5;
                     return { start: start.toDate(), count, interval };
                 }

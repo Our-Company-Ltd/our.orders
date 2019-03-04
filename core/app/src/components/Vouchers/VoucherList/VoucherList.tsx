@@ -13,7 +13,7 @@ import VoucherListItem from '../VoucherListItem/VoucherListItem';
 import { Vouchers } from '../../../_services';
 import { InjectedIntlProps } from 'react-intl';
 
-import { Voucher, Roles } from 'src/@types/our-orders';
+import { Voucher } from 'src/@types/our-orders';
 import Fabs from 'src/components/Fabs/Fabs';
 
 import {
@@ -450,7 +450,7 @@ class VoucherList extends React.Component<VoucherListProps, State> {
                 <Fabs
                     map={[
                         this.state.fetching ?
-                            'loading' : IsAdminOrInRole(user, Roles.CRUD_Vouchers) &&
+                            'loading' : IsAdminOrInRole(user, 'CRUD_Vouchers') &&
                             {
                                 icon: <Add />,
                                 legend: 'add new',

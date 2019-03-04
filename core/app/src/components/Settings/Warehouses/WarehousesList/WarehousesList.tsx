@@ -5,7 +5,7 @@ import { Warehouses } from '../../../../_services';
 import { WithStyles, Grid, withStyles, Avatar } from '@material-ui/core';
 import ItemPreview, { Lines, Line } from 'src/components/ItemPreview/ItemPreview';
 import WarehousesDetail from '../WarehousesDetail/WarehousesDetail';
-import { Warehouse, Roles } from 'src/@types/our-orders';
+import { Warehouse } from 'src/@types/our-orders';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import { Add } from '@material-ui/icons';
 import SideDialog from 'src/components/SideDialog/SideDialog';
@@ -52,7 +52,7 @@ class WarehousesList extends React.Component<WarehouseProps, State> {
             onClick: this._add
         };
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Warehouses);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Warehouses');
 
         return (
             <GridContainer>

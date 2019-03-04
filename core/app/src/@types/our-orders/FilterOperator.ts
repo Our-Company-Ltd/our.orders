@@ -1,18 +1,14 @@
-export const enum FilterOperator {
-    eq = 'eq',
-    ne = 'ne',
-    lt = 'lt',
-    gt = 'gt',
-    lte = 'lte',
-    gte = 'gte',
-    regex = 'regex',
-    and = 'and',
-    or = 'or',
-    // text = 'text',
-
-    like = 'like',
-    isnull = 'isnull',
-
-    isnotnull = 'isnotnull'
-
-}
+export type FilterOperator =
+    'eq' |
+    'ne' |
+    'lt' |
+    'gt' |
+    'lte' |
+    'gte' |
+    'regex' |
+    'and' |
+    'or' |
+    'like' |
+    'isnull' |
+    'isnotnull'
+;

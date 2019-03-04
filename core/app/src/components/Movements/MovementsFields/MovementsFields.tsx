@@ -14,7 +14,7 @@ import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Select, FormControl, InputLabel, Grid } from '@material-ui/core';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
-import { Movement, User, Roles } from 'src/@types/our-orders';
+import { Movement, User } from 'src/@types/our-orders';
 import { DateTimePicker } from 'material-ui-pickers';
 import NumberField from 'src/components/NumberField/NumberField';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
@@ -156,7 +156,7 @@ class MovementsFields extends React.Component<MovementsFieldsProps> {
     }
 
     private _isAdmin(user?: User) {
-        return user && user.Roles && user.Roles.indexOf(Roles.Admin) >= 0;
+        return user && user.Roles && user.Roles.indexOf('Admin') >= 0;
     }
 
 }

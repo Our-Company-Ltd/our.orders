@@ -40,7 +40,6 @@ import VoucherList from 'src/components/Vouchers/VoucherList/VoucherList';
 import { InjectedTemplatesProps, withTemplates } from 'src/_context/Templates';
 import MovementsList from 'src/components/Movements/MovementsList/MovementsList';
 import Dashboard from 'src/components/Dashboard/Dashboard';
-import { Roles } from 'src/@types/our-orders';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
 
 export const HomePageMessages = defineMessages({
@@ -109,7 +108,7 @@ export class HomePage extends React.Component<HomePageProps> {
             settingsCtx, warehouseCtx, authCtx, shopCtx, categoryCtx, productCtx
         } = this.props;
         var tabs = [
-            IsAdminOrInRole(user, Roles.View_Dashboard) && {
+            IsAdminOrInRole(user, 'View_Dashboard') && {
                 Key: 'dashboard',
                 Title: this.props.intl.formatMessage(HomePageMessages.dashboard),
                 Icon: <DashboardIcon />,
@@ -127,7 +126,7 @@ export class HomePage extends React.Component<HomePageProps> {
                         }}
                     />)
             },
-            IsAdminOrInRole(user, Roles.List_Orders, Roles.CRUD_All_Orders, Roles.CRUD_Own_Orders) && {
+            IsAdminOrInRole(user, 'List_Orders', 'CRUD_All_Orders', 'CRUD_Own_Orders') && {
                 Key: 'orders',
                 Title: intl.formatMessage(HomePageMessages.orders),
                 Icon: <ShoppingCart />,
@@ -181,7 +180,7 @@ export class HomePage extends React.Component<HomePageProps> {
                         }}
                     />)
             },
-            IsAdminOrInRole(user, Roles.List_Vouchers, Roles.CRUD_Vouchers) && {
+            IsAdminOrInRole(user, 'List_Vouchers', 'CRUD_Vouchers') && {
                 Key: 'voucher',
                 Title: intl.formatMessage(HomePageMessages.vouchers),
                 Icon: <CardGiftcard />,

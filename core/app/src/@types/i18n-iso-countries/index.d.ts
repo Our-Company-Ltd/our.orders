@@ -12,12 +12,12 @@ declare module 'i18n-iso-countries' {
     export default Countries;
 
 }
-declare module "i18n-iso-countries/langs/en" {
-    const data: any;
-    export = data;
-}
+// declare module "i18n-iso-countries/langs/en" {
+//     const data: any;
+//     export = data;
+// }
 
-declare module "i18n-iso-countries/langs/de" {
-    const data: any;
-    export = data;
-}
+// declare module "i18n-iso-countries/langs/de" {
+//     const data: any;
+//     export = data;
+// }

@@ -7,7 +7,6 @@ import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import * as classNames from 'classnames';
 import { InjectedAuthProps } from 'src/_context';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
-import { Roles } from 'src/@types/our-orders';
 
 type injectedClasses = 'input' | 'inputWrong' | 'inputGood';
 export type VoucherCodeProps =
@@ -33,7 +32,7 @@ class VoucherCode extends React.Component<VoucherCodeProps, State> {
     render() {
         const { classes, onChange, valid, code, authCtx: { user} } = this.props;
 
-        const canEdit = IsAdminOrInRole(user, Roles.CRUD_Vouchers);
+        const canEdit = IsAdminOrInRole(user, 'CRUD_Vouchers');
 
         const change = (index: number) =>
             (e: React.ChangeEvent<HTMLInputElement>) => {

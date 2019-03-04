@@ -37,7 +37,7 @@ import {
     withStyles
 } from '@material-ui/core';
 import ProductFieldsOption from './ProductFieldsOption';
-import { Product, ProductOption, Roles } from 'src/@types/our-orders';
+import { Product, ProductOption } from 'src/@types/our-orders';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import PricesField from 'src/components/PricesField/PricesField';
@@ -110,7 +110,7 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
         const colorHash = new ColorHash();
         const options = preview.Options;
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Products);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
 
         return (
             <GridContainer>

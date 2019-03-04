@@ -185,7 +185,7 @@ export abstract class ServiceApi<TModel extends ModelBase> {
 }
 
 class ProductApi extends ServiceApi<Product> {
-    type: ModelType = ModelType.Product;
+    type: ModelType = 'product';
 
     Empty(title: string, partial: Partial<Product>): Promise<Product> {
         const empty: Partial<Product> = {
@@ -236,11 +236,11 @@ class ServerStorageApi {
 export const ServerStorage = new ServerStorageApi();
 
 class OrderApi extends ServiceApi<Order> {
-    type: ModelType = ModelType.Order;
+    type: ModelType = 'order';
 
     Empty(partial: Partial<Order>): Promise<Order> {
         // const empty: Order = {
-        //     Type: ModelType.Order,
+        //     Type: 'Order',
         //     Tax: 0,
         //     Price: 0,
         //     Total: 0,
@@ -314,7 +314,7 @@ class OrderApi extends ServiceApi<Order> {
 export const Orders = new OrderApi();
 
 class ClientApi extends ServiceApi<Client> {
-    type: ModelType = ModelType.Client;
+    type: ModelType = 'client';
 
     Empty(partial: Partial<Client>): Promise<Client> {
         const empty: Partial<Client> = {
@@ -327,7 +327,7 @@ class ClientApi extends ServiceApi<Client> {
 export const Clients = new ClientApi();
 
 class VoucherApi extends ServiceApi<Voucher> {
-    type: ModelType = ModelType.Voucher;
+    type: ModelType = 'voucher';
 
     Empty(partial: Partial<Voucher>): Promise<Voucher> {
         const empty: Partial<Voucher> = {
@@ -341,7 +341,7 @@ class VoucherApi extends ServiceApi<Voucher> {
 export const Vouchers = new VoucherApi();
 
 class ShopApi extends ServiceApi<Shop> {
-    type: ModelType = ModelType.Shop;
+    type: ModelType = 'shop';
 
     Empty(name: string, partial: Partial<Shop>): Promise<Shop> {
         const empty: Partial<Shop> = {
@@ -355,7 +355,7 @@ class ShopApi extends ServiceApi<Shop> {
 export const Shops = new ShopApi();
 
 class WarehouseApi extends ServiceApi<Warehouse> {
-    type: ModelType = ModelType.Warehouse;
+    type: ModelType = 'Warehouse';
 
     Empty(name: string, partial: Partial<Warehouse>): Promise<Warehouse> {
         const empty: Partial<Warehouse> = {
@@ -369,7 +369,7 @@ class WarehouseApi extends ServiceApi<Warehouse> {
 export const Warehouses = new WarehouseApi();
 
 class CategoryApi extends ServiceApi<Category> {
-    type: ModelType = ModelType.Category;
+    type: ModelType = 'category';
 
     Empty(title: string, partial: Partial<Category>): Promise<Category> {
         const empty: Partial<Category> = {
@@ -383,7 +383,7 @@ class CategoryApi extends ServiceApi<Category> {
 export const Categories = new CategoryApi();
 
 class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
-    type: ModelType = ModelType.DocumentTemplate;
+    type: ModelType = 'documenttemplate';
 
     Empty(title: string, partial: Partial<DocumentTemplate>): Promise<DocumentTemplate> {
         const empty: Partial<DocumentTemplate> = {
@@ -499,7 +499,7 @@ class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
 export const DocumentTemplates = new DocumentTemplateApi();
 
 class MovementApi extends ServiceApi<Movement> {
-    type: ModelType = ModelType.Movement;
+    type: ModelType = 'movement';
 
     Cashbox(): Promise<Cashbox> {
         const requestOptions = {
@@ -579,7 +579,7 @@ export interface StockUnitUpdateBindngs {
 export type StockUnitWarehouseResult = { SKU: string; Stock: number };
 
 class StockUnitApi extends ServiceApi<StockUnit> {
-    type: ModelType = ModelType.StockUnit;
+    type: ModelType = 'stockunit';
 
     Update(stockUpdate: StockUnitUpdateBindngs): Promise<StockUnit> {
         const requestOptions = {
@@ -724,7 +724,7 @@ export const Settings = new SettingsApi();
 
 export type ResetResponse = { Id: string; Username: string; Code: string; Link: string };
 class UsersApi { // extends ServiceApi<User> 
-    // type: ModelType = ModelType.User;
+    // type: ModelType = 'User';
     endpoint: string = 'user';
 
     // Empty(firstName: string, partial: Partial<User>): Promise<User> {

@@ -3,7 +3,7 @@ import * as md5 from 'md5';
 
 import ItemPreview, { Thumb, Line, Lines } from '../../ItemPreview/ItemPreview';
 import { InjectedIntlProps, defineMessages, FormattedMessage } from 'react-intl';
-import { Person, Client, Roles } from 'src/@types/our-orders';
+import { Person, Client } from 'src/@types/our-orders';
 import { DialogContent, Button, DialogActions, CircularProgress, WithStyles, withStyles } from '@material-ui/core';
 import PersonFields from 'src/components/Person/PersonFields';
 import { Clients } from 'src/_services';
@@ -93,7 +93,7 @@ class OrderClientFields extends React.Component<OrderClientFieldsProps, State> {
         const email = client.Email || '';
         const city = client.City || '';
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Clients);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Clients');
 
         const empty = !(firstname || lastname || organizationname);
         const preview = empty ?

@@ -16,7 +16,7 @@ import { InjectedAuthProps } from '../../../_context/Auth';
 import { InjectedSettingsProps } from '../../../_context/Settings';
 import { OrderDetail } from '../OrderDetail/OrderDetail';
 import { InjectedShopProps, InjectedWarehouseProps, InjectedUsersProps } from 'src/_context';
-import { Order, OrderStatus, OrderType, Roles } from 'src/@types/our-orders';
+import { Order, OrderStatus, OrderType } from 'src/@types/our-orders';
 import Fabs, { FabBtnProps } from 'src/components/Fabs/Fabs';
 
 import {
@@ -222,7 +222,7 @@ class OrderList extends React.Component<OrdersListProps, State> {
             rowCount: rowCount
         };
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_All_Orders, Roles.CRUD_Own_Orders);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_All_Orders', 'CRUD_Own_Orders');
 
         const add = () => {
             this.setState(() => ({ fetching: true }), () => {

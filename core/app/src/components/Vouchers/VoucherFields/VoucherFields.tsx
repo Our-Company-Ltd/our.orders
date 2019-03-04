@@ -15,7 +15,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Grid } from '@material-ui/core';
 import { DatePicker } from 'material-ui-pickers';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
-import { Voucher, Roles } from 'src/@types/our-orders';
+import { Voucher } from 'src/@types/our-orders';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
 
@@ -44,7 +44,7 @@ export class VoucherFields extends React.Component<VoucherFieldsProps> {
             MultipleUse,
             Used } = current;
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Vouchers);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Vouchers');
 
         return (
             <GridContainer>

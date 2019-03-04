@@ -1,7 +1,0 @@
-[
-  {
-    "id": "src.components.movementFilterBar.interactiveTitle",
-    "description": "Legend for interactive title",
-    "defaultMessage": "for {search} in {status} {filters} sorted by {sortDropdown}"
-  }
-]

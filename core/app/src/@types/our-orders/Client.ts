@@ -1,5 +1,5 @@
-import { ModelBase, Person, ModelType } from '.';
+import { ModelBase, Person } from '.';
 
 export interface Client extends Person, ModelBase {
-    Type: ModelType.Client;
+    Type: 'client';
 }

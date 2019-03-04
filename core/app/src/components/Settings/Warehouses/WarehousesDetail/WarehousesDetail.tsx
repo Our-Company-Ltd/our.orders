@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import { InjectedIntlProps, injectIntl } from 'react-intl';
 import WarehousesFields from '../WarehousesFields/WarehousesFields';
-import { Warehouse, Roles } from 'src/@types/our-orders';
+import { Warehouse } from 'src/@types/our-orders';
 import { DialogContent, DialogActions, Button } from '@material-ui/core';
 import { InjectedWarehouseProps, InjectedAuthProps } from 'src/_context';
 import { Delete } from '@material-ui/icons';
@@ -40,7 +40,7 @@ class WarehousesDetail extends React.Component<Props, State> {
         const { cancel, initial: { Id }, intl, initial, authCtx: { user } } = this.props;
         const { changes } = this.state;
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Products);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
 
         return (
             <React.Fragment>

@@ -12,7 +12,7 @@ import { InjectedWarehouseProps } from '../../_context/Warehouse';
 
 import { StockUnits } from '../../_services';
 
-import { StockUnit, Roles } from 'src/@types/our-orders';
+import { StockUnit } from 'src/@types/our-orders';
 import { Filter } from 'src/_helpers/Filter';
 import { FilterDefinition } from 'src/_types/FilterDefinition';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
@@ -52,7 +52,7 @@ export class Stock extends React.Component<StockProps, State> {
         const rowCount = Object.keys(units).length;
         const rowsPerPage = 10;
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Products);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
         
         return (
             <React.Fragment>

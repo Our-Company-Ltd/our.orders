@@ -1,7 +1,7 @@
-import { ModelBase, ModelType } from '.';
+import { ModelBase } from '.';
 
 export type DocumentTemplate = ModelBase & {
-    Type: ModelType.DocumentTemplate;
+    Type: 'documenttemplate';
 
     Title: string;
 

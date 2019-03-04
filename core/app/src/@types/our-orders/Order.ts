@@ -1,6 +1,6 @@
-import { ModelBase, ModelType, OrderType, Amount, OrderStatus, OrderItem, Person, Payment, Dispatch } from '.';
+import { ModelBase, OrderType, Amount, OrderStatus, OrderItem, Person, Payment, Dispatch } from '.';
 export interface Order extends ModelBase {
-    Type: ModelType.Order;
+    Type: 'order';
 
     OrderType?: OrderType;
 

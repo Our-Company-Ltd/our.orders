@@ -1,7 +1,7 @@
-import { ModelBase, ModelType, Price, ProductOption } from '.';
+import { ModelBase, Price, ProductOption } from '.';
 
 export type Product = ModelBase & {
-    Type: ModelType.Product;
+    Type: 'product';
     Title: string;
     Src?: string;
     Favorite: boolean;

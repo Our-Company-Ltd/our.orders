@@ -12,7 +12,7 @@ import { Button, Grid, Dialog, DialogActions, DialogContent, Slide, IconButton }
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import ProductList from '../ProductList/ProductList';
 import { Add, Delete, Close, Check } from '@material-ui/icons';
-import { Product, Roles } from 'src/@types/our-orders';
+import { Product } from 'src/@types/our-orders';
 import WarehouseIcon from './WarehouseIcon';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules, withStyles, WithStyles } from '@material-ui/core/styles';
@@ -166,7 +166,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
 
         const skus: { sku: string; legend: string }[] = [];
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Products);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
 
         const addSKU = (p: Product) => {
             const { SKU, Options } = p;

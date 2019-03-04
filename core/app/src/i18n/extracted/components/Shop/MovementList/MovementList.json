@@ -1,7 +1,0 @@
-[
-  {
-    "id": "src.components.MovementList.title",
-    "description": "Legend for interactive title",
-    "defaultMessage": "At the moment, the kasse in {shop} is :"
-  }
-]

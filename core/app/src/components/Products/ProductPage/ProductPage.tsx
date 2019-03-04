@@ -9,7 +9,7 @@ import { InjectedSettingsProps } from '../../../_context/Settings';
 
 import { InjectedWarehouseProps, InjectedAuthProps } from '../../../_context';
 import ProductList from '../ProductList/ProductList';
-import { Product, Roles } from 'src/@types/our-orders';
+import { Product } from 'src/@types/our-orders';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import { Dialog } from '@material-ui/core';
 import { InjectedProductProps } from 'src/_context/Product';
@@ -81,7 +81,7 @@ export class ProductPage extends React.Component<ProductPageProps, State> {
             this.setState(() => ({ editingOpened: false }));
         };
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Products);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
 
         return (
             <div style={{ position: 'relative', height: '100%' }}>

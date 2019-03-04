@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Select, FormControl, InputLabel, Grid, WithStyles, withStyles } from '@material-ui/core';
 import DispatchList from '../../Forms/Dispatch/DispatchList';
-import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem, Roles } from 'src/@types/our-orders';
+import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem } from 'src/@types/our-orders';
 import { DateTimePicker } from 'material-ui-pickers';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 
@@ -131,8 +131,8 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
         const needsDispatchInfos = NeedsDispatch;
 
         const ownOrder = (current.UserId && current.UserId) === (user && user.Id);
-        const hasRights = ownOrder && IsAdminOrInRole(user, Roles.CRUD_Own_Orders) ||
-            IsAdminOrInRole(user, Roles.CRUD_All_Orders);
+        const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_Own_Orders') ||
+            IsAdminOrInRole(user, 'CRUD_All_Orders');
 
         return (
             <DetailGridContainer>

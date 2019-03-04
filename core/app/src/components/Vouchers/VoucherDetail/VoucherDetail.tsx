@@ -5,7 +5,7 @@ import { InjectedIntlProps } from 'react-intl';
 import {
     Close, Check, Delete
 } from '@material-ui/icons';
-import { Voucher, Order, Roles } from 'src/@types/our-orders';
+import { Voucher, Order } from 'src/@types/our-orders';
 import Fabs, { FabBtnProps } from 'src/components/Fabs/Fabs';
 import VoucherFields, { VoucherFieldsProps } from '../VoucherFields/VoucherFields';
 import { Vouchers, Orders } from 'src/_services';
@@ -180,7 +180,7 @@ export class VoucherDetail extends React.Component<VoucherDetailProps, State> {
         const changed = !!Object.keys(changes).length;
         const { authCtx: { user } } = this.props;
 
-        const hasRights = IsAdminOrInRole(user, Roles.CRUD_Vouchers);
+        const hasRights = IsAdminOrInRole(user, 'CRUD_Vouchers');
 
         const saveBtn: FabBtnProps = {
             icon: <Check />,
@@ -229,7 +229,7 @@ export class VoucherDetail extends React.Component<VoucherDetailProps, State> {
 
     private _loadOrders() {
         const { authCtx: { user } } = this.props;
-        const canListOrders = IsAdminOrInRole(user, Roles.List_Orders);
+        const canListOrders = IsAdminOrInRole(user, 'List_Orders');
 
         const { id, current: { OrderIds } } = this.state;
 

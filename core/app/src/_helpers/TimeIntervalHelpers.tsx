@@ -3,27 +3,27 @@ import { TimeInterval } from 'src/@types/our-orders';
 
 export const TimeIntervalMessages = defineMessages({
     Hour: {
-        id: `TimeInterval.${TimeInterval.Hour}`,
+        id: `TimeInterval.Hour`,
         defaultMessage: '{itemCount, plural, one {Hour} other {Hours}}',
         description: 'Legend for timeinterval - Hour'
     },
     Day: {
-        id: `TimeInterval.${TimeInterval.Day}`,
+        id: `TimeInterval.Day`,
         defaultMessage: '{itemCount, plural, one {Day} other {Days}}',
         description: 'Legend for timeinterval - Day'
     },
     Week: {
-        id: `TimeInterval.${TimeInterval.Week}`,
+        id: `TimeInterval.Week`,
         defaultMessage: '{itemCount, plural, one {Week} other {Weeks}}',
         description: 'Legend for timeinterval - Week'
     },
     Month: {
-        id: `TimeInterval.${TimeInterval.Month}`,
+        id: `TimeInterval.Month`,
         defaultMessage: '{itemCount, plural, one {Month} other {Months}}',
         description: 'Legend for timeinterval - Month'
     },
     Year: {
-        id: `TimeInterval.${TimeInterval.Year}`,
+        id: `TimeInterval.Year`,
         defaultMessage: '{itemCount, plural, one {Year} other {Years}}',
         description: 'Legend for timeinterval - Year'
     }

@@ -1,7 +1,0 @@
-[
-  {
-    "id": "src.components.forms.client.searchPlaceholder",
-    "description": "Placeholder for search bar client",
-    "defaultMessage": "Choose existing client"
-  }
-]

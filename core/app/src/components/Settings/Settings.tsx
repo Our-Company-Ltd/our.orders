@@ -17,7 +17,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import PowerSettings from '@material-ui/icons/PowerSettingsNew';
 import Account from './Account/Account';
-import { User, Roles } from 'src/@types/our-orders';
+import { User } from 'src/@types/our-orders';
 import { Bookmarks, FileCopy, People, Store, Settings as SettingsIcon, EuroSymbol } from '@material-ui/icons';
 import CategoriesList from './Categories/CategoriesList/CategoriesList';
 import WarehousesList from './Warehouses/WarehousesList/WarehousesList';
@@ -131,7 +131,7 @@ class Settings extends React.Component<SettingsProps, State> {
                             />
                         </ListItem>
 
-                        {IsAdminOrInRole(user, Roles.CRUD_Users) &&
+                        {IsAdminOrInRole(user, 'CRUD_Users') &&
                             <ListItem
                                 button={true}
                                 onClick={e => this._changeSubmenu('Users')}
@@ -149,7 +149,7 @@ class Settings extends React.Component<SettingsProps, State> {
                             </ListItem>
                         }
 
-                        {IsAdminOrInRole(user, Roles.View_Shops) && <ListItem
+                        {IsAdminOrInRole(user, 'View_Shops') && <ListItem
                             button={true}
                             onClick={e => this._changeSubmenu('Shops')}
                             className={
@@ -165,7 +165,7 @@ class Settings extends React.Component<SettingsProps, State> {
                             <ListItemText primary="Shops" />
                         </ListItem>}
 
-                        {IsAdminOrInRole(user, Roles.View_Warehouses) && <ListItem
+                        {IsAdminOrInRole(user, 'View_Warehouses') && <ListItem
                             button={true}
                             onClick={e => this._changeSubmenu('Warehouses')}
                             className={
@@ -181,7 +181,7 @@ class Settings extends React.Component<SettingsProps, State> {
                             <ListItemText primary="Warehouses" />
                         </ListItem>}
 
-                        {IsAdminOrInRole(user, Roles.CRUD_Categories) && <ListItem
+                        {IsAdminOrInRole(user, 'CRUD_Categories') && <ListItem
                             button={true}
                             onClick={e => this._changeSubmenu('Categories')}
                             className={
@@ -197,7 +197,7 @@ class Settings extends React.Component<SettingsProps, State> {
                             <ListItemText primary="Categories" />
                         </ListItem>}
 
-                        {IsAdminOrInRole(user, Roles.View_Templates) &&
+                        {IsAdminOrInRole(user, 'View_Templates') &&
                             <ListItem
                                 button={true}
                                 onClick={e => this._changeSubmenu('Templates')}
@@ -214,7 +214,7 @@ class Settings extends React.Component<SettingsProps, State> {
                                 <ListItemText primary="Templates" />
                             </ListItem>
                         }
-                        {IsAdminOrInRole(user, Roles.View_Payments) &&
+                        {IsAdminOrInRole(user, 'View_Payments') &&
                             <ListItem
                                 button={true}
                                 onClick={e => this._changeSubmenu('Payments')}
@@ -231,7 +231,7 @@ class Settings extends React.Component<SettingsProps, State> {
                                 <ListItemText primary="Payments" />
                             </ListItem>
                         }
-                        {IsAdminOrInRole(user, Roles.View_Configuration) &&
+                        {IsAdminOrInRole(user, 'View_Configuration') &&
                             <ListItem
                                 button={true}
                                 onClick={e => this._changeSubmenu('Configuration')}
@@ -318,7 +318,7 @@ class Settings extends React.Component<SettingsProps, State> {
         localStorage.setItem('settingActiveSubmenu', activeSubmenu);
     }
     // private _isAdmin(user: TUser) {
-    //     return user.Roles && user.Roles.indexOf(Roles.Admin) >= 0;
+    //     return user.Roles && user.'indexOf'('Admin') >= 0;
     // }
 }
 

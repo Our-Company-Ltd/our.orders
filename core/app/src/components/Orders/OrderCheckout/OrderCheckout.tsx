@@ -7,7 +7,7 @@ import {
 import { InjectedIntlProps } from 'react-intl';
 
 import { InjectedWarehouseProps, InjectedAuthProps, InjectedShopProps, InjectedSettingsProps } from '../../../_context';
-import { Order, Dispatch, OrderItem, ModelType } from 'src/@types/our-orders';
+import { Order, Dispatch, OrderItem } from 'src/@types/our-orders';
 import { Grid, Typography, Paper, ButtonBase } from '@material-ui/core';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import OrderReciept from '../OrderReciept/OrderReciept';
@@ -86,7 +86,7 @@ class OrderCheckout extends React.Component<OrderCheckoutProps, State> {
 
         const templates = templateCtx
             .templates
-            .filter(t => t.ApplyTo === ModelType.Payment);
+            .filter(t => t.ApplyTo === 'payment');
 
         // const templateBtn = templates.length > 0 && {
         //     icon: <Print />,

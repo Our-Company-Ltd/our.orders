@@ -3,50 +3,51 @@ import { FilterOperator } from 'src/@types/our-orders';
 
 const messages = defineMessages({
     'eq': {
-        id: `FilterOperator.${FilterOperator.eq}`,
+        id: `FilterOperator.eq`,
         defaultMessage: '=',
         description: 'Equal oprerator'
     },
     'ne': {
-        id: `FilterOperator.${FilterOperator.ne}`,
+        id: `FilterOperator.ne`,
         defaultMessage: '!=',
         description: 'Not equal siopreratorgn'
     },
     'lt': {
-        id: `FilterOperator.${FilterOperator.lt}`,
+        id: `FilterOperator.lt`,
         defaultMessage: '<',
         description: 'Less then oprerator'
     },
     'bt': {
-        id: `FilterOperator.${FilterOperator.gt}`,
+        id: `FilterOperator.gt`,
         defaultMessage: '>',
         description: 'Bigger then oprerator'
     },
     'lte': {
-        id: `FilterOperator.${FilterOperator.lte}`,
+        id: `FilterOperator.lte`,
         defaultMessage: '<=',
         description: 'Less or equal then oprerator'
     },
     'gte': {
-        id: `FilterOperator.${FilterOperator.gte}`,
+        id: `FilterOperator.gte`,
         defaultMessage: '>=',
         description: 'Bigger or equal then oprerator'
     },
     'and': {
-        id: `FilterOperator.${FilterOperator.and}`,
+        id: `FilterOperator.and`,
         defaultMessage: 'and',
         description: 'and oprerator'
     },
     'or': {
-        id: `FilterOperator.${FilterOperator.or}`,
+        id: `FilterOperator.or`,
         defaultMessage: 'or',
         description: 'or oprerator'
     },
-    'regex': {
-        id: `FilterOperator.${FilterOperator.regex}`,
+    'like': {
+        id: `FilterOperator.like`,
         defaultMessage: 'like',
-        description: 'regex then oprerator'
+        description: 'like oprerator'
     }
+    
 });
 
 export const GetLegend = (intl: InjectedIntl, operator: FilterOperator): string => {
