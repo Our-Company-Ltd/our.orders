@@ -62,6 +62,7 @@ Task("BuildApp")
         NpmInstall(settings => {
             settings.FromPath(dir);
             settings.AddPackage("typescript").InstallGlobally();
+            settings.AddPackage("@babel/core").InstallGlobally();
             settings.AddPackage("@babel/cli").InstallGlobally();
         });
         
