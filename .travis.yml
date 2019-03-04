@@ -26,6 +26,7 @@ install:
   - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
   - cd $TRAVIS_REPO_SLUG
   - git checkout -qf $TRAVIS_COMMIT
+  - nuget install xunit.runners -Version 2.3.1 -OutputDirectory testrunner
 script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
   - dotnet tool install -g Cake.Tool --version 0.31.0
