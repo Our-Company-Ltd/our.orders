@@ -149,13 +149,19 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var settings = new DotNetCoreTestSettings() {
-             Configuration = "Release"
-        };
+       
 
         GetFiles(coreTestPath)
             .ToList()
-            .ForEach(f => DotNetCoreTest(f.FullPath, settings));
+            .ForEach(f => {
+                 var settings = new DotNetCoreTestSettings() {
+                    Configuration = "Release",
+                    DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
+                    DiagnosticOutput = true
+                };
+                
+                DotNetCoreTest(f.FullPath, settings);
+            });
     })
     .Does(() =>
     {

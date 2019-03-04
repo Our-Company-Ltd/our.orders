@@ -68,7 +68,7 @@
     "start-demo-js": "cross-env REACT_APP_API_URL=http://localhost:5000/orders react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "start-all": "npm-run-all -p watch-css start-demo-js start-demo",
-    "localization-extract": "npx babel ./src --extensions \".ts,.tsx\"",
+    "localization-extract": "npx babel ./src --extensions \".ts,.tsx\" --out-file script-compiled.js",
     "localization-manage": "node scripts/translationRunner.js",
     "localization": "npm-run-all localization-extract localization-manage",
     "build-js": "react-scripts-ts build",

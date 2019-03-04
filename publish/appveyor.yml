@@ -1,20 +1,11 @@
-image: Visual Studio 2017
-branches:
-  only:
-    - master
-    # We'll also build whenever there is a new commit on any branch starting with `features/`
-    - /feature\/.+/
-    # Nightly build for dev
-    - develop
-build_script:
-  - ps: cd publish
-  - ps: dotnet cake build.cake --bootstrap
-  - ps: dotnet cake build.cake --pack
+---
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
 assembly_info:
   # We'll version the binaries and the NuGet package in the build script
   patch: false
-# We'll run the tests in the build script
-test: off
+
 # AppVeyor will create a release tag if a matching one does not exist
 # hence triggering another build
 skip_tags: true
@@ -26,8 +17,60 @@ skip_commits:
     - .travis.yml
     - .circleci/config.yml
     - azure-pipelines.yml
+branches:
+  only:
+    - master
+    # We'll also build whenever there is a new commit on any branch starting with `features/`
+    - /feature\/.+/
+    # Nightly build for dev
+    - develop
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+image: Visual Studio 2017
+
+environment:
+  # No need to pre-warm the `NuGet` cache
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+# `install` will run before `build_script`
+install:
+  # The `SDK` is required to restore, build, publish... a `.NET Core` application
+  # https://www.microsoft.com/net/download/windows
+  - ps: .\publish\install-script\dotnet-install.ps1 -Version 2.2.104
+  - ps: dotnet tool install --global Cake.Tool --version 0.31.0
+  
+#---------------------------------#
+#       tests configuration       #
+#---------------------------------#
+# We'll run the tests in the build script
+test: off
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+build_script:
+  - ps: cd publish
+  - ps: dotnet cake build.cake --bootstrap
+  - ps: dotnet cake build.cake --pack
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+artifacts:
+  # Store NuGet packages
+  - path: .\publish\Artifacts\**\*.nupkg
+    name: NuGet
+  # Store Test Results
+  - path: .\publish\Artifacts\**\*.trx
+    name: Test Results
+
+#---------------------------------#
+#     deployment configuration    #
+#---------------------------------#
 deploy:
-  # Main releases 
+  # Main releases
   - provider: GitHub
     # By convention release versions start with `v`
     release: v$(APPVEYOR_BUILD_VERSION)
@@ -35,12 +78,12 @@ deploy:
       # Encrypted `GitHub` `PAT`
       # https://www.appveyor.com/docs/deployment/github/#provider-settings
       secure: m6r49s7GcXjgrF22gSHdcXKSKqXugyvdf6khfLgdqXW9mUIND/4//kEbAjHYCIyw
-    artifact: packages
+    artifact: .\publish\Artifacts\**\*.nupkg
     draft: false
     prerelease: false
     on:
       branch: master
-  # Features releases 
+  # Features releases
   # - provider: GitHub
   #   # By convention release versions start with `v`
   #   release: v$(APPVEYOR_BUILD_VERSION)
@@ -53,7 +96,7 @@ deploy:
   #   prerelease: true
   #   on:
   #     branch: /features\/.+/
-  # # Develop / Nightly releases 
+  # # Develop / Nightly releases
   # - provider: GitHub
   #   # By convention release versions start with `v`
   #   release: v$(APPVEYOR_BUILD_VERSION)
@@ -69,24 +112,24 @@ deploy:
   - provider: NuGet
     server: https://www.nuget.org/F/our-orders/api/v2/package
     api_key:
-      # Encrypted `MyGet` token - https://www.myget.org/profile/Me#!/AccessTokens
+      # Encrypted `NuGet` token - https://www.myget.org/profile/Me#!/AccessTokens
       # https://www.appveyor.com/docs/deployment/nuget/#provider-settings
       secure: MI3IYH1hzPTuOrzmjLzd24MpuONLVx1j/fGzaIG5NevSO/HZJpwVAFzXy5+ouY2/
     skip_symbols: false
     symbol_server: https://www.nuget.org/F/our-orders/api/v2/package
-    artifact: packages
+    artifact: .\publish\Artifacts\**\*.nupkg
     prerelease: false
     on:
       branch: master
   - provider: NuGet
     server: https://www.myget.org/F/our-orders/api/v2/package
     api_key:
-      # Encrypted `MyGet` token - https://www.myget.org/profile/Me#!/AccessTokens
+      # Encrypted `NuGet` token - https://www.myget.org/profile/Me#!/AccessTokens
       # https://www.appveyor.com/docs/deployment/nuget/#provider-settings
       secure: 88pNC0/tQsgK9GcPHAoA/JaZqBkhy7U4kqIQjAo13fwoVud1e0024KiXOUmjgNRP
     skip_symbols: false
     symbol_server: https://www.myget.org/F/our-orders/api/v2/package
-    artifact: packages
+    artifact: .\publish\Artifacts\**\*.nupkg
     prerelease: true
     on:
       branch: /develop\/.+/
@@ -101,14 +144,4 @@ deploy:
 #   artifact: packages
 #   on:
 #     branch: /features\/.+/
-# Environment variables
-environment:
-  # No need to pre-warm the `NuGet` cache
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-# `install` will run before `build_script`
-install:
-  # Cake build is targeting `.NET Core` `2.2.0`, so we can safely install the latest `SDK`
-  # The `SDK` is required to restore, build, publish... a `.NET Core` application
-  # https://www.microsoft.com/net/download/windows
-  - ps: .\publish\install-script\dotnet-install.ps1 -Version 2.2.104
-  - ps: dotnet tool install --global Cake.Tool --version 0.31.0
+
