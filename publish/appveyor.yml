@@ -132,7 +132,7 @@ deploy:
     artifact: .\publish\Artifacts\**\*.nupkg
     prerelease: true
     on:
-      branch: /develop\/.+/
+      branch: develop
 # - provider: NuGet
 #   server: https://www.myget.org/F/our-orders/api/v2/package
 #   api_key:
