@@ -1,4 +1,4 @@
-image: .NET Core SDK 2.1.201
+image: Visual Studio 2017
 branches:
   only:
     - master
