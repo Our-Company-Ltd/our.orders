@@ -114,28 +114,13 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var settings = new DotNetCoreToolSettings();
-
-        var argumentsBuilder = new ProcessArgumentBuilder()
-            .Append("-configuration")
-            .Append(configuration);
-
-        if (IsRunningOnLinuxOrDarwin())
-        {
-            argumentsBuilder
-                .Append("-framework")
-                .Append("netcoreapp2.2");
-        }
-
-        var projectFiles = GetFiles(coreTestPath);
-
-        foreach (var projectFile in projectFiles)
-        {
-            var testResultsFile = testsResultsDir.Combine($"{projectFile.GetFilenameWithoutExtension()}.xml");
-            var arguments = $"{argumentsBuilder.Render()}";
-
-            DotNetCoreTool(projectFile, "xunit", arguments, settings);
-        }
+        var settings = new DotNetCoreTestSettings() {
+             Configuration = "Release"
+        };
+        
+        GetFiles(coreTestPath)
+            .ToList()
+            .ForEach(f => DotNetCoreTest(f.FullPath, settings));
     })
     .Does(() =>
     {
