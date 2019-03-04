@@ -3,6 +3,8 @@
 #tool dotnet:?package=GitVersion.Tool&version=4.0.1-beta1-58
 #tool dotnet:?package=dotnet-xunit-to-junit&version=1.0.0
 
+#addin nuget:?package=Cake.Npm&version=0.16.0
+
 #r Newtonsoft.Json
 
 var target = Argument("target", "Default");
@@ -17,6 +19,7 @@ var packagesDir = MakeAbsolute(artifactsDir.Combine(Directory("packages")));
 
 var corePath = "../core/lib/core.csproj";
 var coreTestPath = "../core/lib.test/core.test.csproj";
+var appPath = "../core/app";
 
 Task("Clean")
     .Does(() =>
@@ -50,8 +53,30 @@ Task("Restore")
                 .ForEach(f => DotNetCoreRestore(f.FullPath));
     });
 
-Task("SemVer")
+Task("BuildApp")
     .IsDependentOn("Restore")
+    .Does(() => {
+        var settings = new NpmInstallSettings 
+        {
+            WorkingDirectory = MakeAbsolute(Directory(appPath)),
+            Production = true,
+            LogLevel = NpmLogLevel.Info
+        };
+
+        NpmInstall(settings);
+
+        var runSettings = new NpmRunScriptSettings
+        {
+            ScriptName = "build",
+            WorkingDirectory = MakeAbsolute(Directory(appPath)),
+            LogLevel = NpmLogLevel.Info
+        };
+
+        NpmRunScript(runSettings);
+    });
+
+Task("SemVer")
+    .IsDependentOn("BuildApp")
     .Does(() =>
     {
         var gitVersionSettings = new GitVersionSettings
@@ -117,7 +142,7 @@ Task("Test")
         var settings = new DotNetCoreTestSettings() {
              Configuration = "Release"
         };
-        
+
         GetFiles(coreTestPath)
             .ToList()
             .ForEach(f => DotNetCoreTest(f.FullPath, settings));
