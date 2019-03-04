@@ -7,6 +7,10 @@ Our Orders ♥
 <div align="center">
 e-shop on .net core
 </div>
+<div align="center">
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/our.orders/blob/master/LICENSE)
+[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=flat&logo=twitter)](https://twitter.com/intent/tweet?hashtags=our-orders,dotnet&text=Our%20Orders%20%E2%99%A5.%20e-shop%20on%20.net%20core&url=https%3a%2f%2fgithub.com%2fOur-Company-Ltd%2four.orders)
+</div>
 
 ### **Our Orders** is a new, fully featured, cross-platform e-Commerce solution running on .Net. 
  
@@ -132,6 +136,12 @@ The configuration can be modified either using the `appsettings.json` file by se
  ```
 ## Add newsletter, Paypal, Stripe, custom invoices…
 [Check the wiki for documentation about configuring in depth Our Orders…](https://github.com/Our-Company-Ltd/our.orders/wiki)
+
+## Build Status
+
+|             |Master|Develop|
+|-------------|:----------:|:-----------:|
+|**Linux/Mac**|[![Build Status](https://travis-ci.org/Our-Company-Ltd/our.orders.svg?branch=master)](https://travis-ci.org/Our-Company-Ltd/our.orders)|[![Build Status](https://travis-ci.org/Our-Company-Ltd/our.orders.svg?branch=develop)](https://travis-ci.org/Our-Company-Ltd/our.orders)|
 
 ## Screens
 
