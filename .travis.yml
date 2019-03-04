@@ -2,7 +2,7 @@ language: csharp
 # SDK version, based on the targeted `netstandard` / `netcoreapp` version in the projects
 os: linux
 dist: xenial
-dotnet: 2.2.0
+dotnet: 2.2.101
 mono: none
 env:
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true DOTNET_CLI_TELEMETRY_OPTOUT=true
