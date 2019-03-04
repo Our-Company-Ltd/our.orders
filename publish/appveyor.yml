@@ -51,9 +51,9 @@ test: off
 #       build configuration       #
 #---------------------------------#
 build_script:
-  - ps: cd publish
-  - ps: dotnet cake build.cake --bootstrap
-  - ps: dotnet cake build.cake --pack
+  - cmd: cd publish
+  - cmd: dotnet cake build.cake --bootstrap
+  - cmd: dotnet cake build.cake --pack
 
 #---------------------------------#
 #      artifacts configuration    #
