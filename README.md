@@ -10,7 +10,7 @@ e-shop on .net core
 <div align="center">
  
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/our.orders/blob/master/LICENSE)
-[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=flat&logo=twitter)](https://twitter.com/intent/tweet?hashtags=our-orders,dotnet&text=Our%20Orders%20%E2%99%A5.%20e-shop%20on%20.net%20core&url=https%3a%2f%2fgithub.com%2fOur-Company-Ltd%2four.orders)
+[![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=flat&logo=twitter)](https://twitter.com/intent/tweet?hashtags=our-orders,dotnet&text=Our%20Orders%20%E2%99%A5%20E-shop%20on%20.net%20core&url=https%3a%2f%2fgithub.com%2fOur-Company-Ltd%2four.orders)
 </div>
 
 ### **Our Orders** is a new, fully featured, cross-platform e-Commerce solution running on .Net. 
