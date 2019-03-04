@@ -70,7 +70,7 @@ Task("BuildApp")
         var installSettings = new NpmInstallSettings 
         {
             WorkingDirectory = dir,
-            Production = true
+            Production = false
         };
         NpmInstall(installSettings);
 
