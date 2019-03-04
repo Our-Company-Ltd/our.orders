@@ -8,7 +8,6 @@
   "FilterOperator.lte": "<=",
   "FilterOperator.ne": "!=",
   "FilterOperator.or": "or",
-  "LangSwitch.title": "Swicth Langs",
   "OrderStatus.Canceled": "Canceled",
   "OrderStatus.Done": "Done",
   "OrderStatus.Empty": "Empty",
