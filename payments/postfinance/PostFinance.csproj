@@ -8,7 +8,7 @@
     <RootNamespace>our.orders</RootNamespace>
 
     <IsPackable>true</IsPackable>
-    <PackageId>Our.Orders.PostFinance</PackageId>
+    <PackageId>Our.Orders.Payments.PostFinance</PackageId>
     <Title>Post Financefor Our Orders ♥</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Our Company Ltd.</Authors>

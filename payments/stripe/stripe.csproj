@@ -8,7 +8,7 @@
     <RootNamespace>our.orders</RootNamespace>
 
     <IsPackable>true</IsPackable>
-    <PackageId>Our.Orders.Stripe</PackageId>
+    <PackageId>Our.Orders.Payments.Stripe</PackageId>
     <Title>Stripe® for Our Orders ♥</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Our Company Ltd.</Authors>

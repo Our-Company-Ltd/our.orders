@@ -7,7 +7,7 @@
     <RootNamespace>our.orders</RootNamespace>
 
     <IsPackable>true</IsPackable>
-    <PackageId>Our.Orders.CampaignMonitor</PackageId>
+    <PackageId>Our.Orders.Newsletters.CampaignMonitor</PackageId>
     <Title>Campaign Monitor® for Our Orders ♥</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Our Company Ltd.</Authors>
@@ -20,7 +20,10 @@
     <PackageTags>eshop,netcore,csharp,react,campaignmonitor,entity-framework,entity-framework-core,mongodb</PackageTags>
     <RepositoryUrl>https://github.com/Our-Company-Ltd/our.orders</RepositoryUrl>
   </PropertyGroup>
+  
   <ItemGroup>      
+  
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
       <PackageReference Include="campaignmonitor-api-dotnet-standard" Version="4.2.4" />
   </ItemGroup>
   <ItemGroup>

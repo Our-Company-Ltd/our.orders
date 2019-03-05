@@ -7,7 +7,7 @@
     <RootNamespace>our.orders</RootNamespace>
 
     <IsPackable>true</IsPackable>
-    <PackageId>Our.Orders.MailChimp</PackageId>
+    <PackageId>Our.Orders.Newsletters.MailChimp</PackageId>
     <Title>MailChimp® for Our Orders ♥</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Our Company Ltd.</Authors>

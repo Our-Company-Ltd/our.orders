@@ -8,7 +8,7 @@
     <RootNamespace>our.orders</RootNamespace>
 
     <IsPackable>true</IsPackable>
-    <PackageId>Our.Orders.Paypal</PackageId>
+    <PackageId>Our.Orders.Payments.Paypal</PackageId>
     <Title>Paypal® for Our Orders ♥</Title>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Authors>Our Company Ltd.</Authors>
