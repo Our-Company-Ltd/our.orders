@@ -26,5 +26,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\core\lib\core.csproj" />
   </ItemGroup>
-
 </Project>
