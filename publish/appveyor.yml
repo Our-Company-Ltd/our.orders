@@ -53,7 +53,7 @@ test: off
 build_script:
   - cmd: cd publish
   - cmd: dotnet cake build.cake --bootstrap
-  - cmd: dotnet cake build.cake --pack
+  - cmd: dotnet cake build.cake --pack --coverage
 
 #---------------------------------#
 #      artifacts configuration    #

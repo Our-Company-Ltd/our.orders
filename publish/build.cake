@@ -201,20 +201,68 @@ Task("Pack")
             .ForEach(f => DotNetCorePack(f.FullPath, settings));
     });
 
-Task("PublishAppVeyorArtifacts")
+// Task("PublishAppVeyorArtifacts")
+//     .IsDependentOn("Pack")
+//     .WithCriteria(() => HasArgument("pack") && AppVeyor.IsRunningOnAppVeyor)
+//     .Does(() =>
+//     {
+//         CopyFiles($"{packagesDir}/*.nupkg", MakeAbsolute(Directory("./")), false);
+
+//         GetFiles($"./*.nupkg")
+//             .ToList()
+//             .ForEach(f => AppVeyor.UploadArtifact(f, new AppVeyorUploadArtifactsSettings { DeploymentName = "packages" }));
+//     });
+
+
+// Get coverage.
+#tool "nuget:?package=OpenCover"
+#tool "nuget:?package=Codecov&version=1.0.3"
+#addin "nuget:?package=Cake.Codecov"
+Task("Coverage")
     .IsDependentOn("Pack")
-    .WithCriteria(() => HasArgument("pack") && AppVeyor.IsRunningOnAppVeyor)
+    .WithCriteria(() => HasArgument("coverage") && !IsRunningOnLinuxOrDarwin())
     .Does(() =>
     {
-        CopyFiles($"{packagesDir}/*.nupkg", MakeAbsolute(Directory("./")), false);
-
-        GetFiles($"./*.nupkg")
+        var resultsFile = artifactsDir.CombineWithFilePath("coverage.xml");
+        
+        GetFiles(corePath)
             .ToList()
-            .ForEach(f => AppVeyor.UploadArtifact(f, new AppVeyorUploadArtifactsSettings { DeploymentName = "packages" }));
+            .ForEach(f => {
+                TransformTextFile(f.FullPath, ">", "<")
+                    .WithToken("portable", ">full<")
+                    .Save(f.FullPath);
+            });
+        
+        GetFiles(coreTestPath)
+            .ToList()
+            .ForEach(f => {
+                OpenCover(
+                    x => x.DotNetCoreTest(
+                        f.FullPath,
+                        new DotNetCoreTestSettings() { Configuration = "Debug" }
+                    ),
+                    resultsFile,
+                    new OpenCoverSettings()
+                    {
+                        ArgumentCustomization = args => args
+                            .Append("-threshold:100")
+                            .Append("-returntargetcode")
+                            .Append("-hideskipped:Filter;Attribute"),
+                        Register = "user",
+                        OldStyle = true,
+                        MergeOutput = true
+                    }
+                        .WithFilter("+[Skeleton*]*")
+                        .WithFilter("-[xunit*]*")
+                        .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+                );
+            });
+
+        Codecov(resultsFile.FullPath);
     });
 
 Task("Default")
-    .IsDependentOn("Pack");
+    .IsDependentOn("Coverage");
 
 RunTarget(target);
 
