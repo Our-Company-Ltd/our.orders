@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using CsvHelper;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -96,6 +99,59 @@ namespace our.orders.Controllers
         public override Task<IActionResult> CountAsync([FromBody]Filter filter = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             return base.CountAsync(filter, cancellationToken);
+        }
+
+        [HttpPost("import/csv")]
+        [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_CLIENTS)]
+        public async Task<IActionResult> ImportCsvAsync([FromBody]Dictionary<string, string> headers = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var results = new List<ClientDto>();
+            foreach (var file in Request.Form.Files)
+            {
+                if (file.Length <= 0 || file.FileName == null) continue;
+                using (var stream = file.OpenReadStream())
+                using (var reader = new StreamReader(stream))
+                using (var csv = new CsvReader(reader))
+                {
+                    if (headers != null)
+                    {
+                        csv.Configuration.PrepareHeaderForMatch = (string header, int index) => headers.TryGetValue(header, out string h) ? h : header;
+                    }
+                    var records = csv.GetRecords<ClientDto>();
+                    foreach (var clientDto in records)
+                    {
+                        var record = _mapper.Map<IClient>(clientDto);
+                        var newClient = await service.CreateAsync(record, cancellationToken);
+                        results.Add(_mapper.Map<ClientDto>(newClient));
+                    }
+                }
+            }
+            return Ok(ApiModel.AsSuccess(results));
+
+        }
+
+        [HttpPost("export/csv")]
+        [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_CLIENTS)]
+        public async Task<IActionResult> ExportCsvAsync([FromBody]Filter filter = null, [FromQuery]string sort = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
+            var results = await service.FindAsync(filter, sorts, cancellationToken: cancellationToken);
+
+
+            var implementationType = this.GetType();
+            var controllerName = implementationType.Name.ToLowerInvariant().Replace("controller", "");
+
+            var dtos = results.Select(r => _mapper.Map<ClientDto>(r));
+            var csvString = "";
+            using (var writer = new StringWriter())
+            using (var csv = new CsvWriter(writer))
+            {
+                csv.WriteRecords(dtos);
+                csvString = writer.ToString();
+            }
+
+            return Ok(ApiModel.AsSuccess(csvString));
+
         }
     }
 }

@@ -28,7 +28,17 @@ import {
 } from '@material-ui/icons';
 
 import {
-    withStyles, Dialog, WithStyles, ListItem, IconButton, TextField, Grid, List as MaterialList, Tooltip, MenuItem
+    withStyles,
+    Dialog,
+    WithStyles,
+    ListItem,
+    IconButton,
+    TextField,
+    Grid,
+    List as MaterialList,
+    Tooltip,
+    MenuItem,
+    Button
 } from '@material-ui/core';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import { InjectedProductProps } from 'src/_context/Product';
@@ -41,8 +51,14 @@ import { debounce } from 'throttle-debounce';
 import { InjectedTemplatesProps } from 'src/_context/Templates';
 import ClientListMesseges from './ClientListMesseges';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import Dropzone from 'react-dropzone';
+import { InjectedNotistackProps, withSnackbar } from 'notistack';
+import { FilterDefinition } from 'src/_types/FilterDefinition';
 
 export type injectedClasses =
+    'dropZone' |
+    'dropZoneLabel' |
+    'dropZoneNoImage' |
     'drawerSpacer' |
     'searchInput' |
     'menuContainer' |
@@ -70,6 +86,7 @@ export type ClientListProps =
     InjectedSettingsProps &
     InjectedProductProps &
     InjectedTemplatesProps &
+    InjectedNotistackProps &
     WithStyles<injectedClasses> &
     {
     };
@@ -126,6 +143,7 @@ class ClientList extends React.Component<ClientListProps, State> {
         this._isRowLoaded = this._isRowLoaded.bind(this);
         this._loadMore = this._loadMore.bind(this);
         this._rowRenderer = this._rowRenderer.bind(this);
+        this._onDrop = this._onDrop.bind(this);
         this._handleItemChanged = this._handleItemChanged.bind(this);
         this._firstNameInput = React.createRef<HTMLInputElement>();
         this._lastNameInput = React.createRef<HTMLInputElement>();
@@ -333,6 +351,18 @@ class ClientList extends React.Component<ClientListProps, State> {
                                 onChange={telephoneChange}
                             />
                         </Grid>
+                        <Grid item={true}>
+                            <Button onClick={() => this._export()}>export</Button>
+                        </Grid>
+                        <Grid item={true}>
+                            <Dropzone
+                                className={classes.dropZone}
+                                onDrop={this._onDrop}
+                            >
+                                <Button className={classes.dropZoneLabel}>import</Button>
+
+                            </Dropzone>
+                        </Grid>
                         <Grid item={true} style={{ marginTop: 'auto', display: 'flex' }}>
                             <IconButton
                                 onClick={() =>
@@ -507,11 +537,43 @@ class ClientList extends React.Component<ClientListProps, State> {
         );
     }
 
-    private _loadMore(range: IndexRange) {
-        const { stopIndex, startIndex } = range;
-        this._loadMoreRowsStartIndex = startIndex;
-        this._loadMoreRowsStopIndex = stopIndex;
-        // const { filter: { query, sortAttribute, sortDirection } } = this.state;
+    private _export() {
+        Clients.ExportCsv(this._GetFilters()).then(csvString => {
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString));
+            element.setAttribute('download', 'clients.csv');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        });
+
+    }
+    private _onDrop(acceptedFiles: Blob[]) {
+
+        if (!acceptedFiles || acceptedFiles.length === 0) { return; }
+        // const reader = new FileReader();
+        // reader.onload = () => {
+        //     if (reader.result) {
+        //         // import 
+        //         this.props.onChange({ Src: reader.result as string });
+        //     }
+        // };
+        // // tslint:disable-next-line:no-console
+        // reader.onabort = () => console.log('file reading was aborted');
+        // // tslint:disable-next-line:no-console
+        // reader.onerror = () => console.log('file reading has failed');
+
+        var data = new FormData();
+        acceptedFiles.forEach((b, i) => data.set(`csv${i}`, b));
+        Clients.ImportCsv(data).then(clients => {
+            this.props.enqueueSnackbar(`${clients.length} clients imported`);
+            this._refresh();
+        });
+    }
+    private _GetFilters() {
         const { filter: { firstName, lastName, telephone, email, sortAttribute, sortDirection } } = this.state;
         const filters: Filter[] = [];
 
@@ -529,6 +591,18 @@ class ClientList extends React.Component<ClientListProps, State> {
         if (telephone) {
             filters.push(Filter.Or(Filter.Like('Phone', telephone), Filter.Like('CellPhone', telephone)));
         }
+        return {
+            filters: filters,
+            operator: 'and',
+            // query: query,
+            sort: `${sortDirection === 'ascending' ? '' : '-'}${sortAttribute}`
+        } as FilterDefinition;
+    }
+    private _loadMore(range: IndexRange) {
+        const { stopIndex, startIndex } = range;
+        this._loadMoreRowsStartIndex = startIndex;
+        this._loadMoreRowsStopIndex = stopIndex;
+        // const { filter: { query, sortAttribute, sortDirection } } = this.state;
 
         const delta = stopIndex - startIndex;
 
@@ -538,12 +612,7 @@ class ClientList extends React.Component<ClientListProps, State> {
         }));
 
         return Clients.Find(
-            {
-                filters: filters,
-                operator: 'and',
-                // query: query,
-                sort: `${sortDirection === 'ascending' ? '' : '-'}${sortAttribute}`
-            },
+            this._GetFilters(),
             startIndex,
             stopIndex + 1)
             .then(response => {
@@ -629,6 +698,16 @@ const drawerWidth = '16rem';
 export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
 
     return {
+        dropZone: {
+            width: '100%',
+            height: '100%'
+        },
+        dropZoneNoImage: {
+        },
+        dropZoneLabel: {
+            width: '100%',
+            height: '100%'
+        },
         containerCls: {
             height: '100%',
             position: 'relative'
@@ -733,4 +812,4 @@ export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
             fontSize: 11,
         }
     };
-})(ClientList);
+})(withSnackbar(ClientList));

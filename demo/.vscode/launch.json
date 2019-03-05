@@ -22,6 +22,7 @@
             "program": "${workspaceRoot}/bin/Debug/netcoreapp2.2/our.orders.demo.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
+            "requireExactSource": false,
             "stopAtEntry": false,
             "launchBrowser": {
                 "enabled": false,

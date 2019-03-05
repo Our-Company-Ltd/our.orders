@@ -4584,6 +4584,64 @@ function (_ServiceApi3) {
       var empty = {};
       return _get(_getPrototypeOf(ClientApi.prototype), "_Empty", this).call(this, _objectSpread({}, empty, partial));
     }
+  }, {
+    key: "ImportCsv",
+    value: function ImportCsv(formData) {
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formData
+      };
+      var url = "".concat(_helpers.config.apiUrl, "/import-csv");
+      return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse).then(function (response) {
+        return response;
+      });
+    }
+  }, {
+    key: "ExportCsv",
+    value: function ExportCsv(filterDef) {
+      var f = filterDef.filters,
+          sort = filterDef.sort,
+          o = filterDef.operator;
+      var filters = f && _toConsumableArray(f) || [];
+      var operator = o || 'and'; // if (query) {
+      //     filters.push(Filter.Text(query));
+      // }
+
+      var body;
+
+      switch (filters.length) {
+        case 0:
+          body = null;
+          break;
+
+        case 1:
+          body = filters[0];
+          break;
+
+        default:
+          body = operator === 'and' ? _Filter.Filter.And.apply(_Filter.Filter, _toConsumableArray(filters)) : _Filter.Filter.Or.apply(_Filter.Filter, _toConsumableArray(filters));
+          break;
+      }
+
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: body && JSON.stringify(body)
+      };
+      var querystring = "";
+
+      if (sort) {
+        querystring += "sort=".concat(sort);
+      }
+
+      var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type, "/export-csv?").concat(querystring);
+      return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse);
+    }
   }]);
 
   return ClientApi;
@@ -6443,6 +6501,10 @@ var _ClientListMesseges = _interopRequireDefault(require("./ClientListMesseges")
 
 var _roles = require("src/_helpers/roles");
 
+var _reactDropzone = _interopRequireDefault(require("react-dropzone"));
+
+var _notistack = require("notistack");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -6515,6 +6577,7 @@ function (_React$Component) {
     _this._isRowLoaded = _this._isRowLoaded.bind(_assertThisInitialized(_this));
     _this._loadMore = _this._loadMore.bind(_assertThisInitialized(_this));
     _this._rowRenderer = _this._rowRenderer.bind(_assertThisInitialized(_this));
+    _this._onDrop = _this._onDrop.bind(_assertThisInitialized(_this));
     _this._handleItemChanged = _this._handleItemChanged.bind(_assertThisInitialized(_this));
     _this._firstNameInput = React.createRef();
     _this._lastNameInput = React.createRef();
@@ -6759,6 +6822,19 @@ function (_React$Component) {
         inputRef: this._telephoneNameInput,
         onChange: telephoneChange
       })), React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.Button, {
+        onClick: function onClick() {
+          return _this4._export();
+        }
+      }, "export")), React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_reactDropzone.default, {
+        className: classes.dropZone,
+        onDrop: this._onDrop
+      }, React.createElement(_core.Button, {
+        className: classes.dropZoneLabel
+      }, "import"))), React.createElement(_core.Grid, {
         item: true,
         style: {
           marginTop: 'auto',
@@ -6916,15 +6992,47 @@ function (_React$Component) {
       }));
     }
   }, {
-    key: "_loadMore",
-    value: function _loadMore(range) {
+    key: "_export",
+    value: function _export() {
+      _services.Clients.ExportCsv(this._GetFilters()).then(function (csvString) {
+        // tslint:disable-next-line:no-console
+        console.log(csvString);
+      });
+    }
+  }, {
+    key: "_onDrop",
+    value: function _onDrop(acceptedFiles) {
       var _this6 = this;
 
-      var stopIndex = range.stopIndex,
-          startIndex = range.startIndex;
-      this._loadMoreRowsStartIndex = startIndex;
-      this._loadMoreRowsStopIndex = stopIndex; // const { filter: { query, sortAttribute, sortDirection } } = this.state;
+      if (!acceptedFiles || acceptedFiles.length === 0) {
+        return;
+      } // const reader = new FileReader();
+      // reader.onload = () => {
+      //     if (reader.result) {
+      //         // import 
+      //         this.props.onChange({ Src: reader.result as string });
+      //     }
+      // };
+      // // tslint:disable-next-line:no-console
+      // reader.onabort = () => console.log('file reading was aborted');
+      // // tslint:disable-next-line:no-console
+      // reader.onerror = () => console.log('file reading has failed');
 
+
+      var data = new FormData();
+      acceptedFiles.forEach(function (b, i) {
+        return data.set("csv".concat(i), b);
+      });
+
+      _services.Clients.ImportCsv(data).then(function (clients) {
+        _this6.props.enqueueSnackbar("".concat(clients.length, " clients imported"));
+
+        _this6._refresh();
+      });
+    }
+  }, {
+    key: "_GetFilters",
+    value: function _GetFilters() {
       var _this$state$filter2 = this.state.filter,
           firstName = _this$state$filter2.firstName,
           lastName = _this$state$filter2.lastName,
@@ -6950,6 +7058,23 @@ function (_React$Component) {
         filters.push(_Filter.Filter.Or(_Filter.Filter.Like('Phone', telephone), _Filter.Filter.Like('CellPhone', telephone)));
       }
 
+      return {
+        filters: filters,
+        operator: 'and',
+        // query: query,
+        sort: "".concat(sortDirection === 'ascending' ? '' : '-').concat(sortAttribute)
+      };
+    }
+  }, {
+    key: "_loadMore",
+    value: function _loadMore(range) {
+      var _this7 = this;
+
+      var stopIndex = range.stopIndex,
+          startIndex = range.startIndex;
+      this._loadMoreRowsStartIndex = startIndex;
+      this._loadMoreRowsStopIndex = stopIndex; // const { filter: { query, sortAttribute, sortDirection } } = this.state;
+
       var delta = stopIndex - startIndex;
       this.setState(function (prev) {
         return {
@@ -6957,18 +7082,13 @@ function (_React$Component) {
           fetching: true
         };
       });
-      return _services.Clients.Find({
-        filters: filters,
-        operator: 'and',
-        // query: query,
-        sort: "".concat(sortDirection === 'ascending' ? '' : '-').concat(sortAttribute)
-      }, startIndex, stopIndex + 1).then(function (response) {
+      return _services.Clients.Find(this._GetFilters(), startIndex, stopIndex + 1).then(function (response) {
         var count = response.Values.length;
         response.Values.forEach(function (client, i) {
-          _this6._loadedRowsMap[startIndex + i] = client;
+          _this7._loadedRowsMap[startIndex + i] = client;
         });
 
-        _this6.setState(function (prev) {
+        _this7.setState(function (prev) {
           return {
             loading: prev.loading - count,
             loaded: prev.loaded + count,
@@ -6982,7 +7102,7 @@ function (_React$Component) {
   }, {
     key: "_refresh",
     value: function _refresh() {
-      var _this7 = this;
+      var _this8 = this;
 
       this._loadedRowsMap = {};
 
@@ -7001,14 +7121,14 @@ function (_React$Component) {
           lastUpdate: new Date().getTime()
         };
       }, function () {
-        _this7._loadMore({
-          startIndex: _this7._loadMoreRowsStartIndex,
-          stopIndex: _this7._loadMoreRowsStopIndex
+        _this8._loadMore({
+          startIndex: _this8._loadMoreRowsStartIndex,
+          stopIndex: _this8._loadMoreRowsStopIndex
         }).then(function () {
-          if (_this7._list) {
-            _this7._list.forceUpdate();
+          if (_this8._list) {
+            _this8._list.forceUpdate();
 
-            _this7._list.forceUpdateGrid();
+            _this8._list.forceUpdateGrid();
           }
         });
       });
@@ -7016,14 +7136,14 @@ function (_React$Component) {
   }, {
     key: "_resetFilters",
     value: function _resetFilters() {
-      var _this8 = this;
+      var _this9 = this;
 
       this.setState(function () {
         return {
           filter: DefaultFilters()
         };
       }, function () {
-        return _this8._refresh();
+        return _this9._refresh();
       });
     }
   }, {
@@ -7045,14 +7165,14 @@ function (_React$Component) {
   }, {
     key: "_handleOrderDeleted",
     value: function _handleOrderDeleted() {
-      var _this9 = this;
+      var _this10 = this;
 
       this.setState(function () {
         return {
           editing: -1
         };
       }, function () {
-        return _this9._refresh();
+        return _this10._refresh();
       });
     }
   }, {
@@ -7070,6 +7190,15 @@ var drawerWidth = '16rem';
 
 var _default = (0, _core.withStyles)(function (theme) {
   return {
+    dropZone: {
+      width: '100%',
+      height: '100%'
+    },
+    dropZoneNoImage: {},
+    dropZoneLabel: {
+      width: '100%',
+      height: '100%'
+    },
     containerCls: {
       height: '100%',
       position: 'relative'
@@ -7172,7 +7301,7 @@ var _default = (0, _core.withStyles)(function (theme) {
       fontSize: 11
     }
   };
-})(ClientList);
+})((0, _notistack.withSnackbar)(ClientList));
 
 exports.default = _default;
 "use strict";
