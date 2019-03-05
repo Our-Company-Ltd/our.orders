@@ -6,6 +6,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using our.orders.Builder;
 using our.orders.Helpers;
@@ -27,19 +28,19 @@ namespace our.orders.Repositories.mongoDb
                               services.AddSingleton<IRepository<IProduct>>((s) => CreateProvider<Product, IProduct>(database));
                               services.AddSingleton<IRepository<IClient>>((s) => CreateProvider<Client, IClient>(database));
                               services.AddSingleton<IRepository<IShippingTemplate>>((s) => CreateProvider<ShippingTemplate, IShippingTemplate>(database));
-                              services.AddSingleton<IRepository<Shop>>((s) => CreateProvider<Shop>(database));
-                              services.AddSingleton<IRepository<Movement>>((s) => CreateProvider<Movement>(database));
-                              services.AddSingleton<IRepository<Voucher>>((s) => CreateProvider<Voucher>(database));
-                              services.AddSingleton<IRepository<StockUnit>>((s) => CreateProvider<StockUnit>(database));
-                              services.AddSingleton<IRepository<Warehouse>>((s) => CreateProvider<Warehouse>(database));
-                              services.AddSingleton<IRepository<Category>>((s) => CreateProvider<Category>(database));
-                              services.AddSingleton<IRepository<DocumentTemplate>>((s) => CreateProvider<DocumentTemplate>(database));
+                              services.AddSingleton<IRepository<Shop>>((s) => CreateRepository<Shop>(database));
+                              services.AddSingleton<IRepository<Movement>>((s) => CreateRepository<Movement>(database));
+                              services.AddSingleton<IRepository<Voucher>>((s) => CreateRepository<Voucher>(database));
+                              services.AddSingleton<IRepository<StockUnit>>((s) => CreateRepository<StockUnit>(database));
+                              services.AddSingleton<IRepository<Warehouse>>((s) => CreateRepository<Warehouse>(database));
+                              services.AddSingleton<IRepository<Category>>((s) => CreateRepository<Category>(database));
+                              services.AddSingleton<IRepository<DocumentTemplate>>((s) => CreateRepository<DocumentTemplate>(database));
 
-                              services.AddSingleton<IRepository<User>>((s) => CreateProvider<User>(database));
+                              // be sure the user is registered in the DI before used in the identity builder
+                              var userRepository = CreateRepository<User>(database);
+                              services.AddSingleton<IRepository<User>>((s) => userRepository);
 
                               services.AddSingleton<IUserStore<User>, RepositoryUserStore>();
-
-
 
                               var identityBuilder = services
                                     .AddIdentity<User, Role>()
@@ -60,19 +61,46 @@ namespace our.orders.Repositories.mongoDb
         }
         private static void _EnsureIndex<TImplementation>(IMongoCollection<TImplementation> collection) where TImplementation : class, IModel
         {
-            BsonClassMap.RegisterClassMap<TImplementation>(cm =>
-              {
-                  cm.AutoMap();
-                  cm.MapIdMember(c => c.Id).SetElementName("Id").SetIdGenerator(StringObjectIdGenerator.Instance);
-                  cm.SetIgnoreExtraElements(true);
-              });
-        }
+            // collection.Indexes.CreateOne()
 
+        }
+        private static void _EnsureClassMap<TImplementation>() where TImplementation : class, IModel
+        {
+            if (BsonClassMap.IsClassMapRegistered(typeof(TImplementation))) return;
+
+            if (typeof(TImplementation).Extends<Model>())
+            {
+                _EnsureClassMap<Model>();
+            }
+            BsonClassMap.RegisterClassMap<TImplementation>(_ApplyClassMap);
+        }
+        private static void _ApplyClassMap<TImplementation>(BsonClassMap<TImplementation> cm) where TImplementation : class, IModel
+        {
+            cm.AutoMap();
+
+            var idMember = typeof(TImplementation)
+                .GetMember("Id",
+                    System.Reflection.BindingFlags.Public
+                    | System.Reflection.BindingFlags.Instance
+                    | System.Reflection.BindingFlags.DeclaredOnly
+                ).FirstOrDefault();
+
+            if (idMember != null)
+            {
+                cm
+                    .MapIdMember(idMember)
+                    .SetElementName("_id")
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId))
+                    .SetIdGenerator(StringObjectIdGenerator.Instance);
+            }
+
+            cm.SetIgnoreExtraElements(true);
+        }
 
         public static IRepository<TInterface> CreateProvider<TImplementation, TInterface>(IMongoDatabase database) where TImplementation : class, TInterface where TInterface : IModel
         {
             var interfaceType = typeof(TInterface);
-
+            _EnsureClassMap<TImplementation>();
             var collectionname = interfaceType.Name;
             var mongoCollection = database.GetCollection<TImplementation>(collectionname);
             _EnsureIndex(mongoCollection);
@@ -81,10 +109,10 @@ namespace our.orders.Repositories.mongoDb
         }
 
 
-        public static IRepository<TModel> CreateProvider<TModel>(IMongoDatabase database) where TModel : class, IModel
+        public static IRepository<TModel> CreateRepository<TModel>(IMongoDatabase database) where TModel : class, IModel
         {
             var modelType = typeof(TModel);
-
+            _EnsureClassMap<TModel>();
             var collectionname = modelType.Name;
             var mongoCollection = database.GetCollection<TModel>(collectionname);
             _EnsureIndex(mongoCollection);

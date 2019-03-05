@@ -7,45 +7,45 @@ namespace our.orders.Helpers
 	/// <summary>
 	/// extensions utilities for Objects 
 	/// </summary>
-	internal static class TypesExtensions
+	public static class TypesExtensions
 	{
 
-		internal static bool Is<TType>(this Type t)
+		public static bool Is<TType>(this Type t)
 		{
 			return t == typeof(TType);
 		}
-		internal static bool IsOrImplements<TInterface>(this Type t)
+		public static bool IsOrImplements<TInterface>(this Type t)
 		{
 			return t.Is<TInterface>() || Implements(t, typeof(TInterface));
 		}
 
-		internal static bool IsOrImplements(this Type t, Type interfaceType)
+		public static bool IsOrImplements(this Type t, Type interfaceType)
 		{
 			return t == interfaceType || Implements(t, interfaceType);
 		}
 
 
-		internal static bool Implements<TInterface>(this Type t)
+		public static bool Implements<TInterface>(this Type t)
 		{
 			return Implements(t, typeof(TInterface));
 		}
 
-		internal static bool Implements(this Type t, Type interfaceType)
+		public static bool Implements(this Type t, Type interfaceType)
 		{
 			return interfaceType != t && interfaceType.IsAssignableFrom(t);
 		}
 
-		internal static bool Extends<TBase>(this Type t)
+		public static bool Extends<TBase>(this Type t)
 		{
 			return Extends(t, typeof(TBase));
 		}
 
-		internal static bool Extends(this Type t, Type baseType)
+		public static bool Extends(this Type t, Type baseType)
 		{
 			return t.GetTypeInfo().IsSubclassOf(baseType);
 		}
 
-		internal static Type[] GetNestedTypes(this Type t, BindingFlags bindingAttr, bool includeBaseNestedTypes)
+		public static Type[] GetNestedTypes(this Type t, BindingFlags bindingAttr, bool includeBaseNestedTypes)
 		{
 			var actualNested = t.GetNestedTypes(bindingAttr);
 

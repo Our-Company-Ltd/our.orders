@@ -234,7 +234,7 @@ namespace our.orders
 #if NETCORE2_2
             var embeddedProvider = new ManifestEmbeddedFileProvider(Assembly.GetAssembly(this.GetType()));
 #else
-            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetAssembly(this.GetType()), "api");
+            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetAssembly(this.GetType()), "our.orders");
 #endif
             services.AddSingleton<IFileProvider>(embeddedProvider);
 

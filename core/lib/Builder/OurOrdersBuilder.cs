@@ -64,23 +64,27 @@ namespace our.orders.Builder
         {
             builder.AppEvents.ApplicationStarted += (sender, serviceProvider) =>
             {
-                var userManager = serviceProvider.GetService<UserManager>();
-                var old = AsyncHelper.RunSync(() => userManager.FindByNameAsync(username));
-                if (old != null) return;
-
-                var result = AsyncHelper.RunSync(() => userManager.CreateAsync(new User()
+                using (var scope = serviceProvider.CreateScope())
                 {
-                    UserName = username,
-                    Email = ""
-                }, password));
+                    var userManager = scope.ServiceProvider.GetService<UserManager>();
+                    var old = AsyncHelper.RunSync(() => userManager.FindByNameAsync(username));
+                    if (old != null) return;
 
-                if (!result.Succeeded)
-                {
-                    var errors = result.Errors.Select(e => $"{e.Code}: {e.Description}");
-                    throw new AppException($"impossible to create the admin: {string.Join(", ", errors)}");
+                    var result = AsyncHelper.RunSync(() => userManager.CreateAsync(new User()
+                    {
+                        UserName = username,
+                        Email = ""
+                    }, password));
+
+                    if (!result.Succeeded)
+                    {
+                        var errors = result.Errors.Select(e => $"{e.Code}: {e.Description}");
+                        throw new AppException($"impossible to create the admin: {string.Join(", ", errors)}");
+                    }
+                    var user = AsyncHelper.RunSync(() => userManager.FindByNameAsync(username));
+                    userManager.AddToRoleAsync(user, RoleStore.ADMIN);
                 }
-                var user = AsyncHelper.RunSync(() => userManager.FindByNameAsync(username));
-                userManager.AddToRoleAsync(user, RoleStore.ADMIN);
+
             };
             return builder;
         }
