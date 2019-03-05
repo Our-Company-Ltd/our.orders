@@ -231,9 +231,11 @@ namespace our.orders
                     manager.FeatureProviders.Add(new InternalControllerFeature());
                     manager.FeatureProviders.Add(new ExternalControllerFeatureProvider(AppSettings));
                 });
-
-
+#if NETCORE2_2
             var embeddedProvider = new ManifestEmbeddedFileProvider(Assembly.GetAssembly(this.GetType()));
+#else
+            var embeddedProvider = new EmbeddedFileProvider(Assembly.GetAssembly(this.GetType()), "api");
+#endif
             services.AddSingleton<IFileProvider>(embeddedProvider);
 
             // configure DI for application services
@@ -262,7 +264,7 @@ namespace our.orders
                 FileProvider = fileProvider,
                 DefaultFileNames = new List<string> { "index.html", "index.htm", "home.html", "home.htm", "default.html", "default.html" }
             });
-        
+
 
             app.UseStaticFiles(new StaticFileOptions
             {
