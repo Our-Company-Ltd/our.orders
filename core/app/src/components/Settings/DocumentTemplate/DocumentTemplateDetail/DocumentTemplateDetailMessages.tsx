@@ -56,6 +56,11 @@ export default defineMessages({
         defaultMessage: 'Orders',
         description: 'Legend for orders in template chosser'
     },
+    stocks: {
+        id: 'src.components.settings.documenttemplate.stocks',
+        defaultMessage: 'Stocks',
+        description: 'Legend for Stocks in template chosser'
+    },
     ordersProducts: {
         id: 'src.components.settings.documenttemplate.ordersProducts',
         defaultMessage: 'Orders products',

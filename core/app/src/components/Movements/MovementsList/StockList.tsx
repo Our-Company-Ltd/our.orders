@@ -9,14 +9,14 @@ import {
     AutoSizer
 } from 'react-virtualized';
 
-import { StockUnitWarehouseResult, StockUnits } from '../../../_services';
+import { StockUnitWarehouseResult, StockUnits, DocumentTemplates } from '../../../_services';
 import { InjectedIntlProps } from 'react-intl';
 
 import { Movement, Cashbox } from 'src/@types/our-orders';
 import Fabs, { FabBtnProps } from 'src/components/Fabs/Fabs';
 
 import {
-    Cached
+    Cached, Print
 } from '@material-ui/icons';
 
 import {
@@ -40,6 +40,8 @@ import { InjectedTemplatesProps } from 'src/_context/Templates';
 import { Filter } from 'src/_helpers/Filter';
 import StockListItem from '../StockListItem/StockListItem';
 import Stock from 'src/components/Stock/Stock';
+import { Printer } from 'src/_helpers/print';
+import { FilterDefinition } from 'src/_types/FilterDefinition';
 
 export type injectedClasses =
     'drawerSpacer' |
@@ -99,6 +101,7 @@ type State = {
     openDialog?: boolean;
     dialogSku?: string;
     dialogTitle?: string;
+    templatesOpened?: boolean;
 };
 
 class StockList extends React.Component<StockListProps, State> {
@@ -151,10 +154,23 @@ class StockList extends React.Component<StockListProps, State> {
             classes,
             settingsCtx,
             warehouseCtx,
-            authCtx
+            authCtx,
+            templateCtx
         } = this.props;
 
         const loading = fetching;
+
+        const stocksTemplates = templateCtx
+            .templates
+            .filter(t => t.ApplyTo === 'Stocks');
+
+        const ordersTemplatesBtn = stocksTemplates.length > 0 && {
+            icon: <Print />,
+            legend: stocksTemplates.length > 1 ? 'documents' : stocksTemplates[0].Title,
+            themeColor: 'gray',
+            onClick: stocksTemplates.length > 1 ?
+                () => this.setState(() => ({ templatesOpened: true })) : () => this._printOrders(stocksTemplates[0].Id)
+        } as FabBtnProps;
 
         return (
             <GridContainer className={classes.containerCls} spacing={0}>
@@ -211,11 +227,11 @@ class StockList extends React.Component<StockListProps, State> {
                 </Dialog>
                 <Fabs
                     map={
-                        [loading && {
+                        [loading ? {
                             icon: <Cached />,
                             legend: 'loading',
                             themeColor: 'gray'
-                        }] as FabBtnProps[]
+                        } : ordersTemplatesBtn]
                     }
                 />
             </GridContainer>);
@@ -329,6 +345,37 @@ class StockList extends React.Component<StockListProps, State> {
     private _isRowLoaded(ind: Index) {
         // No entry in this map signifies that the row has never been loaded before
         return !!this._loadedRowsMap[ind.index];
+    }
+
+    private _printOrders(templateId: string) {
+        const { id, min, max, sku } = this.props;
+        const filters: Filter[] = [];
+
+        if (sku) {
+            filters.push(Filter.Like('SKU', sku));
+        }
+        const filterDef = { filters, operator: 'and' } as FilterDefinition;
+
+        DocumentTemplates
+            .Stocks(
+                id,
+                filterDef,
+                min === undefined ? -1 : min,
+                max === undefined ? -1 : max,
+                templateId
+            )
+            .then((res) => {
+                new Printer({
+                    content: () => (
+                        <div
+                            dangerouslySetInnerHTML={{ __html: res.html }}
+                        />
+                    ),
+                    cssClasses: ['body--print-reciept'],
+                    cssStyles: res.styles,
+                    copyStyles: false
+                }).Print();
+            });
     }
 }
 

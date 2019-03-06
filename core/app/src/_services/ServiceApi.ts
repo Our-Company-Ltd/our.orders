@@ -494,6 +494,47 @@ class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
                 return response;
             });
     }
+
+    Stocks(
+        id: string,
+        filterDef: Partial<FilterDefinition>,
+        min: number,
+        max: number,
+        tempalteId: string):
+        Promise<{ html: string; styles: string }> {
+        const { filters: f, sort, operator: o } = filterDef;
+        const filters = f && [...f] || [];
+        const operator = o || 'and';
+
+        let body;
+        switch (filters.length) {
+            case 0:
+                body = null;
+                break;
+            case 1:
+                body = filters[0];
+                break;
+            default:
+                body = operator === 'and' ? Filter.And(...filters) : Filter.Or(...filters);
+                break;
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body && JSON.stringify(body)
+        };
+
+        let querystring = sort ? `&sort=${sort}` : '';
+
+        const url = `${config.apiUrl}/${this.type}/${tempalteId}/stocks/${id}/${min}/${max}?${querystring}`;
+
+        return fetch(url, addAuthHeader(requestOptions))
+            .then<{ html: string; styles: string }>(handleApiResponse)
+            .then(response => {
+                return response;
+            });
+    }
 }
 
 export const DocumentTemplates = new DocumentTemplateApi();

@@ -46,8 +46,6 @@ namespace our.orders.Controllers
                 serviceProvider,
                 service)
         {
-
-
         }
 
         private class ProductLine
@@ -59,6 +57,14 @@ namespace our.orders.Controllers
             public string Sku { get; set; }
 
             public string OptionTitle { get; set; }
+        };
+
+
+        private class StocksBinding
+        {
+            public string Title { get; set; }
+            public string SKU { get; set; }
+            public int Stock { get; set; }
         };
 
         [HttpPost("{templateId}/order/{id}")]
@@ -184,7 +190,8 @@ namespace our.orders.Controllers
             decimal taxAmount = 0;
             decimal totalAmount = 0;
 
-            foreach(var item in itemsList) {
+            foreach (var item in itemsList)
+            {
                 taxAmount += item.Price.Tax;
                 totalAmount += item.Price.Final;
             }
@@ -200,12 +207,13 @@ namespace our.orders.Controllers
                 var optionIdQuery = resultGroup.GroupBy(item => item.Option?.OptionId);
 
                 foreach (var optionIdGroup in optionIdQuery)
-                {   
+                {
                     var quantity = 0;
-                    foreach(var item in optionIdGroup) {
+                    foreach (var item in optionIdGroup)
+                    {
                         quantity += item.Quantity;
                     }
-                    
+
                     var sample = optionIdGroup.FirstOrDefault();
                     var productLine = new ProductLine
                     {
@@ -226,11 +234,51 @@ namespace our.orders.Controllers
 
             var prettyToday = DateTime.UtcNow.ToString("dd.MM.yyyy");
 
-            var html = compiled(new { 
+            var html = compiled(new
+            {
                 Prodcuts = groupedItems.ToArray(),
                 today = prettyToday,
                 tax = taxAmount.ToString("0.00", CultureInfo.InvariantCulture),
-                total = totalAmount.ToString("0.00", CultureInfo.InvariantCulture) });
+                total = totalAmount.ToString("0.00", CultureInfo.InvariantCulture)
+            });
+
+            return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
+        }
+
+        [HttpPost("{templateId}/stocks/{id}/{min}/{max}")]
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StocksAsync(
+          [FromServices]IService<DocumentTemplate> templateService,
+          [FromServices]IService<StockUnit> stocksService,
+          [FromRoute]string templateId,
+          [FromRoute]string id,
+          [FromRoute]int min,
+          [FromRoute]int max,
+          [FromBody]Filter filter = null,
+          string sort = null,
+          CancellationToken cancellationToken = default(CancellationToken)
+          )
+        {
+            var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
+            var result = await stocksService.FindAsync(filter, sorts, null, cancellationToken);
+
+            var values = result.Where(s => s.Units.ContainsKey(id)).Select((i) => 
+                new StocksBinding { Title = i.Detail, SKU = i.SKU, Stock = i.Units[id] });
+
+            if (max >= 0)
+            {
+                values = values.Where(v => v.Stock <= max);
+            }
+            if (min >= 0)
+            {
+                values = values.Where(v => v.Stock >= min);
+            }
+            values = values.OrderBy(s => s.Stock);
+
+            var template = await templateService.GetByIdAsync(templateId, cancellationToken);
+            var compiled = Handlebars.Compile(template.Template);
+
+            var html = compiled(new { stocks = values.ToArray() });
 
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }

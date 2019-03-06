@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ItemPreview, { Line, Lines, Thumb } from '../../ItemPreview/ItemPreview';
+import ItemPreview, { Line, Lines } from '../../ItemPreview/ItemPreview';
 
 import { withStyles, Avatar } from '@material-ui/core';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
@@ -23,17 +23,7 @@ const StockListItem: React.FunctionComponent<StockListItemProps> =
         const { product, classes, productCtx, title, ...divProps } = props;
 
         if (!product) {
-            return (
-                <div {...divProps} className={classNames(divProps.className, classes.container)}>
-                    <ItemPreview>
-                        <Thumb loading={true} />
-                        <Lines>
-                            <Line loading={true} />
-                            <Line loading={true} />
-                        </Lines>
-                    </ItemPreview>
-                </div>
-            );
+            return null;
         }
 
         return (

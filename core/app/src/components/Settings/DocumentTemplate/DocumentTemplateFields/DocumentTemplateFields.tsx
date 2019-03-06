@@ -105,6 +105,9 @@ class DocumentTemplateFields extends React.Component<DocumentTemplateFieldsProps
                             <MenuItem key="OrdersProducts" value="OrdersProducts">
                                 {intl.formatMessage(DocumentTemplateDetailMessages.ordersProducts)}
                             </MenuItem>
+                            <MenuItem key="Stocks" value="Stocks">
+                                {intl.formatMessage(DocumentTemplateDetailMessages.stocks)}
+                            </MenuItem>
 
                             {  // <MenuItem key="Orders" value="Orders">
                                 //     {intl.formatMessage(DocumentTemplateDetailMessages.orders)}
