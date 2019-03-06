@@ -108,16 +108,28 @@ namespace our.orders.demo
                     appEvents.Configure += (sender, s) =>
                     {
                         s.AddScoped<RandomData>();
+                        s.AddCors();
                     };
-                    appEvents.ApplicationStarted += (sender, s) =>
-                        {
-                            using (var scope = s.CreateScope())
-                            {
-                                var randomData = scope.ServiceProvider.GetService<RandomData>();
-                                AsyncHelper.RunSync(() => randomData.Generate());
-                            }
 
-                        };
+                    appEvents.ApplicationStarted += (sender, s) =>
+                    {
+                        using (var scope = s.CreateScope())
+                        {
+                            var randomData = scope.ServiceProvider.GetService<RandomData>();
+                            AsyncHelper.RunSync(() => randomData.Generate());
+                        }
+
+                    };
+
+                    appEvents.ApplicationConfigure += (sender, appBuilder) =>
+                    {
+                        // global cors policy
+                        appBuilder.UseCors(x => x
+                            .WithOrigins("http://localhost")
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
+                    };
                 });
 
 
