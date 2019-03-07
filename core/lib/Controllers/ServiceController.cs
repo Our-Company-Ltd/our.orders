@@ -39,8 +39,8 @@ namespace our.orders.Controllers
         protected IService<TModel> service { get; }
 
 
-        protected IServiceProvider serviceProvider  { get; }
-        protected ILogger logger  { get; }
+        protected IServiceProvider serviceProvider { get; }
+        protected ILogger logger { get; }
 
 
         public ServiceController(
@@ -118,6 +118,11 @@ namespace our.orders.Controllers
         {
             var patched = _mapper.Map<JsonPatchDocument<TModel>>(patch);
             var result = await service.GetByIdAsync(id, cancellationToken);
+
+            if (result == null)
+            {
+                return Ok(ApiModel.AsError(id, $"impossible to find ${typeof(TModel).Name} width id: ${id}"));
+            }
 
             patched.ApplyTo(result);
 

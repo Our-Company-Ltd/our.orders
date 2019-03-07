@@ -34,6 +34,7 @@ using our.orders.Payments.Stripe;
 using our.orders.Payments.Paypal;
 using our.orders.Repositories.EntityFramework;
 using our.orders.Payments.PostFinance;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 
 namespace our.orders.demo
 {
@@ -123,9 +124,10 @@ namespace our.orders.demo
 
                     appEvents.ApplicationConfigure += (sender, appBuilder) =>
                     {
+                        var serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
                         // global cors policy
                         appBuilder.UseCors(x => x
-                            .WithOrigins("http://localhost")
+                            .WithOrigins(serverAddressesFeature.Addresses.Concat(new string[] { "http://localhost:3000" }).ToArray())
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials());

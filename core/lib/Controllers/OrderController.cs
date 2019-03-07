@@ -162,7 +162,7 @@ namespace our.orders.Controllers
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_ALL_ORDERS, RoleStore.CRUD_OWN_ORDERS)]
+        [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_ORDERS, RoleStore.CRUD_ALL_ORDERS, RoleStore.CRUD_OWN_ORDERS)]
         public override async Task<IActionResult> PostAsync([FromBody]OrderDto modelDto, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(modelDto.UserId))

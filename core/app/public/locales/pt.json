@@ -84,6 +84,7 @@
   "src.components.client.clientDetail.deleteConfirm": "Are you sure you want to delete this client?",
   "src.components.client.clientDetail.dialogTitle": "Select template",
   "src.components.client.clientDetail.inputLegend": "Template",
+  "src.components.client.clientImports.import": "import",
   "src.components.dashboard.amount": "Amount",
   "src.components.dashboard.chart": "Chart",
   "src.components.dashboard.customTimePeriodFrom": "From",

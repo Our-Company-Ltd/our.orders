@@ -25,43 +25,86 @@ using static our.orders.Controllers.AccountController;
 
 namespace our.orders.test.Controllers
 {
-    public class AccountControllerShould : IClassFixture<WebHostFixture>
+    public class AccountControllerShould : IClassFixture<TestWebApplicationFactory>
     {
-        private readonly WebHostFixture controllerFixture;
+        private readonly TestWebApplicationFactory factory;
 
-
-        public AccountControllerShould(WebHostFixture controllerFixture)
+        public AccountControllerShould(TestWebApplicationFactory factory)
         {
-            this.controllerFixture = controllerFixture;
-
+            this.factory = factory;
         }
 
-        protected HttpClient httpClient() => controllerFixture.HttpClient();
 
-        private async Task<ApiModel<AccountDto>> _authenticateAsync(int index)
+        private async Task<string> _adminToken(HttpClient client)
         {
-            var users = this.controllerFixture.GetUsers();
-            var user = users.ElementAt(index);
-            var password = user.Note;
-            var bindings = new AuthenticateBindings { UserName = user.UserName, Password = password };
-            var response = await httpClient().PostAsync($"{controllerFixture.PATH}/account/authenticate", new JsonContent(bindings));
+            var bindings = new AuthenticateBindings { UserName = "admin-1", Password = "admin-1-Pa$$w0rd" };
+            var response = await client.PostAsync($"{TestStartup.PATH}/account/authenticate", new JsonContent(bindings));
             var content = await response.Content.ReadAsStringAsync();
 
             Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
 
 
             var result = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(content);
-            return result;
+            return result.Value.Token;
+
+        }
+        private async Task<AccountDto> _CreateUser(HttpClient client, User user, string password)
+        {
+
+            var newUserrequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{TestStartup.PATH}/user?password={ WebUtility.UrlEncode(password)}");
+            newUserrequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await _adminToken(client));
+            newUserrequestMessage.Content = new JsonContent(user);
+            var response = await client.SendAsync(newUserrequestMessage);
+            Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
+
+            var newUserContent = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(newUserContent);
+            Assert.True(result.Result.Success);
+            return result.Value;
+        }
+        private async Task<string> _authenticateAsync(HttpClient client, string username, string password)
+        {
+
+            var bindings = new AuthenticateBindings { UserName = username, Password = password };
+            var response = await client.PostAsync($"{TestStartup.PATH}/account/authenticate", new JsonContent(bindings));
+            var content = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
+
+
+            var result = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(content);
+            return result.Value.Token;
+        }
+        private async Task<string> _CreateUserAndGetToken(HttpClient client, User user, string password)
+        {
+            var account = await _CreateUser(client, user, password);
+            var token = await _authenticateAsync(client, user.UserName, password);
+            return token;
+
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public async Task AuthenticateUsingUserName(int index)
+        [Fact]
+        public async Task AuthenticateUsingUserName()
         {
-            var result = await _authenticateAsync(index);
+            // create a user : 
+            var user = RandomObjects.RandomUser(new string[] { }).Generate();
 
+            var username = user.UserName;
+            var password = "randomPassword@#$123";
+            var httpClient = factory.CreateSecureClient();
+
+            var account = await _CreateUser(httpClient, user, password);
+
+
+            var bindings = new AuthenticateBindings { UserName = username, Password = password };
+            var response = await httpClient.PostAsync($"{TestStartup.PATH}/account/authenticate", new JsonContent(bindings));
+            var content = await response.Content.ReadAsStringAsync();
+
+            Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
+
+            var result = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(content);
             Assert.True(result.Result.Success, result.Result.Errors?.FirstOrDefault().Value?.FirstOrDefault() ?? "");
+
             Assert.Empty(result.Result.Errors);
 
             var resultUser = result.Value;
@@ -72,19 +115,24 @@ namespace our.orders.test.Controllers
             Assert.NotEqual("", resultUser.Token);
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public async Task ReturnCurrentAfterAuthenticateWithToken(int index)
+        [Fact]
+        public async Task ReturnCurrentAfterAuthenticateWithToken()
         {
-            var authresult = await _authenticateAsync(index);
+            // create a user : 
+            var user = RandomObjects.RandomUser(new string[] { }).Generate();
 
-            var authuser = authresult.Value;
+            var username = user.UserName;
+            var password = "randomPassword@#$123";
+            var httpClient = factory.CreateSecureClient();
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{controllerFixture.PATH}/account/current");
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authuser.Token);
 
-            var response = await httpClient().SendAsync(requestMessage);
+            var token = await this._CreateUserAndGetToken(httpClient, user, password);
+
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{TestStartup.PATH}/account/current");
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await httpClient.SendAsync(requestMessage);
             Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
 
             var content = await response.Content.ReadAsStringAsync();
@@ -100,18 +148,24 @@ namespace our.orders.test.Controllers
             Assert.Null(resultUser.Token); // no token for current, the token is sent on refresh and login;
         }
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public async Task SendForgetMails(int index)
+        [Fact]
+        public async Task SendForgetMails()
         {
 
-            var users = this.controllerFixture.GetUsers();
-            var user = users.ElementAt(index);
+            // create a user : 
+            var user = RandomObjects.RandomUser(new string[] { }).Generate();
+
+            var username = user.UserName;
+            var password = "randomPassword@#$123";
+            var httpClient = factory.CreateSecureClient();
+
+
+            var token = await this._CreateUserAndGetToken(httpClient, user, password);
+
 
             var bindings = new ForgotPasswordBindings { UserName = user.UserName };
 
-            var authrequest = await httpClient().PostAsync($"{controllerFixture.PATH}/account/forgot", new JsonContent(bindings));
+            var authrequest = await httpClient.PostAsync($"{TestStartup.PATH}/account/forgot", new JsonContent(bindings));
             var authcontent = await authrequest.Content.ReadAsStringAsync();
             var authresult = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(authcontent);
             var authuser = authresult.Value;
@@ -120,7 +174,7 @@ namespace our.orders.test.Controllers
             Assert.True(authrequest.IsSuccessStatusCode, authrequest.ReasonPhrase ?? "");
 
             // emails :
-            var recievedEmails = this.controllerFixture.EmailSender.Flush();
+            var recievedEmails = this.factory.EmailSender.Flush();
 
             // we expect to have recieved a message : 
             Assert.NotEmpty(recievedEmails);
@@ -141,41 +195,29 @@ namespace our.orders.test.Controllers
             Assert.Matches(new Regex(resetroute, RegexOptions.IgnoreCase), actionLink);
         }
 
-        [Theory]
-        [InlineData(0)]
-        public async Task ResetsPassword(int index)
+        [Fact]
+        public async Task ResetsPassword()
         {
-            // login with admin
-            var authresult = await _authenticateAsync(index);
+             // create a user : 
+            var user = RandomObjects.RandomUser(new string[] { }).Generate();
 
-            var client = httpClient();
-
-            var user = RandomObjects.RandomUser(new string[] { RoleStore.ADMIN }).Generate();
+            var username = user.UserName;
             var oldpassword = $"username-Pa$$w0rd-old";
-            // create new user :
+            var httpClient = factory.CreateSecureClient();
 
-            var newUserrequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{controllerFixture.PATH}/user?password={ WebUtility.UrlEncode(oldpassword)}");
-            newUserrequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authresult.Value.Token);
-            newUserrequestMessage.Content = new JsonContent(user);
-            var newUserResponse = await client.SendAsync(newUserrequestMessage);
 
-            var newUserContent = await newUserResponse.Content.ReadAsStringAsync();
-            var newUserResult = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(newUserContent);
-
-            Assert.True(newUserResponse.IsSuccessStatusCode, newUserResponse.ReasonPhrase ?? "");
-            Assert.True(newUserResult.Result.Success, newUserResult.Result.Errors?.FirstOrDefault().Value?.FirstOrDefault() ?? "");
-            Assert.Empty(newUserResult.Result.Errors);
+            var token = await this._CreateUserAndGetToken(httpClient, user, oldpassword);
 
             // forgot his email
-            var bindings = new ForgotPasswordBindings { UserName = user.UserName };
+            var bindings = new ForgotPasswordBindings { UserName = username};
 
-            var forgotrequest = await client.PostAsync($"{controllerFixture.PATH}/account/forgot", new JsonContent(bindings));
+            var forgotrequest = await httpClient.PostAsync($"{TestStartup.PATH}/account/forgot", new JsonContent(bindings));
 
             var forgotcontent = await forgotrequest.Content.ReadAsStringAsync();
             var forgotresult = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(forgotcontent);
 
             // emails :
-            var recievedEmails = this.controllerFixture.EmailSender.Flush();
+            var recievedEmails = this.factory.EmailSender.Flush();
 
             var message = recievedEmails.First().message;
 
@@ -193,7 +235,7 @@ namespace our.orders.test.Controllers
             var encodedPassword = WebUtility.UrlEncode(newpassword);
 
             // request rest 
-            var resetrequest = await client.GetAsync($"{actionLink}&password={encodedPassword}");
+            var resetrequest = await httpClient.GetAsync($"{actionLink}&password={encodedPassword}");
             var resetcontent = await resetrequest.Content.ReadAsStringAsync();
             var resetresult = JsonConvert.DeserializeObject<ApiModel<AccountDto>>(resetcontent);
 
@@ -202,7 +244,7 @@ namespace our.orders.test.Controllers
             Assert.Empty(resetresult.Result.Errors);
 
             var verifyNewbindings = new AuthenticateBindings { UserName = user.UserName, Password = newpassword };
-            var verifyNewresponse = await client.PostAsync($"{controllerFixture.PATH}/account/authenticate", new JsonContent(verifyNewbindings));
+            var verifyNewresponse = await httpClient.PostAsync($"{TestStartup.PATH}/account/authenticate", new JsonContent(verifyNewbindings));
             var verifyNewcontent = await verifyNewresponse.Content.ReadAsStringAsync();
 
             Assert.True(verifyNewresponse.IsSuccessStatusCode, verifyNewresponse.ReasonPhrase ?? "");
@@ -222,7 +264,7 @@ namespace our.orders.test.Controllers
             Assert.NotEqual("", resultUser.Token);
 
             var verifyOldbindings = new AuthenticateBindings { UserName = user.UserName, Password = oldpassword };
-            var verifyOldresponse = await client.PostAsync($"{controllerFixture.PATH}/account/authenticate", new JsonContent(verifyOldbindings));
+            var verifyOldresponse = await httpClient.PostAsync($"{TestStartup.PATH}/account/authenticate", new JsonContent(verifyOldbindings));
             var verifyOldcontent = await verifyOldresponse.Content.ReadAsStringAsync();
 
             Assert.True(verifyOldresponse.IsSuccessStatusCode, verifyOldresponse.ReasonPhrase ?? "");

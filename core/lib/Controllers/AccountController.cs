@@ -93,6 +93,35 @@ namespace our.orders.Controllers
             public bool RememberMe { get; set; }
         }
 
+        private string _GenerateToken(User user)
+        {
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
+
+            var claims = new Claim[]
+                {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                        new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
+                        new Claim(ClaimTypes.NameIdentifier,user.UserName ?? ""),
+                        new Claim(ClaimTypes.Name,user.UserName)
+                }.Concat(
+                    user.Roles.Select(r => new Claim(ClaimTypes.Role, r)
+                    )
+                );
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
         [AllowAnonymous]
         [HttpPost("authenticate")]
         // [ValidateAntiForgeryToken]
@@ -115,34 +144,8 @@ namespace our.orders.Controllers
 
                 _logger.LogInformation("User logged in.");
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
-
-                var claims = new Claim[]
-                    {
-                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                        new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-
-                        new Claim(ClaimTypes.NameIdentifier,user.UserName),
-                        new Claim(ClaimTypes.Name,user.UserName)
-                    }.Concat(
-                        user.Roles.Select(r => new Claim(ClaimTypes.Role, r)
-                        )
-                    );
-
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
                 var resultDto = _mapper.Map<AccountDto>(user);
-                resultDto.Token = tokenString;
+                resultDto.Token = _GenerateToken(user);
                 resultDto.IsAuthenticated = true;
 
                 return Ok(ApiModel.AsSuccess(resultDto));

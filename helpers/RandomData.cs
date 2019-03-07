@@ -93,7 +93,6 @@ namespace our.orders.helpers
             ).ToList();
 
 
-
             foreach (var tpl in users)
             {
                 await userManager.CreateAsync(tpl.Item1, tpl.Item2);

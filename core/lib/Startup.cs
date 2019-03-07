@@ -169,7 +169,7 @@ namespace our.orders
                 .AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
+                    //x.SaveToken = true;
 
                     x.TokenValidationParameters = new TokenValidationParameters
                     {

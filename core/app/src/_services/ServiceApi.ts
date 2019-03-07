@@ -331,7 +331,7 @@ class ClientApi extends ServiceApi<Client> {
             body: formData
         };
 
-        const url = `${config.apiUrl}/import/csv`;
+        const url = `${config.apiUrl}/${this.type}/import/csv`;
         return fetch(url, addAuthHeader(requestOptions))
             .then<Client[]>(handleApiResponse)
             .then(response => {

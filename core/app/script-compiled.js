@@ -4594,7 +4594,7 @@ function (_ServiceApi3) {
         },
         body: formData
       };
-      var url = "".concat(_helpers.config.apiUrl, "/import-csv");
+      var url = "".concat(_helpers.config.apiUrl, "/import/csv");
       return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse).then(function (response) {
         return response;
       });
@@ -4639,7 +4639,7 @@ function (_ServiceApi3) {
         querystring += "sort=".concat(sort);
       }
 
-      var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type, "/export-csv?").concat(querystring);
+      var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type, "/export/csv?").concat(querystring);
       return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse);
     }
   }]);
@@ -6475,6 +6475,279 @@ exports.default = void 0;
 
 var React = _interopRequireWildcard(require("react"));
 
+var _services = require("../../../_services");
+
+var _core = require("@material-ui/core");
+
+var _GridContainer = require("src/components/GridContainer/GridContainer");
+
+var _ClientImportMessages = _interopRequireDefault(require("./ClientImportMessages"));
+
+var _reactDropzone = _interopRequireDefault(require("react-dropzone"));
+
+var _notistack = require("notistack");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var ClientFields = ['Address', 'CellPhone', 'City', 'CountryIso', 'Creation', 'Email', 'FirstName', 'Id', 'LastMod', 'LastName', 'OrganizationName', 'Phone', 'PostalCode', 'State', 'VATNumber'];
+
+var ClientImport =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ClientImport, _React$Component);
+
+  function ClientImport(props) {
+    var _this;
+
+    _classCallCheck(this, ClientImport);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ClientImport).call(this, props));
+    _this._onDrop = _this._onDrop.bind(_assertThisInitialized(_this));
+    _this._import = _this._import.bind(_assertThisInitialized(_this));
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(ClientImport, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$state = this.state,
+          headers = _this$state.headers,
+          file = _this$state.file;
+      var _this$props = this.props,
+          intl = _this$props.intl,
+          classes = _this$props.classes;
+      return React.createElement(React.Fragment, null, React.createElement(_core.DialogTitle, {
+        id: "draggable-dialog-title"
+      }, "Subscribe"), React.createElement(_core.DialogContent, null, React.createElement(_GridContainer.GridContainer, {
+        className: classes.container,
+        spacing: 0
+      }, React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_reactDropzone.default, {
+        className: classes.dropZone,
+        onDrop: this._onDrop
+      }, React.createElement(_core.Button, {
+        className: classes.dropZoneLabel
+      }, intl.formatMessage(_ClientImportMessages.default.header)))), headers && React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.List, null, Object.keys(headers).map(function (h) {
+        return React.createElement(_core.ListItem, {
+          key: "".concat(h)
+        }, React.createElement(_core.TextField, {
+          select: true,
+          label: h,
+          fullWidth: true,
+          value: headers[h] || '',
+          onChange: function onChange(value) {
+            var v = value.target.value;
+
+            _this2.setState(function (prev) {
+              return {
+                headers: _objectSpread({}, prev.headers, _defineProperty({}, h, v))
+              };
+            });
+          }
+        }, ClientFields.map(function (k) {
+          return React.createElement(_core.MenuItem, {
+            key: k,
+            value: k
+          }, k);
+        }), React.createElement(_core.MenuItem, {
+          key: "--none--",
+          value: undefined
+        }, "Do not import")));
+      }))))), React.createElement(_core.DialogActions, null, React.createElement(_core.Button, {
+        onClick: this.props.close,
+        color: "primary"
+      }, "Cancel"), React.createElement(_core.Button, {
+        onClick: this._import,
+        color: "primary",
+        disabled: !headers || !file
+      }, "Import")));
+    }
+  }, {
+    key: "_GetHeaders",
+    value: function _GetHeaders(file) {
+      return new Promise(function (resolve, reject) {
+        // Instantiate a new FileReader
+        var reader = new FileReader(); // Read our file to an ArrayBuffer
+
+        reader.readAsArrayBuffer(file);
+
+        reader.onloadend = function () {
+          if (reader.result) {
+            // Get the Array Buffer
+            var data = reader.result; // Grab our byte length
+
+            var byteLength = data.byteLength; // Convert to conventional array, so we can iterate though it
+
+            var ui8a = new Uint8Array(data, 0); // Used to store each character that makes up CSV header
+
+            var headerString = ''; // Iterate through each character in our Array
+
+            for (var i = 0; i < byteLength; i++) {
+              // Get the character for the current iteration
+              var char = String.fromCharCode(ui8a[i]); // Check if the char is a new line
+
+              if (char.match(/[^\r\n]+/g) !== null) {
+                // Not a new line so lets append it to our header string and keep processing
+                headerString += char;
+              } else {
+                // We found a new line character, stop processing
+                break;
+              }
+            } // find out serparator : 
+
+
+            var splitOnComas = headerString.split(',');
+            var splitOnSemiColons = headerString.split(';');
+            return resolve(splitOnComas.length > splitOnSemiColons.length ? splitOnComas : splitOnSemiColons);
+          }
+        };
+
+        reader.onerror = function () {
+          return reject('impossible to read the file');
+        };
+      });
+    }
+  }, {
+    key: "_import",
+    value: function _import() {
+      var _this3 = this;
+
+      var _this$state2 = this.state,
+          file = _this$state2.file,
+          headers = _this$state2.headers;
+
+      if (!file || !headers) {
+        return;
+      }
+
+      var data = new FormData();
+      data.set("csv", file);
+      data.set("headers", JSON.stringify(headers));
+
+      _services.Clients.ImportCsv(data).then(function (clients) {
+        _this3.props.enqueueSnackbar("".concat(clients.length, " clients imported"));
+
+        _this3.props.refresh();
+
+        _this3.props.close();
+      });
+    }
+  }, {
+    key: "_onDrop",
+    value: function _onDrop(acceptedFiles) {
+      var _this4 = this;
+
+      if (!acceptedFiles || acceptedFiles.length === 0) {
+        return;
+      } // process the file  :
+
+
+      var file = acceptedFiles[0];
+
+      this._GetHeaders(file).then(function (csvheaders) {
+        var headers = {};
+        csvheaders.forEach(function (h) {
+          var prop = ClientFields.find(function (f) {
+            return f.toLowerCase() === h.toLowerCase();
+          });
+          headers[h] = prop;
+        });
+
+        _this4.setState(function () {
+          return {
+            file: file,
+            headers: headers
+          };
+        });
+      });
+    }
+  }]);
+
+  return ClientImport;
+}(React.Component);
+
+var _default = (0, _core.withStyles)(function (theme) {
+  return {
+    dropZone: {
+      width: '100%',
+      height: '100%'
+    },
+    dropZoneNoImage: {},
+    dropZoneLabel: {
+      width: '100%',
+      height: '100%'
+    },
+    container: {
+      height: '100%',
+      position: 'relative'
+    },
+    tooltip: {
+      background: theme.palette.common.white,
+      color: theme.palette.text.primary,
+      boxShadow: theme.shadows[1],
+      fontSize: 11
+    }
+  };
+})((0, _notistack.withSnackbar)(ClientImport));
+
+exports.default = _default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.ClientListMesseges = void 0;
+
+var _reactIntl = require("react-intl");
+
+var ClientListMesseges = (0, _reactIntl.defineMessages)({
+  header: {
+    "id": "src.components.client.clientImports.import",
+    "defaultMessage": "import"
+  }
+});
+exports.ClientListMesseges = ClientListMesseges;
+var _default = ClientListMesseges;
+exports.default = _default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
 var _reactVirtualized = require("react-virtualized");
 
 var _ClientListItem = _interopRequireDefault(require("../ClientListItem/ClientListItem"));
@@ -6501,9 +6774,9 @@ var _ClientListMesseges = _interopRequireDefault(require("./ClientListMesseges")
 
 var _roles = require("src/_helpers/roles");
 
-var _reactDropzone = _interopRequireDefault(require("react-dropzone"));
-
 var _notistack = require("notistack");
+
+var _ClientImport = _interopRequireDefault(require("../ClientImport/ClientImport"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6577,7 +6850,6 @@ function (_React$Component) {
     _this._isRowLoaded = _this._isRowLoaded.bind(_assertThisInitialized(_this));
     _this._loadMore = _this._loadMore.bind(_assertThisInitialized(_this));
     _this._rowRenderer = _this._rowRenderer.bind(_assertThisInitialized(_this));
-    _this._onDrop = _this._onDrop.bind(_assertThisInitialized(_this));
     _this._handleItemChanged = _this._handleItemChanged.bind(_assertThisInitialized(_this));
     _this._firstNameInput = React.createRef();
     _this._lastNameInput = React.createRef();
@@ -6655,6 +6927,7 @@ function (_React$Component) {
           drawerOpen = _this$state.drawerOpen,
           editingOpened = _this$state.editingOpened,
           creatingOpened = _this$state.creatingOpened,
+          importOpened = _this$state.importOpened,
           _this$state$filter = _this$state.filter,
           firstName = _this$state$filter.firstName,
           lastName = _this$state$filter.lastName,
@@ -6829,12 +7102,11 @@ function (_React$Component) {
         }
       }, "export")), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_reactDropzone.default, {
-        className: classes.dropZone,
-        onDrop: this._onDrop
       }, React.createElement(_core.Button, {
-        className: classes.dropZoneLabel
-      }, "import"))), React.createElement(_core.Grid, {
+        onClick: function onClick() {
+          return _this4._import();
+        }
+      }, "import")), React.createElement(_core.Grid, {
         item: true,
         style: {
           marginTop: 'auto',
@@ -6965,6 +7237,24 @@ function (_React$Component) {
         onDelete: function onDelete() {
           _this4._handleOrderDeleted();
         }
+      }))), React.createElement(_core.Dialog, {
+        open: !!importOpened,
+        fullScreen: true,
+        onClose: close
+      }, React.createElement(_ClientImport.default, _extends({
+        intl: intl,
+        settingsCtx: settingsCtx
+      }, {
+        close: function close() {
+          _this4.setState(function () {
+            return {
+              importOpened: false
+            };
+          });
+        },
+        refresh: function refresh() {
+          _this4._refresh();
+        }
       }))));
     }
   }, {
@@ -6995,39 +7285,22 @@ function (_React$Component) {
     key: "_export",
     value: function _export() {
       _services.Clients.ExportCsv(this._GetFilters()).then(function (csvString) {
-        // tslint:disable-next-line:no-console
-        console.log(csvString);
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString));
+        element.setAttribute('download', 'clients.csv');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
       });
     }
   }, {
-    key: "_onDrop",
-    value: function _onDrop(acceptedFiles) {
-      var _this6 = this;
-
-      if (!acceptedFiles || acceptedFiles.length === 0) {
-        return;
-      } // const reader = new FileReader();
-      // reader.onload = () => {
-      //     if (reader.result) {
-      //         // import 
-      //         this.props.onChange({ Src: reader.result as string });
-      //     }
-      // };
-      // // tslint:disable-next-line:no-console
-      // reader.onabort = () => console.log('file reading was aborted');
-      // // tslint:disable-next-line:no-console
-      // reader.onerror = () => console.log('file reading has failed');
-
-
-      var data = new FormData();
-      acceptedFiles.forEach(function (b, i) {
-        return data.set("csv".concat(i), b);
-      });
-
-      _services.Clients.ImportCsv(data).then(function (clients) {
-        _this6.props.enqueueSnackbar("".concat(clients.length, " clients imported"));
-
-        _this6._refresh();
+    key: "_import",
+    value: function _import() {
+      this.setState(function () {
+        return {
+          importOpened: true
+        };
       });
     }
   }, {
@@ -7068,7 +7341,7 @@ function (_React$Component) {
   }, {
     key: "_loadMore",
     value: function _loadMore(range) {
-      var _this7 = this;
+      var _this6 = this;
 
       var stopIndex = range.stopIndex,
           startIndex = range.startIndex;
@@ -7085,10 +7358,10 @@ function (_React$Component) {
       return _services.Clients.Find(this._GetFilters(), startIndex, stopIndex + 1).then(function (response) {
         var count = response.Values.length;
         response.Values.forEach(function (client, i) {
-          _this7._loadedRowsMap[startIndex + i] = client;
+          _this6._loadedRowsMap[startIndex + i] = client;
         });
 
-        _this7.setState(function (prev) {
+        _this6.setState(function (prev) {
           return {
             loading: prev.loading - count,
             loaded: prev.loaded + count,
@@ -7102,7 +7375,7 @@ function (_React$Component) {
   }, {
     key: "_refresh",
     value: function _refresh() {
-      var _this8 = this;
+      var _this7 = this;
 
       this._loadedRowsMap = {};
 
@@ -7121,14 +7394,14 @@ function (_React$Component) {
           lastUpdate: new Date().getTime()
         };
       }, function () {
-        _this8._loadMore({
-          startIndex: _this8._loadMoreRowsStartIndex,
-          stopIndex: _this8._loadMoreRowsStopIndex
+        _this7._loadMore({
+          startIndex: _this7._loadMoreRowsStartIndex,
+          stopIndex: _this7._loadMoreRowsStopIndex
         }).then(function () {
-          if (_this8._list) {
-            _this8._list.forceUpdate();
+          if (_this7._list) {
+            _this7._list.forceUpdate();
 
-            _this8._list.forceUpdateGrid();
+            _this7._list.forceUpdateGrid();
           }
         });
       });
@@ -7136,14 +7409,14 @@ function (_React$Component) {
   }, {
     key: "_resetFilters",
     value: function _resetFilters() {
-      var _this9 = this;
+      var _this8 = this;
 
       this.setState(function () {
         return {
           filter: DefaultFilters()
         };
       }, function () {
-        return _this9._refresh();
+        return _this8._refresh();
       });
     }
   }, {
@@ -7165,14 +7438,14 @@ function (_React$Component) {
   }, {
     key: "_handleOrderDeleted",
     value: function _handleOrderDeleted() {
-      var _this10 = this;
+      var _this9 = this;
 
       this.setState(function () {
         return {
           editing: -1
         };
       }, function () {
-        return _this10._refresh();
+        return _this9._refresh();
       });
     }
   }, {
@@ -7190,15 +7463,6 @@ var drawerWidth = '16rem';
 
 var _default = (0, _core.withStyles)(function (theme) {
   return {
-    dropZone: {
-      width: '100%',
-      height: '100%'
-    },
-    dropZoneNoImage: {},
-    dropZoneLabel: {
-      width: '100%',
-      height: '100%'
-    },
     containerCls: {
       height: '100%',
       position: 'relative'

@@ -101,11 +101,21 @@ namespace our.orders.Controllers
             return base.CountAsync(filter, cancellationToken);
         }
 
+        [HttpPost("find")]
+        [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_CLIENTS, RoleStore.CRUD_ORDERS, RoleStore.CRUD_ALL_ORDERS, RoleStore.CRUD_OWN_ORDERS)]
+        public override Task<IActionResult> FindAsync([FromBody]Filter filter = null, string sort = null, string query = null, int start = 0, int take = 50, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return base.FindAsync(filter, sort, query, start, take, cancellationToken);
+
+        }
+
         [HttpPost("import/csv")]
         [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_CLIENTS)]
-        public async Task<IActionResult> ImportCsvAsync([FromBody]Dictionary<string, string> headers = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IActionResult> ImportCsvAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
+
             var results = new List<ClientDto>();
+            var headers = Request.Form.Where(p => p.Key == "headers").Select(p => p.Value.FirstOrDefault()).FirstOrDefault()?.DeSerialize<Dictionary<string, string>>();
             foreach (var file in Request.Form.Files)
             {
                 if (file.Length <= 0 || file.FileName == null) continue;

@@ -51,14 +51,11 @@ import { debounce } from 'throttle-debounce';
 import { InjectedTemplatesProps } from 'src/_context/Templates';
 import ClientListMesseges from './ClientListMesseges';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
-import Dropzone from 'react-dropzone';
 import { InjectedNotistackProps, withSnackbar } from 'notistack';
 import { FilterDefinition } from 'src/_types/FilterDefinition';
+import ClientImport from '../ClientImport/ClientImport';
 
 export type injectedClasses =
-    'dropZone' |
-    'dropZoneLabel' |
-    'dropZoneNoImage' |
     'drawerSpacer' |
     'searchInput' |
     'menuContainer' |
@@ -103,6 +100,7 @@ type State = {
     lightboxes: Client[];
     fetching?: boolean;
     editing: number;
+    importOpened?: boolean;
     editingOpened?: boolean;
     creatingOpened?: boolean;
     creating?: Client;
@@ -143,7 +141,6 @@ class ClientList extends React.Component<ClientListProps, State> {
         this._isRowLoaded = this._isRowLoaded.bind(this);
         this._loadMore = this._loadMore.bind(this);
         this._rowRenderer = this._rowRenderer.bind(this);
-        this._onDrop = this._onDrop.bind(this);
         this._handleItemChanged = this._handleItemChanged.bind(this);
         this._firstNameInput = React.createRef<HTMLInputElement>();
         this._lastNameInput = React.createRef<HTMLInputElement>();
@@ -192,7 +189,7 @@ class ClientList extends React.Component<ClientListProps, State> {
     render() {
         const {
             rowCount, editing, creating, drawerOpen,
-            editingOpened, creatingOpened,
+            editingOpened, creatingOpened, importOpened,
             filter: { firstName, lastName, email, telephone, sortDirection, sortAttribute }
         } = this.state;
 
@@ -355,13 +352,7 @@ class ClientList extends React.Component<ClientListProps, State> {
                             <Button onClick={() => this._export()}>export</Button>
                         </Grid>
                         <Grid item={true}>
-                            <Dropzone
-                                className={classes.dropZone}
-                                onDrop={this._onDrop}
-                            >
-                                <Button className={classes.dropZoneLabel}>import</Button>
-
-                            </Dropzone>
+                            <Button onClick={() => this._import()}>import</Button>
                         </Grid>
                         <Grid item={true} style={{ marginTop: 'auto', display: 'flex' }}>
                             <IconButton
@@ -511,6 +502,28 @@ class ClientList extends React.Component<ClientListProps, State> {
                         />
                     </Dialog>
                 }
+                <Dialog
+                    open={!!importOpened}
+                    fullScreen={true}
+                    onClose={close}
+                >
+
+                    <ClientImport
+                        {...{
+                            intl,
+                            settingsCtx
+                        }}
+                        close={() => {
+                            this.setState(
+                                () => ({ importOpened: false })
+                            );
+                        }}
+                        refresh={() => {
+                            this._refresh();
+                        }}
+                    />
+                </Dialog>
+
             </GridContainer>);
     }
 
@@ -551,27 +564,11 @@ class ClientList extends React.Component<ClientListProps, State> {
         });
 
     }
-    private _onDrop(acceptedFiles: Blob[]) {
+    private _import() {
+        this.setState(
+            () => ({ importOpened: true })
+        );
 
-        if (!acceptedFiles || acceptedFiles.length === 0) { return; }
-        // const reader = new FileReader();
-        // reader.onload = () => {
-        //     if (reader.result) {
-        //         // import 
-        //         this.props.onChange({ Src: reader.result as string });
-        //     }
-        // };
-        // // tslint:disable-next-line:no-console
-        // reader.onabort = () => console.log('file reading was aborted');
-        // // tslint:disable-next-line:no-console
-        // reader.onerror = () => console.log('file reading has failed');
-
-        var data = new FormData();
-        acceptedFiles.forEach((b, i) => data.set(`csv${i}`, b));
-        Clients.ImportCsv(data).then(clients => {
-            this.props.enqueueSnackbar(`${clients.length} clients imported`);
-            this._refresh();
-        });
     }
     private _GetFilters() {
         const { filter: { firstName, lastName, telephone, email, sortAttribute, sortDirection } } = this.state;
@@ -698,16 +695,6 @@ const drawerWidth = '16rem';
 export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
 
     return {
-        dropZone: {
-            width: '100%',
-            height: '100%'
-        },
-        dropZoneNoImage: {
-        },
-        dropZoneLabel: {
-            width: '100%',
-            height: '100%'
-        },
         containerCls: {
             height: '100%',
             position: 'relative'
