@@ -14,8 +14,8 @@ namespace our.orders.Identity
         public Role(string roleName)
         {
             Name = roleName;
-            NormalizedName = roleName.ToUpperInvariant();
-            Id = roleName.ToUpperInvariant();
+            NormalizedName = Normalize(roleName);
+            Id = Normalize(roleName);
         }
         public string Id { get; set; }
         public string Name { get; set; }
@@ -24,7 +24,7 @@ namespace our.orders.Identity
 
         public override string ToString() => Name;
 
-
+        public static string Normalize(string role) => role?.ToUpperInvariant();
 
     }
 }

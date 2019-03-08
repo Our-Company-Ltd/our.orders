@@ -63,7 +63,7 @@ namespace our.orders.helpers
                             o.UserName = person.UserName;
                             o.ShopId = shops != null ? f.PickRandom(shops).Id : null;
                             o.Email = person.Email;
-                            o.Roles = roles;
+                            o.Roles = roles.Select(Role.Normalize);
                         });
         }
         public static Faker<Models.Person> RandomPerson()

@@ -85,7 +85,7 @@ namespace our.orders.helpers
                             Email = person.Email,
                             ShopId = shop.Id,
                             Note = $"admin-{i}-Pa$$w0rd",
-                            Roles = new List<string>() { RoleStore.ADMIN }
+                            Roles = new List<string>() { Role.Normalize(RoleStore.ADMIN) }
                         },
                         $"admin-{i}-Pa$$w0rd"
                     );

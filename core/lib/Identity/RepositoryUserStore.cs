@@ -155,9 +155,11 @@ namespace our.orders.Identity
             return Task.FromResult(user.PhoneNumberConfirmed);
         }
 
-        public Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
+        public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Roles as IList<string>);
+            var roles = await Task.WhenAll(user.Roles.Select(r => roleStore.FindByNameAsync(r, cancellationToken)));
+            
+            return roles.Select(r => r.Name).ToList();
         }
 
         public Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
@@ -193,7 +195,7 @@ namespace our.orders.Identity
         public Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
             return Task.FromResult(Users
-                .Select(u => u.Roles.Any(r => r.ToLowerInvariant() == roleName.ToLowerInvariant()))
+                .Select(u => u.Roles.Any(r => r == Role.Normalize(roleName)))
                 .ToList() as IList<User>);
         }
 
@@ -210,7 +212,7 @@ namespace our.orders.Identity
         }
 
         public Task<bool> IsInRoleAsync(User user, string role, CancellationToken cancellationToken)
-            => Task.FromResult(user.Roles.Any(r => r.ToLowerInvariant() == role.ToLowerInvariant()));
+            => Task.FromResult(user.Roles.Any(r => r == Role.Normalize(role)));
 
         public Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {

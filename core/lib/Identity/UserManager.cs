@@ -57,6 +57,8 @@ namespace our.orders.Identity
             user.PreferedLanguage = preferedLanaguage;
             await Store.UpdateAsync(user, token);
         }
+        
+        public override string NormalizeKey(string key) => Role.Normalize(key);
 
     }
 }

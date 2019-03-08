@@ -40,6 +40,7 @@ namespace our.orders.Controllers
     {
         readonly UserManager _userManager;
         readonly SignInManager<User> _signInManager;
+        private readonly IRoleStore<Role> roleStore;
         readonly Guid _sessionId;
         readonly IServiceProvider _serviceProvider;
         readonly ILogger _logger;
@@ -48,6 +49,7 @@ namespace our.orders.Controllers
         public AccountController(
             UserManager userManager,
             SignInManager<User> signInManager,
+            IRoleStore<Role> roleStore,
             IAntiforgery antiForgery,
             IHttpContextAccessor httpContextAccessor,
             IServiceProvider serviceProvider,
@@ -64,6 +66,7 @@ namespace our.orders.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.roleStore = roleStore;
 
 
             // this.cookie = cookie;
@@ -93,11 +96,13 @@ namespace our.orders.Controllers
             public bool RememberMe { get; set; }
         }
 
-        private string _GenerateToken(User user)
+        private async Task<string> _GenerateTokenAsync(User user)
         {
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
+            var roles = await _userManager.GetRolesAsync(user);
+            var rolesClaims = roles.Select(r => new Claim(ClaimTypes.Role, r));
 
             var claims = new Claim[]
                 {
@@ -107,10 +112,8 @@ namespace our.orders.Controllers
 
                         new Claim(ClaimTypes.NameIdentifier,user.UserName ?? ""),
                         new Claim(ClaimTypes.Name,user.UserName)
-                }.Concat(
-                    user.Roles.Select(r => new Claim(ClaimTypes.Role, r)
-                    )
-                );
+                }.Concat(rolesClaims);
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -145,7 +148,7 @@ namespace our.orders.Controllers
                 _logger.LogInformation("User logged in.");
 
                 var resultDto = _mapper.Map<AccountDto>(user);
-                resultDto.Token = _GenerateToken(user);
+                resultDto.Token = await _GenerateTokenAsync(user);
                 resultDto.IsAuthenticated = true;
 
                 return Ok(ApiModel.AsSuccess(resultDto));

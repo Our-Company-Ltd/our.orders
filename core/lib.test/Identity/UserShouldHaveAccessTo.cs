@@ -31,7 +31,7 @@ using static our.orders.Controllers.AccountController;
 using our.orders.Builder;
 using Xunit.Abstractions;
 
-
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace our.orders.test.Identity
 {

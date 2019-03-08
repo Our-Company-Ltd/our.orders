@@ -26,7 +26,7 @@ namespace our.orders.Helpers
             CreateMap<AccountDto, User>();
 
             CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>();
+            CreateMap<UserDto, User>().ForMember(u => u.Roles, d => d.MapFrom(x => x.Roles.Select(Role.Normalize)));
 
             CreateMap(typeof(OrderDto), appsettings.OrderType);
             CreateMap<IOrder, OrderDto>();
