@@ -216,8 +216,8 @@ class ClientSelect extends React.Component<ClientSelectProps, State> {
             return Clients.Find(
                 {
                     filters: [
-                        Filter.Like('Firstname', inputValue),
-                        Filter.Like('Lastname', inputValue),
+                        Filter.Like('FirstName', inputValue),
+                        Filter.Like('LastName', inputValue),
                         Filter.Like('Phone', inputValue),
                         Filter.Like('Email', inputValue)
                     ],

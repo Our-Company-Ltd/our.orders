@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +16,7 @@ namespace our.orders.Helpers
 {
     public class AutoMapperProfile : Profile
     {
-        public AutoMapperProfile(IServiceProvider sp, IAppSettings appsettings, Configuration configuration, AppEvents appEvents)
+        public AutoMapperProfile(IServiceProvider sp, IAppSettings appsettings, Configuration configuration, AppEvents appEvents, IRoleStore<Role> roleStore)
         {
 
             // https://github.com/aspnet/JsonPatch/issues/31
@@ -24,9 +25,9 @@ namespace our.orders.Helpers
 
             CreateMap<User, AccountDto>();
             CreateMap<AccountDto, User>();
-
+            
             CreateMap<User, UserDto>();
-            CreateMap<UserDto, User>().ForMember(u => u.Roles, d => d.MapFrom(x => x.Roles.Select(Role.Normalize)));
+            CreateMap<UserDto, User>();
 
             CreateMap(typeof(OrderDto), appsettings.OrderType);
             CreateMap<IOrder, OrderDto>();

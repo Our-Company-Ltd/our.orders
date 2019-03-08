@@ -56,7 +56,7 @@ export class ClientFields extends React.Component<ClientFieldsProps> {
         const country = CountryIso || '';
 
         const { intl: { formatMessage }, onChange, authCtx: { user } } = this.props;
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Clients');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_CLIENTS');
 
         return (
             <GridContainer spacing={24}>

@@ -156,7 +156,7 @@ class MovementsFields extends React.Component<MovementsFieldsProps> {
     }
 
     private _isAdmin(user?: User) {
-        return user && user.Roles && user.Roles.indexOf('Admin') >= 0;
+        return user && user.Roles && user.Roles.indexOf('ADMIN') >= 0;
     }
 
 }

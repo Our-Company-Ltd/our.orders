@@ -388,8 +388,7 @@ class ClientList extends React.Component<ClientListProps, State> {
                                     'OrganizationName',
                                     'City',
                                     'CountryIso',
-                                    'State',
-                                    'Creation'
+                                    'State'
                                 ] as Array<keyof Client>).map(k => (
                                     <MenuItem key={k} value={k}>
                                         {k}
@@ -426,7 +425,7 @@ class ClientList extends React.Component<ClientListProps, State> {
                 <Fabs
                     map={[
                         this.state.fetching ?
-                            'loading' : IsAdminOrInRole(user, 'CRUD_Clients') &&
+                            'loading' : IsAdminOrInRole(user, 'CRUD_CLIENTS') &&
                             {
                                 icon: <Add />,
                                 legend: 'add new',

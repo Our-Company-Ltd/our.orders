@@ -115,7 +115,9 @@ namespace our.orders.Controllers
         {
 
             var results = new List<ClientDto>();
-            var headers = Request.Form.Where(p => p.Key == "headers").Select(p => p.Value.FirstOrDefault()).FirstOrDefault()?.DeSerialize<Dictionary<string, string>>();
+            var headers = Request.Form.Where(p => p.Key == "headers").Select(p => p.Value.FirstOrDefault()).FirstOrDefault()?.DeSerialize<Dictionary<string, int>>();
+            var delimiter = Request.Form.Where(p => p.Key == "delimiter").Select(p => p.Value.FirstOrDefault()).FirstOrDefault()?.DeSerialize<string>();
+            var hasHeaderRecord = Request.Form.Where(p => p.Key == "hasHeaderRecord").Select(p => p.Value.FirstOrDefault())?.FirstOrDefault().DeSerialize<bool>();
             foreach (var file in Request.Form.Files)
             {
                 if (file.Length <= 0 || file.FileName == null) continue;
@@ -123,9 +125,24 @@ namespace our.orders.Controllers
                 using (var reader = new StreamReader(stream))
                 using (var csv = new CsvReader(reader))
                 {
+                    // we can and will miss fields 
+                    csv.Configuration.MissingFieldFound = null;
+                    // csv.Configuration.Encoding = new System.Text.UTF8Encoding();
+                    csv.Configuration.Delimiter = delimiter ?? ",";
+                    csv.Configuration.HasHeaderRecord = hasHeaderRecord ?? true;
+
                     if (headers != null)
                     {
-                        csv.Configuration.PrepareHeaderForMatch = (string header, int index) => headers.TryGetValue(header, out string h) ? h : header;
+                        var map = new CsvHelper.Configuration.DefaultClassMap<ClientDto>();
+                        var clientType = typeof(ClientDto);
+                        foreach (var memberName in headers.Keys)
+                        {
+                            var member = clientType.GetMember(memberName).FirstOrDefault();
+                            if(member == null) continue;
+                            map.Map(typeof(ClientDto),member).Index(headers[memberName]);
+                        }
+                        csv.Configuration.RegisterClassMap(map);
+                        // csv.Configuration.PrepareHeaderForMatch = (string header, int index) => string.IsNullOrWhiteSpace(headers[index]) ? header : headers[index];
                     }
                     var records = csv.GetRecords<ClientDto>();
                     foreach (var clientDto in records)

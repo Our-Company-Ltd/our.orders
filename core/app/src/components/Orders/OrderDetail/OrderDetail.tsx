@@ -263,8 +263,8 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
 
         const ownOrder = current.UserId === user!!.Id;
 
-        const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_Own_Orders') ||
-            IsAdminOrInRole(user, 'CRUD_All_Orders');
+        const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_OWN_ORDERS') ||
+            IsAdminOrInRole(user, 'CRUD_ALL_ORDERS');
 
         const isOrderType = current.OrderType === 'Order';
         const { Status } = current;

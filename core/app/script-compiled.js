@@ -3910,7 +3910,7 @@ var IsAdminOrInRole = function IsAdminOrInRole(user) {
   }
 
   return user && (roles.some(function (role) {
-    return user.Roles.indexOf('Admin') >= 0;
+    return user.Roles.indexOf('ADMIN') >= 0;
   }) || roles.some(function (role) {
     return user.Roles.indexOf(role) >= 0;
   }));
@@ -5614,7 +5614,7 @@ function (_React$Component) {
           orders = _this$state.orders,
           templatesOpened = _this$state.templatesOpened;
       var changed = !!Object.keys(changes).length;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Clients');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_CLIENTS');
       var saveBtn = {
         icon: React.createElement(_icons.Check, null),
         onClick: function onClick() {
@@ -6132,7 +6132,7 @@ function (_React$Component) {
           formatMessage = _this$props.intl.formatMessage,
           onChange = _this$props.onChange,
           user = _this$props.authCtx.user;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Clients');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_CLIENTS');
       return React.createElement(_GridContainer.GridContainer, {
         spacing: 24
       }, React.createElement(_Grid.default, {
@@ -7169,7 +7169,7 @@ function (_React$Component) {
           });
         });
       })), React.createElement(_Fabs.default, {
-        map: [this.state.fetching ? 'loading' : (0, _roles.IsAdminOrInRole)(user, 'CRUD_Clients') && {
+        map: [this.state.fetching ? 'loading' : (0, _roles.IsAdminOrInRole)(user, 'CRUD_CLIENTS') && {
           icon: React.createElement(_icons.Add, null),
           legend: 'add new',
           onClick: add,
@@ -12474,7 +12474,7 @@ function (_React$Component) {
   }, {
     key: "_isAdmin",
     value: function _isAdmin(user) {
-      return user && user.Roles && user.Roles.indexOf('Admin') >= 0;
+      return user && user.Roles && user.Roles.indexOf('ADMIN') >= 0;
     }
   }]);
 
@@ -12704,7 +12704,7 @@ function (_React$Component) {
         className: classes.menuContainer
       }, React.createElement(_core.List, {
         className: classNames(classes.menu)
-      }, (0, _roles.IsAdminOrInRole)(user, 'View_Shops_Movements') && shopCtx.Shops.map(function (s) {
+      }, (0, _roles.IsAdminOrInRole)(user, 'VIEW_SHOPS_MOVEMENTS') && shopCtx.Shops.map(function (s) {
         var active = activeLabel === s.Id;
         return React.createElement(_core.ListItem, {
           key: "shop-".concat(s.Id),
@@ -18394,7 +18394,7 @@ function (_React$Component) {
       var cellphone = client.CellPhone || '';
       var email = client.Email || '';
       var city = client.City || '';
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Clients');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_CLIENTS');
       var empty = !(firstname || lastname || organizationname);
       var preview = empty ? React.createElement(_ItemPreview.default, null, React.createElement(_ItemPreview.Thumb, {
         loading: true
@@ -18873,7 +18873,7 @@ function (_React$Component) {
       var changed = !!Object.keys(changes).length;
       var hasItems = current.Items && current.Items.length > 0 || changes.Items && changes.Items.length > 0;
       var ownOrder = current.UserId === user.Id;
-      var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_Own_Orders') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_All_Orders');
+      var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_OWN_ORDERS') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_ALL_ORDERS');
       var isOrderType = current.OrderType === 'Order';
       var Status = current.Status;
 
@@ -19917,7 +19917,7 @@ function (_React$Component) {
           UserId = current.UserId;
       var needsDispatchInfos = NeedsDispatch;
       var ownOrder = (current.UserId && current.UserId) === (user && user.Id);
-      var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_Own_Orders') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_All_Orders');
+      var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_OWN_ORDERS') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_ALL_ORDERS');
       return React.createElement(_DetailGridContainer.default, null, React.createElement(_DetailGridColumn.default, null, React.createElement(_GridContainer.GridContainer, null, React.createElement(_core.Grid, {
         item: true,
         xs: 3
@@ -22381,7 +22381,7 @@ function (_React$Component) {
         loadMoreRows: this._loadMore,
         rowCount: rowCount
       };
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_All_Orders', 'CRUD_Own_Orders');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_ALL_ORDERS', 'CRUD_OWN_ORDERS');
 
       var add = function add() {
         _this4.setState(function () {
@@ -25091,7 +25091,7 @@ function (_React$Component) {
       var hasID = !!preview.Id;
       var subProducts = preview.Products || [];
       var skus = [];
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Products');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_PRODUCTS');
 
       var addSKU = function addSKU(p) {
         var SKU = p.SKU,
@@ -25716,7 +25716,7 @@ function (_React$Component) {
       var description = preview.Description || '';
       var colorHash = new _colorHash.default();
       var options = preview.Options;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Products');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_PRODUCTS');
       return React.createElement(_GridContainer.GridContainer, null, React.createElement(_Grid.default, {
         item: true,
         xs: 12
@@ -26943,7 +26943,7 @@ function (_React$Component) {
         });
       };
 
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Products');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_PRODUCTS');
       return React.createElement("div", {
         style: {
           position: 'relative',
@@ -29084,7 +29084,7 @@ function (_React$Component) {
         themeColor: 'green',
         onClick: this._add
       };
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Templates');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_TEMPLATES');
       return React.createElement(_GridContainer.GridContainer, null, templateCtx.templates.map(function (documentTemplate) {
         var name = documentTemplate.Title || '(no title)';
         var desciption = documentTemplate.Description || '';
@@ -29717,7 +29717,7 @@ function (_React$Component) {
         alt: "".concat(user.FirstName, " ").concat(user.LastName)
       })), React.createElement(_ListItemText.default, {
         primary: "Account"
-      })), (0, _roles.IsAdminOrInRole)(user, 'CRUD_Users') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'CRUD_USERS') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Users');
@@ -29725,7 +29725,7 @@ function (_React$Component) {
         className: classNames(classes.menuItem, activeSubmenu === 'Users' && classes.menuItemActive)
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.People, null)), React.createElement(_ListItemText.default, {
         primary: "Users"
-      })), (0, _roles.IsAdminOrInRole)(user, 'View_Shops') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'VIEW_SHOPS') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Shops');
@@ -29733,7 +29733,7 @@ function (_React$Component) {
         className: classNames(classes.menuItem, activeSubmenu === 'Shops' && classes.menuItemActive)
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.Store, null)), React.createElement(_ListItemText.default, {
         primary: "Shops"
-      })), (0, _roles.IsAdminOrInRole)(user, 'View_Warehouses') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'VIEW_WAREHOUSES') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Warehouses');
@@ -29741,7 +29741,7 @@ function (_React$Component) {
         className: classNames(classes.menuItem, activeSubmenu === 'Warehouses' && classes.menuItemActive)
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_WarehouseIcon.default, null)), React.createElement(_ListItemText.default, {
         primary: "Warehouses"
-      })), (0, _roles.IsAdminOrInRole)(user, 'CRUD_Categories') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'CRUD_CATEGORIES') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Categories');
@@ -29749,7 +29749,7 @@ function (_React$Component) {
         className: classNames(classes.menuItem, activeSubmenu === 'Categories' && classes.menuItemActive)
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.Bookmarks, null)), React.createElement(_ListItemText.default, {
         primary: "Categories"
-      })), (0, _roles.IsAdminOrInRole)(user, 'View_Templates') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'VIEW_TEMPLATES') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Templates');
@@ -29757,7 +29757,7 @@ function (_React$Component) {
         className: classNames(classes.menuItem, activeSubmenu === 'Templates' && classes.menuItemActive)
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.FileCopy, null)), React.createElement(_ListItemText.default, {
         primary: "Templates"
-      })), (0, _roles.IsAdminOrInRole)(user, 'View_Payments') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'VIEW_PAYMENTS') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Payments');
@@ -29765,7 +29765,7 @@ function (_React$Component) {
         className: classNames(classes.menuItem, activeSubmenu === 'Payments' && classes.menuItemActive)
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.EuroSymbol, null)), React.createElement(_ListItemText.default, {
         primary: "Payments"
-      })), (0, _roles.IsAdminOrInRole)(user, 'View_Configuration') && React.createElement(_ListItem.default, {
+      })), (0, _roles.IsAdminOrInRole)(user, 'VIEW_CONFIGURATION') && React.createElement(_ListItem.default, {
         button: true,
         onClick: function onClick(e) {
           return _this2._changeSubmenu('Configuration');
@@ -29850,7 +29850,7 @@ function (_React$Component) {
       });
       localStorage.setItem('settingActiveSubmenu', activeSubmenu);
     } // private _isAdmin(user: TUser) {
-    //     return user.Roles && user.'indexOf'('Admin') >= 0;
+    //     return user.Roles && user.'indexOf'('ADMIN') >= 0;
     // }
 
   }]);
@@ -30466,7 +30466,7 @@ function (_React$Component) {
         themeColor: 'green',
         onClick: this._add
       };
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Shops');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_SHOPS');
       return React.createElement(_GridContainer.GridContainer, null, shopCtx.Shops.map(function (shop) {
         var name = shop.Name || '';
         var city = shop.City || '';
@@ -31045,7 +31045,7 @@ function (_React$Component) {
             }) : null;
           }));
         }
-      }, ['Admin', 'View_Dashboard', 'List_Orders', 'CRUD_Own_Orders', 'CRUD_All_Orders', 'CRUD_Clients', 'CRUD_Products', 'List_Vouchers', 'CRUD_Vouchers', 'View_Shops_Movements', 'CRUD_Shops_Movements', 'CRUD_Stocks_Units_Movements', 'CRUD_Users', 'CRUD_Categories', 'View_Shops', 'CRUD_Shops', 'View_Warehouses', 'CRUD_Warehouses', 'View_Templates', 'CRUD_Templates', 'View_Payments', 'View_Configuration'].map(function (r) {
+      }, ['ADMIN', 'VIEW_DASHBOARD', 'LIST_ORDERS', 'CRUD_OWN_ORDERS', 'CRUD_ALL_ORDERS', 'CRUD_CLIENTS', 'CRUD_PRODUCTS', 'LIST_VOUCHERS', 'CRUD_VOUCHERS', 'VIEW_SHOPS_MOVEMENTS', 'CRUD_SHOPS_MOVEMENTS', 'CRUD_STOCKS_UNITS_MOVEMENTS', 'CRUD_USERS', 'CRUD_CATEGORIES', 'VIEW_SHOPS', 'CRUD_SHOPS', 'VIEW_WAREHOUSES', 'CRUD_WAREHOUSES', 'VIEW_TEMPLATES', 'CRUD_TEMPLATES', 'VIEW_PAYMENTS', 'VIEW_CONFIGURATION'].map(function (r) {
         return React.createElement(_core.MenuItem, {
           value: r,
           style: {
@@ -31444,7 +31444,7 @@ function (_React$Component) {
           initial = _this$props.initial,
           user = _this$props.authCtx.user;
       var changes = this.state.changes;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Products');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_PRODUCTS');
       return React.createElement(React.Fragment, null, React.createElement(_core.DialogContent, null, React.createElement("form", {
         onSubmit: function onSubmit(e) {
           e.preventDefault();
@@ -31905,7 +31905,7 @@ function (_React$Component) {
         themeColor: 'green',
         onClick: this._add
       };
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Warehouses');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_WAREHOUSES');
       return React.createElement(_GridContainer.GridContainer, null, warehouseCtx.Warehouses.map(function (warehouse) {
         var name = warehouse.Name || '';
         var city = warehouse.City || '';
@@ -32274,7 +32274,7 @@ function (_React$Component) {
           page = _this$state.page;
       var rowCount = Object.keys(units).length;
       var rowsPerPage = 10;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Products');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_PRODUCTS');
       return React.createElement(React.Fragment, null, React.createElement(_Table.default, {
         "aria-labelledby": "tableTitle"
       }, React.createElement(_TableHead.default, null, React.createElement(_TableRow.default, null, React.createElement(_TableCell.default, {
@@ -32764,7 +32764,7 @@ function (_React$Component) {
           valid = _this$props.valid,
           code = _this$props.code,
           user = _this$props.authCtx.user;
-      var canEdit = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Vouchers');
+      var canEdit = (0, _roles.IsAdminOrInRole)(user, 'CRUD_VOUCHERS');
 
       var change = function change(index) {
         return function (e) {
@@ -33040,7 +33040,7 @@ function (_React$Component) {
           id = _this$state2.id;
       var changed = !!Object.keys(changes).length;
       var user = this.props.authCtx.user;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Vouchers');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_VOUCHERS');
       var saveBtn = {
         icon: React.createElement(_icons.Check, null),
         onClick: function onClick() {
@@ -33094,7 +33094,7 @@ function (_React$Component) {
       var _this4 = this;
 
       var user = this.props.authCtx.user;
-      var canListOrders = (0, _roles.IsAdminOrInRole)(user, 'List_Orders');
+      var canListOrders = (0, _roles.IsAdminOrInRole)(user, 'LIST_ORDERS');
       var _this$state3 = this.state,
           id = _this$state3.id,
           OrderIds = _this$state3.current.OrderIds;
@@ -33295,7 +33295,7 @@ function (_React$Component) {
           Expiration = current.Expiration,
           MultipleUse = current.MultipleUse,
           Used = current.Used;
-      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_Vouchers');
+      var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_VOUCHERS');
       return React.createElement(_GridContainer.GridContainer, null, React.createElement(_core.Grid, {
         item: true,
         xs: 4
@@ -33984,7 +33984,7 @@ function (_React$Component) {
           });
         });
       })), React.createElement(_Fabs.default, {
-        map: [this.state.fetching ? 'loading' : (0, _roles.IsAdminOrInRole)(user, 'CRUD_Vouchers') && {
+        map: [this.state.fetching ? 'loading' : (0, _roles.IsAdminOrInRole)(user, 'CRUD_VOUCHERS') && {
           icon: React.createElement(_icons.Add, null),
           legend: 'add new',
           onClick: add,
@@ -34724,7 +34724,7 @@ function (_React$Component) {
           shopCtx = _this$props.shopCtx,
           categoryCtx = _this$props.categoryCtx,
           productCtx = _this$props.productCtx;
-      var tabs = [(0, _roles.IsAdminOrInRole)(user, 'View_Dashboard') && {
+      var tabs = [(0, _roles.IsAdminOrInRole)(user, 'VIEW_DASHBOARD') && {
         Key: 'dashboard',
         Title: this.props.intl.formatMessage(HomePageMessages.dashboard),
         Icon: React.createElement(_icons.Dashboard, null),
@@ -34738,7 +34738,7 @@ function (_React$Component) {
           shopCtx: shopCtx,
           productCtx: productCtx
         })
-      }, (0, _roles.IsAdminOrInRole)(user, 'List_Orders', 'CRUD_All_Orders', 'CRUD_Own_Orders') && {
+      }, (0, _roles.IsAdminOrInRole)(user, 'LIST_ORDERS', 'CRUD_ALL_ORDERS', 'CRUD_OWN_ORDERS') && {
         Key: 'orders',
         Title: intl.formatMessage(HomePageMessages.orders),
         Icon: React.createElement(_icons.ShoppingCart, null),
@@ -34781,7 +34781,7 @@ function (_React$Component) {
           categoryCtx: categoryCtx,
           productCtx: productCtx
         })
-      }, (0, _roles.IsAdminOrInRole)(user, 'List_Vouchers', 'CRUD_Vouchers') && {
+      }, (0, _roles.IsAdminOrInRole)(user, 'LIST_VOUCHERS', 'CRUD_VOUCHERS') && {
         Key: 'voucher',
         Title: intl.formatMessage(HomePageMessages.vouchers),
         Icon: React.createElement(_icons.CardGiftcard, null),

@@ -106,7 +106,7 @@ class ClientDetail extends React.Component<ClientProps, State> {
         } = this.state;
 
         const changed = !!Object.keys(changes).length;
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Clients');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_CLIENTS');
 
         const saveBtn: FabBtnProps = {
             icon: <Check />,

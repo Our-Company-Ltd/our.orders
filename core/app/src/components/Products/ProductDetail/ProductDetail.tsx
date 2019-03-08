@@ -166,7 +166,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
 
         const skus: { sku: string; legend: string }[] = [];
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
 
         const addSKU = (p: Product) => {
             const { SKU, Options } = p;

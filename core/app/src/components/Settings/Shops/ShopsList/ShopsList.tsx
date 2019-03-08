@@ -52,7 +52,7 @@ class ShopsList extends React.Component<ShopListProps, State> {
             onClick: this._add
         };
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Shops');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_SHOPS');
 
         return (
             <GridContainer>

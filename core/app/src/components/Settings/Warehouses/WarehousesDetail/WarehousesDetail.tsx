@@ -40,7 +40,7 @@ class WarehousesDetail extends React.Component<Props, State> {
         const { cancel, initial: { Id }, intl, initial, authCtx: { user } } = this.props;
         const { changes } = this.state;
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
 
         return (
             <React.Fragment>

@@ -450,7 +450,7 @@ class VoucherList extends React.Component<VoucherListProps, State> {
                 <Fabs
                     map={[
                         this.state.fetching ?
-                            'loading' : IsAdminOrInRole(user, 'CRUD_Vouchers') &&
+                            'loading' : IsAdminOrInRole(user, 'CRUD_VOUCHERS') &&
                             {
                                 icon: <Add />,
                                 legend: 'add new',

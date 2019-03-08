@@ -88,6 +88,7 @@ namespace our.orders.Models
 
         string Note { get; set; }
 
+
         string Category { get; set; }
 
         string ShopId { get; set; }
@@ -101,6 +102,8 @@ namespace our.orders.Models
         string PrettyDate { get; }
 
         string PrettyTotal { get; }
+
+        string PrettyDelivery { get; }
     }
     public class Order : Model, IOrder
     {
@@ -186,5 +189,7 @@ namespace our.orders.Models
         public string PrettyDate => Date?.ToString("dd.MM.yyyy");
 
         public string PrettyTotal => Total.ToString("0.00", CultureInfo.InvariantCulture);
+
+        public string PrettyDelivery => Delivery.Final.ToString("0.00", CultureInfo.InvariantCulture);
     }
 }

@@ -81,7 +81,7 @@ export class ProductPage extends React.Component<ProductPageProps, State> {
             this.setState(() => ({ editingOpened: false }));
         };
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
 
         return (
             <div style={{ position: 'relative', height: '100%' }}>

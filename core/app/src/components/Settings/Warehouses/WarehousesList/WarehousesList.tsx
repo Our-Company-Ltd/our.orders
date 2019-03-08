@@ -52,7 +52,7 @@ class WarehousesList extends React.Component<WarehouseProps, State> {
             onClick: this._add
         };
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Warehouses');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_WAREHOUSES');
 
         return (
             <GridContainer>
