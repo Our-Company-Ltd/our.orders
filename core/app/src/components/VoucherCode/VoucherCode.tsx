@@ -32,7 +32,7 @@ class VoucherCode extends React.Component<VoucherCodeProps, State> {
     render() {
         const { classes, onChange, valid, code, authCtx: { user} } = this.props;
 
-        const canEdit = IsAdminOrInRole(user, 'CRUD_Vouchers');
+        const canEdit = IsAdminOrInRole(user, 'CRUD_VOUCHERS');
 
         const change = (index: number) =>
             (e: React.ChangeEvent<HTMLInputElement>) => {

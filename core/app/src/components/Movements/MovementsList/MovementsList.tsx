@@ -201,7 +201,7 @@ class MovementsList extends React.Component<MovementsListProps, State> {
                     <MaterialList
                         className={classNames(classes.menu)}
                     >
-                        {IsAdminOrInRole(user, 'View_Shops_Movements') && 
+                        {IsAdminOrInRole(user, 'VIEW_SHOPS_MOVEMENTS') && 
                             shopCtx.Shops.map((s) => {
 
                             const active = activeLabel === s.Id;

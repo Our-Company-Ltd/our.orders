@@ -44,7 +44,7 @@ export class VoucherFields extends React.Component<VoucherFieldsProps> {
             MultipleUse,
             Used } = current;
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Vouchers');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_VOUCHERS');
 
         return (
             <GridContainer>

@@ -93,7 +93,7 @@ class OrderClientFields extends React.Component<OrderClientFieldsProps, State> {
         const email = client.Email || '';
         const city = client.City || '';
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Clients');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_CLIENTS');
 
         const empty = !(firstname || lastname || organizationname);
         const preview = empty ?

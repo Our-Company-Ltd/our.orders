@@ -110,7 +110,7 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
         const colorHash = new ColorHash();
         const options = preview.Options;
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
 
         return (
             <GridContainer>

@@ -14,7 +14,9 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    List
+    List,
+    FormControlLabel,
+    Switch
 } from '@material-ui/core';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
@@ -40,8 +42,11 @@ export type ClientImportProps =
     };
 
 type State = {
-    headers?: { [key: string]: keyof Client | undefined };
+    headers?: { [property: string]: number };
+    firstLine?: string[];
     file?: Blob;
+    hasHeaderRecord: boolean;
+    delimiter: string;
 };
 const ClientFields: Array<keyof Client> = [
     'Address',
@@ -66,13 +71,18 @@ class ClientImport extends React.Component<ClientImportProps, State> {
         this._onDrop = this._onDrop.bind(this);
         this._import = this._import.bind(this);
         this.state = {
+            hasHeaderRecord: true,
+            delimiter: ','
         };
     }
 
     render() {
         const {
             headers,
-            file
+            file,
+            firstLine,
+            hasHeaderRecord,
+            delimiter
         } = this.state;
         const {
             intl,
@@ -94,31 +104,73 @@ class ClientImport extends React.Component<ClientImportProps, State> {
                                 </Button>
                             </Dropzone>
                         </Grid>
-
-                        {headers && (
+                        <Grid item={true}>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={hasHeaderRecord}
+                                        onChange={(e) => {
+                                            const v = e.target.checked;
+                                            this.setState(() => ({ hasHeaderRecord: v }));
+                                        }}
+                                        color="primary"
+                                    />}
+                                label="first record is headers values"
+                            />
+                        </Grid>
+                        <Grid item={true}>
+                            <TextField
+                                select={true}
+                                label="CSV delimiter"
+                                fullWidth={true}
+                                value={delimiter}
+                                onChange={(value) => {
+                                    const v = value.target.value;
+                                    this.setState(
+                                        () => ({ delimiter: v }),
+                                        () => this._RefreshHeaders()
+                                    );
+                                }}
+                            >
+                                <MenuItem key="," value=",">
+                                    comma (,)
+                                </MenuItem>
+                                <MenuItem key=";" value=";">
+                                    semicolon (;)
+                                </MenuItem>
+                            </TextField>
+                        </Grid>
+                        {firstLine && headers && (
                             <Grid item={true}>
                                 <List>
-                                    {Object.keys(headers).map((h) => (
+                                    {ClientFields.map((prop, i) => (
                                         <ListItem
-                                            key={`${h}`}
+                                            key={`${prop}-${i}`}
                                         >
+                                            {prop} :
                                             <TextField
                                                 select={true}
-                                                label={h}
+                                                label="CSV Header"
                                                 fullWidth={true}
-                                                value={headers[h] || ''}
+                                                value={headers[prop] === undefined ? -1 : headers[prop]}
                                                 onChange={(value) => {
-                                                    const v = value.target.value as keyof Client;
+                                                    const v = parseInt(value.target.value, 10);
+                                                    const { [prop]: old, ...newHeaders } = headers;
+                                                    if (v >= 0) {
+                                                        newHeaders[prop] = v;
+                                                    }
                                                     this.setState(
-                                                        (prev) => ({ headers: { ...prev.headers, [h]: v } })
+                                                        () => ({
+                                                            headers: newHeaders
+                                                        })
                                                     );
                                                 }}
                                             >
-                                                {ClientFields.map(k => (
-                                                    <MenuItem key={k} value={k}>
-                                                        {k}
+                                                {firstLine.map((h, j) => (
+                                                    <MenuItem key={h} value={j}>
+                                                        column {j} ({h})
                                                     </MenuItem>))}
-                                                <MenuItem key="--none--" value={undefined}>
+                                                <MenuItem key="--none--" value={-1}>
                                                     Do not import
                                                 </MenuItem>
                                             </TextField>
@@ -148,6 +200,7 @@ class ClientImport extends React.Component<ClientImportProps, State> {
         );
     }
     private _GetHeaders(file: Blob): Promise<string[]> {
+        const { delimiter } = this.state;
         return new Promise((resolve, reject) => {
 
             // Instantiate a new FileReader
@@ -185,10 +238,10 @@ class ClientImport extends React.Component<ClientImportProps, State> {
                             break;
                         }
                     }
+
                     // find out serparator : 
-                    const splitOnComas = headerString.split(',');
-                    const splitOnSemiColons = headerString.split(';');
-                    return resolve(splitOnComas.length > splitOnSemiColons.length ? splitOnComas : splitOnSemiColons);
+
+                    return resolve(headerString.split(delimiter));
                 }
             };
 
@@ -198,13 +251,15 @@ class ClientImport extends React.Component<ClientImportProps, State> {
         });
     }
     private _import() {
-        const { file, headers } = this.state;
+        const { file, headers, hasHeaderRecord, delimiter } = this.state;
         if (!file || !headers) { return; }
 
         var data = new FormData();
 
         data.set(`csv`, file);
         data.set(`headers`, JSON.stringify(headers));
+        data.set(`hasHeaderRecord`, JSON.stringify(hasHeaderRecord));
+        data.set(`delimiter`, JSON.stringify(delimiter));
 
         Clients.ImportCsv(data).then(clients => {
             this.props.enqueueSnackbar(`${clients.length} clients imported`);
@@ -218,20 +273,36 @@ class ClientImport extends React.Component<ClientImportProps, State> {
         if (!acceptedFiles || acceptedFiles.length === 0) { return; }
         // process the file  :
         var file = acceptedFiles[0];
-        this._GetHeaders(file).then(csvheaders => {
-            const headers = {};
-            csvheaders.forEach(h => {
-                var prop = ClientFields.find(f => f.toLowerCase() === h.toLowerCase());
-                headers[h] = prop;
-            });
-            this.setState(
-                () => ({
-                    file,
-                    headers
-                })
-            );
-        }
+        this.setState(
+            () => ({ file }),
+            () => this._RefreshHeaders()
         );
+    }
+
+    private _RefreshHeaders() {
+        const { file } = this.state;
+        if (!file) { return; }
+        const headers: { [property: string]: number } = {};
+        const firstLine: string[] = [];
+
+        this._GetHeaders(file)
+            .then(csvheaders => {
+                csvheaders.forEach((h, i) => {
+                    firstLine.push(h);
+                    var prop = ClientFields.find(f => f.toLowerCase() === h.toLowerCase());
+                    if (prop) {
+                        headers[prop] = i;
+                    }
+                });
+
+                this.setState(
+                    () => ({
+                        file,
+                        headers,
+                        firstLine
+                    })
+                );
+            });
     }
 }
 

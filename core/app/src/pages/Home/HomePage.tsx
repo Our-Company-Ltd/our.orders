@@ -108,7 +108,7 @@ export class HomePage extends React.Component<HomePageProps> {
             settingsCtx, warehouseCtx, authCtx, shopCtx, categoryCtx, productCtx
         } = this.props;
         var tabs = [
-            IsAdminOrInRole(user, 'View_Dashboard') && {
+            IsAdminOrInRole(user, 'VIEW_DASHBOARD') && {
                 Key: 'dashboard',
                 Title: this.props.intl.formatMessage(HomePageMessages.dashboard),
                 Icon: <DashboardIcon />,
@@ -126,7 +126,7 @@ export class HomePage extends React.Component<HomePageProps> {
                         }}
                     />)
             },
-            IsAdminOrInRole(user, 'List_Orders', 'CRUD_All_Orders', 'CRUD_Own_Orders') && {
+            IsAdminOrInRole(user, 'LIST_ORDERS', 'CRUD_ALL_ORDERS', 'CRUD_OWN_ORDERS') && {
                 Key: 'orders',
                 Title: intl.formatMessage(HomePageMessages.orders),
                 Icon: <ShoppingCart />,
@@ -180,7 +180,7 @@ export class HomePage extends React.Component<HomePageProps> {
                         }}
                     />)
             },
-            IsAdminOrInRole(user, 'List_Vouchers', 'CRUD_Vouchers') && {
+            IsAdminOrInRole(user, 'LIST_VOUCHERS', 'CRUD_VOUCHERS') && {
                 Key: 'voucher',
                 Title: intl.formatMessage(HomePageMessages.vouchers),
                 Icon: <CardGiftcard />,

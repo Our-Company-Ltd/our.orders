@@ -180,7 +180,7 @@ export class VoucherDetail extends React.Component<VoucherDetailProps, State> {
         const changed = !!Object.keys(changes).length;
         const { authCtx: { user } } = this.props;
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Vouchers');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_VOUCHERS');
 
         const saveBtn: FabBtnProps = {
             icon: <Check />,
@@ -229,7 +229,7 @@ export class VoucherDetail extends React.Component<VoucherDetailProps, State> {
 
     private _loadOrders() {
         const { authCtx: { user } } = this.props;
-        const canListOrders = IsAdminOrInRole(user, 'List_Orders');
+        const canListOrders = IsAdminOrInRole(user, 'LIST_ORDERS');
 
         const { id, current: { OrderIds } } = this.state;
 

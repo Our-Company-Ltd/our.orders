@@ -222,7 +222,7 @@ class OrderList extends React.Component<OrdersListProps, State> {
             rowCount: rowCount
         };
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_All_Orders', 'CRUD_Own_Orders');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_ALL_ORDERS', 'CRUD_OWN_ORDERS');
 
         const add = () => {
             this.setState(() => ({ fetching: true }), () => {

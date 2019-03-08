@@ -52,7 +52,7 @@ export class Stock extends React.Component<StockProps, State> {
         const rowCount = Object.keys(units).length;
         const rowsPerPage = 10;
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Products');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
         
         return (
             <React.Fragment>

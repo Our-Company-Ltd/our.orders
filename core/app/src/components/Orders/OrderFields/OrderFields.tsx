@@ -45,7 +45,7 @@ import {
 } from 'src/_context';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
 
-export type injectedClasses = 'cancelled' | 'cancelledIcon' | 'cancelledWrapper';
+export type injectedClasses = 'cancelled' | 'cancelledIcon' | 'cancelledWrapper' | 'detailGridColumn';
 
 export type OrderFieldsProps =
     WithStyles<injectedClasses> &
@@ -131,12 +131,12 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
         const needsDispatchInfos = NeedsDispatch;
 
         const ownOrder = (current.UserId && current.UserId) === (user && user.Id);
-        const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_Own_Orders') ||
-            IsAdminOrInRole(user, 'CRUD_All_Orders');
+        const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_OWN_ORDERS') ||
+            IsAdminOrInRole(user, 'CRUD_ALL_ORDERS');
 
         return (
             <DetailGridContainer>
-                <DetailGridColumn>
+                <DetailGridColumn className={classes.detailGridColumn}>
                     <GridContainer>
                         <Grid item={true} xs={3}>
                             <TextField
@@ -600,6 +600,10 @@ export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
         cancelledIcon: {
             marginRight: 5,
             fontSize: 20
+        },
+        detailGridColumn: {
+            height: '100%',
+            boxSizing: 'border-box'
         }
     };
 })(injectIntl(OrderFields));

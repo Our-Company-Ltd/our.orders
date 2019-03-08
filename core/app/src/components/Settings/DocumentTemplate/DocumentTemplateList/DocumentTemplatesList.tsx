@@ -48,7 +48,7 @@ class DocumentTemplatesList extends React.Component<DocumentTemplatesProps, Stat
             onClick: this._add
         };
 
-        const hasRights = IsAdminOrInRole(user, 'CRUD_Templates');
+        const hasRights = IsAdminOrInRole(user, 'CRUD_TEMPLATES');
 
         return (
             <GridContainer>
