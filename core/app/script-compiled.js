@@ -4584,6 +4584,64 @@ function (_ServiceApi3) {
       var empty = {};
       return _get(_getPrototypeOf(ClientApi.prototype), "_Empty", this).call(this, _objectSpread({}, empty, partial));
     }
+  }, {
+    key: "ImportCsv",
+    value: function ImportCsv(formData) {
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formData
+      };
+      var url = "".concat(_helpers.config.apiUrl, "/import/csv");
+      return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse).then(function (response) {
+        return response;
+      });
+    }
+  }, {
+    key: "ExportCsv",
+    value: function ExportCsv(filterDef) {
+      var f = filterDef.filters,
+          sort = filterDef.sort,
+          o = filterDef.operator;
+      var filters = f && _toConsumableArray(f) || [];
+      var operator = o || 'and'; // if (query) {
+      //     filters.push(Filter.Text(query));
+      // }
+
+      var body;
+
+      switch (filters.length) {
+        case 0:
+          body = null;
+          break;
+
+        case 1:
+          body = filters[0];
+          break;
+
+        default:
+          body = operator === 'and' ? _Filter.Filter.And.apply(_Filter.Filter, _toConsumableArray(filters)) : _Filter.Filter.Or.apply(_Filter.Filter, _toConsumableArray(filters));
+          break;
+      }
+
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: body && JSON.stringify(body)
+      };
+      var querystring = "";
+
+      if (sort) {
+        querystring += "sort=".concat(sort);
+      }
+
+      var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type, "/export/csv?").concat(querystring);
+      return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse);
+    }
   }]);
 
   return ClientApi;
@@ -6417,6 +6475,279 @@ exports.default = void 0;
 
 var React = _interopRequireWildcard(require("react"));
 
+var _services = require("../../../_services");
+
+var _core = require("@material-ui/core");
+
+var _GridContainer = require("src/components/GridContainer/GridContainer");
+
+var _ClientImportMessages = _interopRequireDefault(require("./ClientImportMessages"));
+
+var _reactDropzone = _interopRequireDefault(require("react-dropzone"));
+
+var _notistack = require("notistack");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var ClientFields = ['Address', 'CellPhone', 'City', 'CountryIso', 'Creation', 'Email', 'FirstName', 'Id', 'LastMod', 'LastName', 'OrganizationName', 'Phone', 'PostalCode', 'State', 'VATNumber'];
+
+var ClientImport =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ClientImport, _React$Component);
+
+  function ClientImport(props) {
+    var _this;
+
+    _classCallCheck(this, ClientImport);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ClientImport).call(this, props));
+    _this._onDrop = _this._onDrop.bind(_assertThisInitialized(_this));
+    _this._import = _this._import.bind(_assertThisInitialized(_this));
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(ClientImport, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$state = this.state,
+          headers = _this$state.headers,
+          file = _this$state.file;
+      var _this$props = this.props,
+          intl = _this$props.intl,
+          classes = _this$props.classes;
+      return React.createElement(React.Fragment, null, React.createElement(_core.DialogTitle, {
+        id: "draggable-dialog-title"
+      }, "Subscribe"), React.createElement(_core.DialogContent, null, React.createElement(_GridContainer.GridContainer, {
+        className: classes.container,
+        spacing: 0
+      }, React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_reactDropzone.default, {
+        className: classes.dropZone,
+        onDrop: this._onDrop
+      }, React.createElement(_core.Button, {
+        className: classes.dropZoneLabel
+      }, intl.formatMessage(_ClientImportMessages.default.header)))), headers && React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.List, null, Object.keys(headers).map(function (h) {
+        return React.createElement(_core.ListItem, {
+          key: "".concat(h)
+        }, React.createElement(_core.TextField, {
+          select: true,
+          label: h,
+          fullWidth: true,
+          value: headers[h] || '',
+          onChange: function onChange(value) {
+            var v = value.target.value;
+
+            _this2.setState(function (prev) {
+              return {
+                headers: _objectSpread({}, prev.headers, _defineProperty({}, h, v))
+              };
+            });
+          }
+        }, ClientFields.map(function (k) {
+          return React.createElement(_core.MenuItem, {
+            key: k,
+            value: k
+          }, k);
+        }), React.createElement(_core.MenuItem, {
+          key: "--none--",
+          value: undefined
+        }, "Do not import")));
+      }))))), React.createElement(_core.DialogActions, null, React.createElement(_core.Button, {
+        onClick: this.props.close,
+        color: "primary"
+      }, "Cancel"), React.createElement(_core.Button, {
+        onClick: this._import,
+        color: "primary",
+        disabled: !headers || !file
+      }, "Import")));
+    }
+  }, {
+    key: "_GetHeaders",
+    value: function _GetHeaders(file) {
+      return new Promise(function (resolve, reject) {
+        // Instantiate a new FileReader
+        var reader = new FileReader(); // Read our file to an ArrayBuffer
+
+        reader.readAsArrayBuffer(file);
+
+        reader.onloadend = function () {
+          if (reader.result) {
+            // Get the Array Buffer
+            var data = reader.result; // Grab our byte length
+
+            var byteLength = data.byteLength; // Convert to conventional array, so we can iterate though it
+
+            var ui8a = new Uint8Array(data, 0); // Used to store each character that makes up CSV header
+
+            var headerString = ''; // Iterate through each character in our Array
+
+            for (var i = 0; i < byteLength; i++) {
+              // Get the character for the current iteration
+              var char = String.fromCharCode(ui8a[i]); // Check if the char is a new line
+
+              if (char.match(/[^\r\n]+/g) !== null) {
+                // Not a new line so lets append it to our header string and keep processing
+                headerString += char;
+              } else {
+                // We found a new line character, stop processing
+                break;
+              }
+            } // find out serparator : 
+
+
+            var splitOnComas = headerString.split(',');
+            var splitOnSemiColons = headerString.split(';');
+            return resolve(splitOnComas.length > splitOnSemiColons.length ? splitOnComas : splitOnSemiColons);
+          }
+        };
+
+        reader.onerror = function () {
+          return reject('impossible to read the file');
+        };
+      });
+    }
+  }, {
+    key: "_import",
+    value: function _import() {
+      var _this3 = this;
+
+      var _this$state2 = this.state,
+          file = _this$state2.file,
+          headers = _this$state2.headers;
+
+      if (!file || !headers) {
+        return;
+      }
+
+      var data = new FormData();
+      data.set("csv", file);
+      data.set("headers", JSON.stringify(headers));
+
+      _services.Clients.ImportCsv(data).then(function (clients) {
+        _this3.props.enqueueSnackbar("".concat(clients.length, " clients imported"));
+
+        _this3.props.refresh();
+
+        _this3.props.close();
+      });
+    }
+  }, {
+    key: "_onDrop",
+    value: function _onDrop(acceptedFiles) {
+      var _this4 = this;
+
+      if (!acceptedFiles || acceptedFiles.length === 0) {
+        return;
+      } // process the file  :
+
+
+      var file = acceptedFiles[0];
+
+      this._GetHeaders(file).then(function (csvheaders) {
+        var headers = {};
+        csvheaders.forEach(function (h) {
+          var prop = ClientFields.find(function (f) {
+            return f.toLowerCase() === h.toLowerCase();
+          });
+          headers[h] = prop;
+        });
+
+        _this4.setState(function () {
+          return {
+            file: file,
+            headers: headers
+          };
+        });
+      });
+    }
+  }]);
+
+  return ClientImport;
+}(React.Component);
+
+var _default = (0, _core.withStyles)(function (theme) {
+  return {
+    dropZone: {
+      width: '100%',
+      height: '100%'
+    },
+    dropZoneNoImage: {},
+    dropZoneLabel: {
+      width: '100%',
+      height: '100%'
+    },
+    container: {
+      height: '100%',
+      position: 'relative'
+    },
+    tooltip: {
+      background: theme.palette.common.white,
+      color: theme.palette.text.primary,
+      boxShadow: theme.shadows[1],
+      fontSize: 11
+    }
+  };
+})((0, _notistack.withSnackbar)(ClientImport));
+
+exports.default = _default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.ClientListMesseges = void 0;
+
+var _reactIntl = require("react-intl");
+
+var ClientListMesseges = (0, _reactIntl.defineMessages)({
+  header: {
+    "id": "src.components.client.clientImports.import",
+    "defaultMessage": "import"
+  }
+});
+exports.ClientListMesseges = ClientListMesseges;
+var _default = ClientListMesseges;
+exports.default = _default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
 var _reactVirtualized = require("react-virtualized");
 
 var _ClientListItem = _interopRequireDefault(require("../ClientListItem/ClientListItem"));
@@ -6442,6 +6773,10 @@ var _throttleDebounce = require("throttle-debounce");
 var _ClientListMesseges = _interopRequireDefault(require("./ClientListMesseges"));
 
 var _roles = require("src/_helpers/roles");
+
+var _notistack = require("notistack");
+
+var _ClientImport = _interopRequireDefault(require("../ClientImport/ClientImport"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6592,6 +6927,7 @@ function (_React$Component) {
           drawerOpen = _this$state.drawerOpen,
           editingOpened = _this$state.editingOpened,
           creatingOpened = _this$state.creatingOpened,
+          importOpened = _this$state.importOpened,
           _this$state$filter = _this$state.filter,
           firstName = _this$state$filter.firstName,
           lastName = _this$state$filter.lastName,
@@ -6759,6 +7095,18 @@ function (_React$Component) {
         inputRef: this._telephoneNameInput,
         onChange: telephoneChange
       })), React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.Button, {
+        onClick: function onClick() {
+          return _this4._export();
+        }
+      }, "export")), React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.Button, {
+        onClick: function onClick() {
+          return _this4._import();
+        }
+      }, "import")), React.createElement(_core.Grid, {
         item: true,
         style: {
           marginTop: 'auto',
@@ -6889,6 +7237,24 @@ function (_React$Component) {
         onDelete: function onDelete() {
           _this4._handleOrderDeleted();
         }
+      }))), React.createElement(_core.Dialog, {
+        open: !!importOpened,
+        fullScreen: true,
+        onClose: close
+      }, React.createElement(_ClientImport.default, _extends({
+        intl: intl,
+        settingsCtx: settingsCtx
+      }, {
+        close: function close() {
+          _this4.setState(function () {
+            return {
+              importOpened: false
+            };
+          });
+        },
+        refresh: function refresh() {
+          _this4._refresh();
+        }
       }))));
     }
   }, {
@@ -6916,15 +7282,30 @@ function (_React$Component) {
       }));
     }
   }, {
-    key: "_loadMore",
-    value: function _loadMore(range) {
-      var _this6 = this;
-
-      var stopIndex = range.stopIndex,
-          startIndex = range.startIndex;
-      this._loadMoreRowsStartIndex = startIndex;
-      this._loadMoreRowsStopIndex = stopIndex; // const { filter: { query, sortAttribute, sortDirection } } = this.state;
-
+    key: "_export",
+    value: function _export() {
+      _services.Clients.ExportCsv(this._GetFilters()).then(function (csvString) {
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString));
+        element.setAttribute('download', 'clients.csv');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      });
+    }
+  }, {
+    key: "_import",
+    value: function _import() {
+      this.setState(function () {
+        return {
+          importOpened: true
+        };
+      });
+    }
+  }, {
+    key: "_GetFilters",
+    value: function _GetFilters() {
       var _this$state$filter2 = this.state.filter,
           firstName = _this$state$filter2.firstName,
           lastName = _this$state$filter2.lastName,
@@ -6950,6 +7331,23 @@ function (_React$Component) {
         filters.push(_Filter.Filter.Or(_Filter.Filter.Like('Phone', telephone), _Filter.Filter.Like('CellPhone', telephone)));
       }
 
+      return {
+        filters: filters,
+        operator: 'and',
+        // query: query,
+        sort: "".concat(sortDirection === 'ascending' ? '' : '-').concat(sortAttribute)
+      };
+    }
+  }, {
+    key: "_loadMore",
+    value: function _loadMore(range) {
+      var _this6 = this;
+
+      var stopIndex = range.stopIndex,
+          startIndex = range.startIndex;
+      this._loadMoreRowsStartIndex = startIndex;
+      this._loadMoreRowsStopIndex = stopIndex; // const { filter: { query, sortAttribute, sortDirection } } = this.state;
+
       var delta = stopIndex - startIndex;
       this.setState(function (prev) {
         return {
@@ -6957,12 +7355,7 @@ function (_React$Component) {
           fetching: true
         };
       });
-      return _services.Clients.Find({
-        filters: filters,
-        operator: 'and',
-        // query: query,
-        sort: "".concat(sortDirection === 'ascending' ? '' : '-').concat(sortAttribute)
-      }, startIndex, stopIndex + 1).then(function (response) {
+      return _services.Clients.Find(this._GetFilters(), startIndex, stopIndex + 1).then(function (response) {
         var count = response.Values.length;
         response.Values.forEach(function (client, i) {
           _this6._loadedRowsMap[startIndex + i] = client;
@@ -7172,7 +7565,7 @@ var _default = (0, _core.withStyles)(function (theme) {
       fontSize: 11
     }
   };
-})(ClientList);
+})((0, _notistack.withSnackbar)(ClientList));
 
 exports.default = _default;
 "use strict";

@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using our.orders.Models;
 
@@ -10,6 +11,9 @@ namespace our.orders
         public event EventHandler<IServiceCollection> Configure;
 
         public event EventHandler<IServiceProvider> ApplicationStarting;
+
+        public event EventHandler<IApplicationBuilder> ApplicationConfigure;
+        
         public event EventHandler<IServiceProvider> ApplicationStarted;
         public event EventHandler<IServiceProvider> ApplicationStopping;
 
@@ -76,7 +80,7 @@ namespace our.orders
         }
         public event EventHandler<(IOrder order, Payment payment)> PaymentRemoved;
 
-         internal void OnPaymentChanged(object sender, (IOrder order, Payment payment) arg)
+        internal void OnPaymentChanged(object sender, (IOrder order, Payment payment) arg)
         {
             if (PaymentChanged != null)
             {
@@ -90,6 +94,13 @@ namespace our.orders
             if (Configure != null)
             {
                 Configure(this, services);
+            }
+        }
+        internal void OnApplicationConfigure(IApplicationBuilder appBuilder)
+        {
+            if (ApplicationConfigure != null)
+            {
+                ApplicationConfigure(this, appBuilder);
             }
         }
 

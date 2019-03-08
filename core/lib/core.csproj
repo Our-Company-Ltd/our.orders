@@ -28,7 +28,7 @@
     <DefineConstants>NETCORE;NETCORE2_2</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.2'">
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.0" />
   </ItemGroup>
 
   <!-- .NET Core 2.0 references, compilation flags and build options -->
@@ -36,12 +36,13 @@
     <DefineConstants>NETCORE;NETCORE2_0</DefineConstants>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0'">
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
   </ItemGroup>
 
   <!-- common NuGet package refs for all frameworks -->
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
+    <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Handlebars.Net" Version="1.9.5" />
     <PackageReference Include="Innofactor.EfCoreJsonValueConverter" Version="1.25.0" />  
   

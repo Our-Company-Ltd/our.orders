@@ -93,8 +93,6 @@ namespace our.orders
             services.AddSingleton<Profile, AutoMapperProfile>();
             services.AddSingleton<IMapper>((s) => autoMapperProvider.GetMapper(s));
 
-            services.AddCors();
-
             services.AddMemoryCache();
 
             services.AddAntiforgery(options =>
@@ -171,7 +169,7 @@ namespace our.orders
                 .AddJwtBearer(x =>
                 {
                     x.RequireHttpsMetadata = false;
-                    x.SaveToken = true;
+                    //x.SaveToken = true;
 
                     x.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -245,18 +243,14 @@ namespace our.orders
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
+            AppEvents.OnApplicationConfigure(app);
+
             AppEvents.OnApplicationStarting(serviceProvider);
             if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            // global cors policy
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
             var fileProvider = serviceProvider.GetService<IFileProvider>();
             app.UseDefaultFiles(new DefaultFilesOptions
             {

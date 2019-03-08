@@ -34,6 +34,7 @@ using our.orders.Payments.Stripe;
 using our.orders.Payments.Paypal;
 using our.orders.Repositories.EntityFramework;
 using our.orders.Payments.PostFinance;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 
 namespace our.orders.demo
 {
@@ -108,16 +109,29 @@ namespace our.orders.demo
                     appEvents.Configure += (sender, s) =>
                     {
                         s.AddScoped<RandomData>();
+                        s.AddCors();
                     };
-                    appEvents.ApplicationStarted += (sender, s) =>
-                        {
-                            using (var scope = s.CreateScope())
-                            {
-                                var randomData = scope.ServiceProvider.GetService<RandomData>();
-                                AsyncHelper.RunSync(() => randomData.Generate());
-                            }
 
-                        };
+                    appEvents.ApplicationStarted += (sender, s) =>
+                    {
+                        using (var scope = s.CreateScope())
+                        {
+                            var randomData = scope.ServiceProvider.GetService<RandomData>();
+                            AsyncHelper.RunSync(() => randomData.Generate());
+                        }
+
+                    };
+
+                    appEvents.ApplicationConfigure += (sender, appBuilder) =>
+                    {
+                        var serverAddressesFeature = app.ServerFeatures.Get<IServerAddressesFeature>();
+                        // global cors policy
+                        appBuilder.UseCors(x => x
+                            .WithOrigins(serverAddressesFeature.Addresses.Concat(new string[] { "http://localhost:3000" }).ToArray())
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
+                    };
                 });
 
 

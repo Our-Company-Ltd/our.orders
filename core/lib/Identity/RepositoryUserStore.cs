@@ -155,9 +155,11 @@ namespace our.orders.Identity
             return Task.FromResult(user.PhoneNumberConfirmed);
         }
 
-        public Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
+        public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.Roles as IList<string>);
+            var roles = await Task.WhenAll(user.Roles.Select(r => roleStore.FindByNameAsync(r, cancellationToken)));
+            
+            return roles.Select(r => r.Name).ToList();
         }
 
         public Task<string> GetSecurityStampAsync(User user, CancellationToken cancellationToken)
@@ -193,7 +195,7 @@ namespace our.orders.Identity
         public Task<IList<User>> GetUsersInRoleAsync(string roleName, CancellationToken cancellationToken)
         {
             return Task.FromResult(Users
-                .Select(u => u.Roles.Contains(roleName))
+                .Select(u => u.Roles.Any(r => r == Role.Normalize(roleName)))
                 .ToList() as IList<User>);
         }
 
@@ -209,8 +211,8 @@ namespace our.orders.Identity
             return Task.FromResult(user.AccessFailedCount);
         }
 
-        public Task<bool> IsInRoleAsync(User user, string normalizedRoleName, CancellationToken cancellationToken)
-            => Task.FromResult(user.Roles.Any(r => r == normalizedRoleName));
+        public Task<bool> IsInRoleAsync(User user, string role, CancellationToken cancellationToken)
+            => Task.FromResult(user.Roles.Any(r => r == Role.Normalize(role)));
 
         public Task RemoveClaimsAsync(User user, IEnumerable<Claim> claims, CancellationToken cancellationToken)
         {
@@ -221,10 +223,10 @@ namespace our.orders.Identity
             return Task.CompletedTask;
         }
 
-        public async Task RemoveFromRoleAsync(User user, string normalizedRoleName, CancellationToken cancellationToken)
+        public async Task RemoveFromRoleAsync(User user, string role, CancellationToken cancellationToken)
         {
-            var role = await roleStore.FindByNameAsync(normalizedRoleName, cancellationToken);
-            user.RemoveRole(role);
+            var r = await roleStore.FindByNameAsync(role, cancellationToken);
+            user.RemoveRole(r);
         }
 
         public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)

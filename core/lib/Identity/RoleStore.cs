@@ -124,7 +124,7 @@ namespace our.orders.Identity
 
         Task<Role> IRoleStore<Role>.FindByNameAsync(string normalizedRoleName, CancellationToken cancellationToken)
         {
-            var result = Store.FirstOrDefault(r => r.NormalizedName == normalizedRoleName);
+            var result = Store.FirstOrDefault(r => r.NormalizedName == Role.Normalize(normalizedRoleName));
             return Task.FromResult(result);
         }
     }

@@ -322,6 +322,56 @@ class ClientApi extends ServiceApi<Client> {
 
         return super._Empty({ ...empty, ...partial });
     }
+    ImportCsv(formData: FormData): Promise<Client[]> {
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: formData
+        };
+
+        const url = `${config.apiUrl}/${this.type}/import/csv`;
+        return fetch(url, addAuthHeader(requestOptions))
+            .then<Client[]>(handleApiResponse)
+            .then(response => {
+                return response;
+            });
+    }
+    ExportCsv(filterDef: Partial<FilterDefinition>): Promise<string> {
+        const { filters: f, sort, operator: o } = filterDef;
+        const filters = f && [...f] || [];
+        const operator = o || 'and';
+        // if (query) {
+        //     filters.push(Filter.Text(query));
+        // }
+        let body;
+        switch (filters.length) {
+            case 0:
+                body = null;
+                break;
+            case 1:
+                body = filters[0];
+                break;
+            default:
+                body = operator === 'and' ? Filter.And(...filters) : Filter.Or(...filters);
+                break;
+        }
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body && JSON.stringify(body)
+        };
+
+        let querystring = ``;
+        if (sort) { querystring += `sort=${sort}`; }
+
+        const url = `${config.apiUrl}/${this.type}/export/csv?${querystring}`;
+
+        return fetch(url, addAuthHeader(requestOptions))
+            .then<string>(handleApiResponse);
+    }
 }
 
 export const Clients = new ClientApi();
