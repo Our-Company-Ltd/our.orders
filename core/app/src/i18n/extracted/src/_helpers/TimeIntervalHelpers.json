@@ -1,0 +1,27 @@
+[
+  {
+    "id": "TimeInterval.Hour",
+    "description": "Legend for timeinterval - Hour",
+    "defaultMessage": "{itemCount, plural, one {Hour} other {Hours}}"
+  },
+  {
+    "id": "TimeInterval.Day",
+    "description": "Legend for timeinterval - Day",
+    "defaultMessage": "{itemCount, plural, one {Day} other {Days}}"
+  },
+  {
+    "id": "TimeInterval.Week",
+    "description": "Legend for timeinterval - Week",
+    "defaultMessage": "{itemCount, plural, one {Week} other {Weeks}}"
+  },
+  {
+    "id": "TimeInterval.Month",
+    "description": "Legend for timeinterval - Month",
+    "defaultMessage": "{itemCount, plural, one {Month} other {Months}}"
+  },
+  {
+    "id": "TimeInterval.Year",
+    "description": "Legend for timeinterval - Year",
+    "defaultMessage": "{itemCount, plural, one {Year} other {Years}}"
+  }
+]

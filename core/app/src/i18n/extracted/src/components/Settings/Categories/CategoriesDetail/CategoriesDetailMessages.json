@@ -1,0 +1,12 @@
+[
+  {
+    "id": "src.components.settings.categories.title",
+    "description": "Legend for Title field in users submenu of categories",
+    "defaultMessage": "Title"
+  },
+  {
+    "id": "src.components.settings.categories.deleteConfirm",
+    "description": "Default messege for confirm if user are sure about deleting the category",
+    "defaultMessage": "Are you sure you want to delete this category?"
+  }
+]

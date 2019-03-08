@@ -1,0 +1,52 @@
+[
+  {
+    "id": "src.components.settings.warehouses.name",
+    "description": "Legend for Name field in users submenu of settings",
+    "defaultMessage": "Name"
+  },
+  {
+    "id": "src.components.settings.warehouses.address",
+    "description": "Legend for Address field in users submenu of settings",
+    "defaultMessage": "Address"
+  },
+  {
+    "id": "src.components.settings.warehouses.city",
+    "description": "Legend for City field in users submenu of settings",
+    "defaultMessage": "City"
+  },
+  {
+    "id": "src.components.settings.warehouses.countryIso",
+    "description": "Legend for Country Iso field in users submenu of settings",
+    "defaultMessage": "Country"
+  },
+  {
+    "id": "src.components.settings.warehouses.email",
+    "description": "Legend for Email field in users submenu of settings",
+    "defaultMessage": "Email"
+  },
+  {
+    "id": "src.components.settings.warehouses.phone",
+    "description": "Legend for Phone field in users submenu of settings",
+    "defaultMessage": "Phone"
+  },
+  {
+    "id": "src.components.settings.warehouses.postalCode",
+    "description": "Legend for Postal code field in users submenu of settings",
+    "defaultMessage": "Postal code"
+  },
+  {
+    "id": "src.components.settings.warehouses.state",
+    "description": "Legend for State field in users submenu of settings",
+    "defaultMessage": "State"
+  },
+  {
+    "id": "src.components.settings.warehouses.vatNumber",
+    "description": "Legend for VAT number field in users submenu of settings",
+    "defaultMessage": "VAT number"
+  },
+  {
+    "id": "src.components.settings.warehouses.deleteConfirm",
+    "description": "Default messege for confirm if user are sure about deleting the product",
+    "defaultMessage": "Are you sure you want to delete this product?"
+  }
+]

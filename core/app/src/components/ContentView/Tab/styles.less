@@ -1,0 +1,62 @@
+@tab-padding: 0.5rem;
+@import "../../../_variables.less";
+
+.tab {
+  @tab-width: 80px;
+  @tabs-count: 8;
+
+  // height: @height-tabs-bar-tablet;
+  // width: @tab-width;
+  // font-size: 0.7rem;
+  // padding: @tab-padding;
+  // box-sizing: border-box;
+  // color: gray;
+  // cursor: pointer;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+
+  // &__icon {
+  //   display: flex;
+  //   flex-basis: 60%;
+  //   align-items: center;
+  //   font-size: 1.4rem;
+  // }
+
+  // &__icon-inner {
+  //   width: 100%;
+  //   height: 100%;
+  // }
+
+  // &--active {
+  //   color: black;
+  // }
+
+  .order(@counter) when (@counter > 0) {
+    .order((@counter - 1)); // next iteration
+
+    &:nth-child(@{counter}) {
+      order: @counter;
+    }
+  }
+
+  .loop(@counter) when (@counter > 0) {
+    .loop((@counter - 1));
+    @maxwidth: ((@counter + 1) * @tab-width);
+    @minwidth: ((@counter * @tab-width));
+
+    @media screen and (min-width: @minwidth) and (max-width: @maxwidth) {
+      order: (@counter - 1);
+      & when (@counter < @tabs-count) {
+        display: flex;
+      }
+    }
+  }
+
+  .order(@tabs-count);
+
+  &--more {
+    .loop(@tabs-count);
+    display: none;
+  }
+}

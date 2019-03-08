@@ -1,0 +1,132 @@
+[
+  {
+    "id": "src.components.forms.orderitem.empty",
+    "description": "Placeholder for empty order item",
+    "defaultMessage": "(no information)"
+  },
+  {
+    "id": "src.components.forms.orderitem.title",
+    "description": "Order item title",
+    "defaultMessage": "Title"
+  },
+  {
+    "id": "src.components.forms.orderitem.sku",
+    "description": "Order item SKU (Stock Keeping Unit)",
+    "defaultMessage": "SKU"
+  },
+  {
+    "id": "src.components.forms.orderitem.description",
+    "description": "Order item Description",
+    "defaultMessage": "Description"
+  },
+  {
+    "id": "src.components.forms.orderitem.basePrice",
+    "description": "Order item Base Price",
+    "defaultMessage": "Base Price"
+  },
+  {
+    "id": "src.components.forms.orderitem.extraPrice",
+    "description": "Order item Extra Price",
+    "defaultMessage": "Extra Price"
+  },
+  {
+    "id": "src.components.forms.orderitem.includedTaxRate",
+    "description": "Order item included Tax Rate",
+    "defaultMessage": "included Tax Rate"
+  },
+  {
+    "id": "src.components.forms.orderitem.excludedTaxRate",
+    "description": "Order item excluded Tax Rate",
+    "defaultMessage": "excluded Tax Rate"
+  },
+  {
+    "id": "src.components.forms.orderitem.quantity",
+    "description": "Order item Quantity",
+    "defaultMessage": "Quantity"
+  },
+  {
+    "id": "src.components.forms.orderitem.needsDispatch",
+    "description": "Order item Needs Delivery",
+    "defaultMessage": "Needs Delivery"
+  },
+  {
+    "id": "src.components.forms.orderitem.dispatched",
+    "description": "Order item Dispatched",
+    "defaultMessage": "Dispatched"
+  },
+  {
+    "id": "src.components.forms.orderitem.addSubitem",
+    "description": "Legend for add sub-item button",
+    "defaultMessage": "add sub-item"
+  },
+  {
+    "id": "src.components.forms.orderitem.lightboxTitle",
+    "description": "Order item title",
+    "defaultMessage": "Order item: {Title}"
+  },
+  {
+    "id": "src.components.forms.orderitem.lightboxTitleLeaf",
+    "description": "Order item sub-title",
+    "defaultMessage": "Order sub-item: {Title}"
+  },
+  {
+    "id": "src.components.forms.orderitem.searchPlaceholder",
+    "description": "Placeholder for search bar products",
+    "defaultMessage": "Choose existing Product"
+  },
+  {
+    "id": "src.components.forms.orderitem.newProduct",
+    "description": "Title for New product item in product list",
+    "defaultMessage": "Empty product"
+  },
+  {
+    "id": "src.components.forms.orderitem.optionsPrice",
+    "description": "Title for Option price",
+    "defaultMessage": "Option price"
+  },
+  {
+    "id": "src.components.forms.orderitem.optionsTitle",
+    "description": "Title for Option Title",
+    "defaultMessage": "Option Title"
+  },
+  {
+    "id": "src.components.forms.orderitem.OptionId",
+    "description": "Title for Option Id",
+    "defaultMessage": "Id"
+  },
+  {
+    "id": "src.components.forms.orderitem.close",
+    "description": "Close Btn",
+    "defaultMessage": "Close"
+  },
+  {
+    "id": "src.components.forms.orderitem.optionsValue",
+    "description": "Title for Option Value",
+    "defaultMessage": "Option Value"
+  },
+  {
+    "id": "src.components.forms.orderitem.lightboxSubItemOptionsTitle",
+    "description": "Title for sub-item options",
+    "defaultMessage": "Options:"
+  },
+  {
+    "id": "src.components.forms.orderitem.optionsAddOption",
+    "description": "Legend for add option button",
+    "defaultMessage": "add option"
+  },
+  {
+    "id": "src.components.forms.orderitem.dispatchWareHouse",
+    "description": "dispatchWareHouse",
+    "defaultMessage": "dispatch WareHouse"
+  },
+  {
+    "id": "src.components.forms.orderitem.dispatchDate",
+    "description": "dispatchDate",
+    "defaultMessage": "dispatch Date"
+  },
+  {
+    "id": "src.components.forms.orderitem.dispatchQuantity",
+    "description": "dispatchQuantity",
+    "defaultMessage": "dispatch Quantity"
+  }
+]

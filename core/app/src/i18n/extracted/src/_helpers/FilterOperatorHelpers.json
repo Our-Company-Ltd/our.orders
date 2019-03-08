@@ -1,0 +1,47 @@
+[
+  {
+    "id": "FilterOperator.eq",
+    "description": "Equal oprerator",
+    "defaultMessage": "="
+  },
+  {
+    "id": "FilterOperator.ne",
+    "description": "Not equal siopreratorgn",
+    "defaultMessage": "!="
+  },
+  {
+    "id": "FilterOperator.lt",
+    "description": "Less then oprerator",
+    "defaultMessage": "<"
+  },
+  {
+    "id": "FilterOperator.gt",
+    "description": "Bigger then oprerator",
+    "defaultMessage": ">"
+  },
+  {
+    "id": "FilterOperator.lte",
+    "description": "Less or equal then oprerator",
+    "defaultMessage": "<="
+  },
+  {
+    "id": "FilterOperator.gte",
+    "description": "Bigger or equal then oprerator",
+    "defaultMessage": ">="
+  },
+  {
+    "id": "FilterOperator.and",
+    "description": "and oprerator",
+    "defaultMessage": "and"
+  },
+  {
+    "id": "FilterOperator.or",
+    "description": "or oprerator",
+    "defaultMessage": "or"
+  },
+  {
+    "id": "FilterOperator.like",
+    "description": "like oprerator",
+    "defaultMessage": "like"
+  }
+]

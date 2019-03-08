@@ -1,0 +1,74 @@
+@import "../../../../_variables.less";
+
+.categories-list {
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+
+  &__column {
+    width: 50%;
+    flex-shrink: 0;
+    flex-grow: 0;
+    -webkit-overflow-scrolling: touch;
+    overflow: auto;
+  }
+
+  &__section {
+    display: flex;
+    flex-wrap: wrap;
+
+    padding: 1.4rem 0.7rem;
+  }
+
+  &__section-title {
+    width: 100%;
+    height: @form-box-height*2;
+
+    box-sizing: border-box;
+    padding: @form-box-padding 0;
+
+    font-size: inherit;
+    line-height: @form-box-height*2;
+    text-align: center;
+  }
+
+  &__section-item {
+    width: 100%;
+
+    padding: 0 0.7rem;
+    box-sizing: border-box;
+  }
+
+  &__section-item--half {
+    width: 50%;
+  }
+
+  &__lightbox-actions {
+    position: absolute;
+    bottom: 1.4rem;
+    right: 1.4rem;
+  }
+
+  &__lightbox-action-button {
+    color: #969696;
+    background-color: white;
+
+    &--green {
+      color: white;
+      background-color: #64c864;
+    }
+  }
+
+  &__add {
+    margin-top: 20px;
+    margin-left: auto;
+
+    padding: 0 0.7rem;
+    box-sizing: border-box;
+  }
+
+  &__add-icon {
+    padding-right: 5px;
+    font-size: 1.2rem;
+  }
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "src.components.forms.shipping.empty",
+    "description": "Placeholder for empty shipping person",
+    "defaultMessage": "Devilery address"
+  },
+  {
+    "id": "src.components.forms.shipping.name",
+    "description": "Placeholder for name shipping field",
+    "defaultMessage": "Name"
+  },
+  {
+    "id": "src.components.forms.shipping.address",
+    "description": "Placeholder for empty shipping field",
+    "defaultMessage": "Adrress"
+  }
+]

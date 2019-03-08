@@ -1,0 +1,32 @@
+[
+  {
+    "id": "src.components.order.orderCheckout.Pay.Voucher.voucher",
+    "description": "Legend for voucher button",
+    "defaultMessage": "voucher"
+  },
+  {
+    "id": "src.components.order.orderCheckout.Pay.Voucher.ok",
+    "description": "Default legend for button in voucher pay screen",
+    "defaultMessage": "Use voucher"
+  },
+  {
+    "id": "src.components.order.orderCheckout.Pay.Voucher.notfound",
+    "description": "Legend when could not find a voucher to use",
+    "defaultMessage": "Voucher not found"
+  },
+  {
+    "id": "src.components.order.orderCheckout.Pay.Voucher.expired",
+    "description": "Legend when voucher is expired",
+    "defaultMessage": "Voucher expired"
+  },
+  {
+    "id": "src.components.order.orderCheckout.Pay.Voucher.empty",
+    "description": "Legend when voucher amount was used or equal to 0",
+    "defaultMessage": "Voucher empty"
+  },
+  {
+    "id": "src.components.order.orderCheckout.Pay.Voucher.used",
+    "description": "Legend when voucher user",
+    "defaultMessage": "Voucher used"
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "src.components.orders.orderList.sortBtn",
+    "description": "Legend for sort and filters button on side bar",
+    "defaultMessage": "Sort and Filters"
+  },
+  {
+    "id": "src.components.orders.orderList.done",
+    "description": "Legend for done button on side bar",
+    "defaultMessage": "Done"
+  },
+  {
+    "id": "src.components.orders.orderList.dispatching",
+    "description": "Legend for dispatching button on side bar",
+    "defaultMessage": "Dispatching"
+  },
+  {
+    "id": "src.components.orders.orderList.toDispatch",
+    "description": "Legend for to dispatch button on side bar",
+    "defaultMessage": "To dispatch"
+  },
+  {
+    "id": "src.components.orders.orderList.payments",
+    "description": "Legend for payments button on side bar",
+    "defaultMessage": "Payments"
+  },
+  {
+    "id": "src.components.orders.orderList.canceled",
+    "description": "Legend for canceled button on side bar",
+    "defaultMessage": "Canceled"
+  },
+  {
+    "id": "src.components.orders.orderList.offer",
+    "description": "Legend for offer button on side bar",
+    "defaultMessage": "Offer"
+  },
+  {
+    "id": "src.components.orders.orderList.cart",
+    "description": "Legend for cart button on side bar",
+    "defaultMessage": "Cart"
+  },
+  {
+    "id": "src.components.orders.orderList.to",
+    "description": "Legend for To filter",
+    "defaultMessage": "To"
+  },
+  {
+    "id": "src.components.orders.orderList.from",
+    "description": "Legend for From filter",
+    "defaultMessage": "From"
+  },
+  {
+    "id": "src.components.orders.orderList.reference",
+    "description": "Legend for Reference filter",
+    "defaultMessage": "Reference"
+  },
+  {
+    "id": "src.components.orders.orderList.sort",
+    "description": "Legend for Sort filter",
+    "defaultMessage": "Sort"
+  }
+]

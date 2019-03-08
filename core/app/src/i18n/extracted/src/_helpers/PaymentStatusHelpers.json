@@ -1,0 +1,22 @@
+[
+  {
+    "id": "PaymentStatus.Pending",
+    "description": "Legend for payment status",
+    "defaultMessage": "Pending"
+  },
+  {
+    "id": "PaymentStatus.Canceled",
+    "description": "Legend for payment status",
+    "defaultMessage": "Canceled"
+  },
+  {
+    "id": "PaymentStatus.Failed",
+    "description": "Legend for payment status",
+    "defaultMessage": "Failed"
+  },
+  {
+    "id": "PaymentStatus.Paid",
+    "description": "Legend for payment status",
+    "defaultMessage": "Paid"
+  }
+]

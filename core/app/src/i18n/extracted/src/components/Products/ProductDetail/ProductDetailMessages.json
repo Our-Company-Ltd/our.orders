@@ -1,0 +1,7 @@
+[
+  {
+    "id": "src.components.prodcuts.productDetail.deleteConfirm",
+    "description": "Default messege for confirm if user are sure about deleting the product",
+    "defaultMessage": "Are you sure you want to delete this product?"
+  }
+]

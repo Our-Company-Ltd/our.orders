@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.2</TargetFrameworks>
+     <AssemblyName>our.orders.Newsletters.CampaignMonitor</AssemblyName>
+    <OutputType>Library</OutputType>
+    <DefaultItemExcludes>node_modules\**;$(DefaultItemExcludes)</DefaultItemExcludes>
+    <RootNamespace>our.orders</RootNamespace>
+
+    <IsPackable>true</IsPackable>
+    <PackageId>Our.Orders.Newsletters.CampaignMonitor</PackageId>
+    <Title>Campaign Monitor® for Our Orders ♥</Title>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Authors>Our Company Ltd.</Authors>
+    <owners>ourcompanyltd</owners>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageIconUrl>https://raw.githubusercontent.com/Our-Company-Ltd/our.orders/master/branding/logo/logo.192.png</PackageIconUrl>
+    <Copyright>2019 Our Company Ltd.</Copyright>
+    <PackageDescription>Campaign Monitor® newsletter for Our Orders ♥</PackageDescription>
+    <Summary>Campaign Monitor® newsletter for Our Orders ♥</Summary>
+    <PackageTags>eshop,netcore,csharp,react,campaignmonitor,entity-framework,entity-framework-core,mongodb</PackageTags>
+    <RepositoryUrl>https://github.com/Our-Company-Ltd/our.orders</RepositoryUrl>
+  </PropertyGroup>
+  
+  <ItemGroup>      
+  
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+      <PackageReference Include="campaignmonitor-api-dotnet-standard" Version="4.2.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\lib\core.csproj" />
+  </ItemGroup>
+
+</Project>

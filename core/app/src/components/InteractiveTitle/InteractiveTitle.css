@@ -1,0 +1,20 @@
+.interactive-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+  padding: 20px 5rem;
+  box-sizing: border-box;
+  flex-grow: 1;
+  flex-shrink: 0;
+  max-height: 40vh;
+  overflow: auto;
+}
+.interactive-title > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  color: black;
+}
+/*# sourceMappingURL=InteractiveTitle.css.map */

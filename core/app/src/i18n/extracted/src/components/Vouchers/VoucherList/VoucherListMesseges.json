@@ -1,0 +1,42 @@
+[
+  {
+    "id": "src.components.orders.orderList.sortBtn",
+    "description": "Legend for sort and filters button on side bar",
+    "defaultMessage": "Sort and Filters"
+  },
+  {
+    "id": "src.components.orders.orderList.valid",
+    "description": "Legend for valid button on side bar",
+    "defaultMessage": "Valid"
+  },
+  {
+    "id": "src.components.orders.orderList.expired",
+    "description": "Legend for Expired button on side bar",
+    "defaultMessage": "Expired"
+  },
+  {
+    "id": "src.components.orders.orderList.used",
+    "description": "Legend for Used button on side bar",
+    "defaultMessage": "Used"
+  },
+  {
+    "id": "src.components.orders.orderList.search",
+    "description": "Legend for Search filter",
+    "defaultMessage": "Search"
+  },
+  {
+    "id": "src.components.orders.orderList.to",
+    "description": "Legend for to filter",
+    "defaultMessage": "To"
+  },
+  {
+    "id": "src.components.orders.orderList.from",
+    "description": "Legend for From filter",
+    "defaultMessage": "From"
+  },
+  {
+    "id": "src.components.orders.orderList.sort",
+    "description": "Legend for Sort filter",
+    "defaultMessage": "Sort"
+  }
+]

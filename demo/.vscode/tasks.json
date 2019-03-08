@@ -1,0 +1,35 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet build",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": {
+                "base": "$msCompile",
+                "fileLocation": ["relative",  "${workspaceFolder}"]
+            }
+        },
+        {
+            "label": "start",
+            "options": {
+                "cwd": "${workspaceFolder}/../app",
+                "env": {
+                    "REACT_APP_API_URL": "http://localhost:5000/orders"
+                }
+            },
+            "command": "npm run start",
+            "type": "shell",
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            }
+        }
+    ]
+}

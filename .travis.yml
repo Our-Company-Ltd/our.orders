@@ -1,0 +1,26 @@
+language: csharp
+# SDK version, based on the targeted `netstandard` / `netcoreapp` version in the projects
+os: linux
+dist: xenial
+dotnet: 2.2.101
+mono: none
+env:
+  - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true DOTNET_CLI_TELEMETRY_OPTOUT=true
+branches:
+  only:
+  - master
+  - develop
+  # We'll also build whenever there is a new commit on any branch starting with `features/`
+  # - /features\/.+/
+install:
+  # We're cloning the entire repository so that GitVersion can do its thing
+  # by default Travis is only getting a few commits
+  - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+  - cd $TRAVIS_REPO_SLUG
+  - git checkout -qf $TRAVIS_COMMIT
+script:
+  - export PATH="$PATH:$HOME/.dotnet/tools"
+  - dotnet tool install -g Cake.Tool --version 0.31.0
+  - cd publish
+  - dotnet cake build.cake --bootstrap
+  - dotnet cake build.cake --pack

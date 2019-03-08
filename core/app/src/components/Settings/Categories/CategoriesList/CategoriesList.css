@@ -1,0 +1,58 @@
+.categories-list {
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+.categories-list__column {
+  width: 50%;
+  flex-shrink: 0;
+  flex-grow: 0;
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+}
+.categories-list__section {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 1.4rem 0.7rem;
+}
+.categories-list__section-title {
+  width: 100%;
+  height: 4.4rem;
+  box-sizing: border-box;
+  padding: 0.7rem 0;
+  font-size: inherit;
+  line-height: 4.4rem;
+  text-align: center;
+}
+.categories-list__section-item {
+  width: 100%;
+  padding: 0 0.7rem;
+  box-sizing: border-box;
+}
+.categories-list__section-item--half {
+  width: 50%;
+}
+.categories-list__lightbox-actions {
+  position: absolute;
+  bottom: 1.4rem;
+  right: 1.4rem;
+}
+.categories-list__lightbox-action-button {
+  color: #969696;
+  background-color: white;
+}
+.categories-list__lightbox-action-button--green {
+  color: white;
+  background-color: #64c864;
+}
+.categories-list__add {
+  margin-top: 20px;
+  margin-left: auto;
+  padding: 0 0.7rem;
+  box-sizing: border-box;
+}
+.categories-list__add-icon {
+  padding-right: 5px;
+  font-size: 1.2rem;
+}
+/*# sourceMappingURL=CategoriesList.css.map */

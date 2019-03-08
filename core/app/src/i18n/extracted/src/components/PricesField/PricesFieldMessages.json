@@ -1,0 +1,7 @@
+[
+  {
+    "id": "PricesFieldMessages.pricePlaceholder",
+    "description": "price input Placeholder",
+    "defaultMessage": "Price in {currency}"
+  }
+]

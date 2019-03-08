@@ -1,0 +1,67 @@
+[
+  {
+    "id": "src.components.settings.documenttemplate.title",
+    "description": "Legend for Title field",
+    "defaultMessage": "Title"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.template",
+    "description": "Legend for Template field",
+    "defaultMessage": "Template code"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.description",
+    "description": "Legend for description field",
+    "defaultMessage": "Description"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.applyTo",
+    "description": "Legend for applyTo field",
+    "defaultMessage": "applyTo"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.styles",
+    "description": "Legend for styles field",
+    "defaultMessage": "CSS styles code"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.order",
+    "description": "Legend for order in template chosser",
+    "defaultMessage": "Order"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.client",
+    "description": "Legend for client in template chosser",
+    "defaultMessage": "Client"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.payment",
+    "description": "Legend for payment in template chosser",
+    "defaultMessage": "Payment"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.dashboardProduct",
+    "description": "Legend for dashboard products in template chosser",
+    "defaultMessage": "Dashboard products"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.dashboardOrders",
+    "description": "Legend for dashboard orders in template chosser",
+    "defaultMessage": "Dashboard orders"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.orders",
+    "description": "Legend for orders in template chosser",
+    "defaultMessage": "Orders"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.ordersProducts",
+    "description": "Legend for orders products in template chosser",
+    "defaultMessage": "Orders products"
+  },
+  {
+    "id": "src.components.settings.documenttemplate.deleteConfirm",
+    "description": "Default messege for confirm if user are sure about deleting the template",
+    "defaultMessage": "Are you sure you want to delete this template?"
+  }
+]

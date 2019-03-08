@@ -1,0 +1,37 @@
+[
+  {
+    "id": "pages.register.resetpage.mainTitle",
+    "description": "mainTitle",
+    "defaultMessage": "Reset"
+  },
+  {
+    "id": "pages.register.resetpage.passwordTitle",
+    "description": "Password input field title",
+    "defaultMessage": "Password"
+  },
+  {
+    "id": "pages.register.resetpage.loadingText",
+    "description": "Loading button",
+    "defaultMessage": "Loading"
+  },
+  {
+    "id": "pages.register.resetpage.resetBtn",
+    "description": "Reset link text",
+    "defaultMessage": "Reset"
+  },
+  {
+    "id": "pages.register.resetpage.error.failed",
+    "description": "Error message when lofgin filled",
+    "defaultMessage": "Please check your credentials"
+  },
+  {
+    "id": "pages.register.resetpage.error.imcomplete",
+    "description": "Error message when email or password not filled",
+    "defaultMessage": "Please fill all information"
+  },
+  {
+    "id": "pages.register.resetpage.error.different",
+    "description": "Error message when password different",
+    "defaultMessage": "Different passord and confirm"
+  }
+]

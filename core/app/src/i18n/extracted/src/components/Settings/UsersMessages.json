@@ -1,0 +1,47 @@
+[
+  {
+    "id": "src.components.settings.user.firstName",
+    "description": "Legend for First Name form field",
+    "defaultMessage": "First Name"
+  },
+  {
+    "id": "src.components.settings.user.lastName",
+    "description": "Legend for Last Name form field",
+    "defaultMessage": "Last Name"
+  },
+  {
+    "id": "src.components.settings.user.phone",
+    "description": "Legend for Phone number form field",
+    "defaultMessage": "Phone number"
+  },
+  {
+    "id": "src.components.settings.user.email",
+    "description": "Legend for Email form field",
+    "defaultMessage": "Email"
+  },
+  {
+    "id": "src.components.settings.user.shop",
+    "description": "Legend for Shop form field",
+    "defaultMessage": "Shop"
+  },
+  {
+    "id": "src.components.settings.user.warehouse",
+    "description": "Legend for Warehouse form field",
+    "defaultMessage": "Warehouse"
+  },
+  {
+    "id": "src.components.settings.user.resetPassword",
+    "description": "Legend for reset password form field",
+    "defaultMessage": "New password"
+  },
+  {
+    "id": "src.components.settings.user.confirmPassword",
+    "description": "Legend for confirm password form field",
+    "defaultMessage": "Confirm password"
+  },
+  {
+    "id": "src.components.settings.user.currentPassword",
+    "description": "Legend for confirm password form field",
+    "defaultMessage": "Current password"
+  }
+]
