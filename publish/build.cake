@@ -150,7 +150,13 @@ Task("Build")
         }
         else
         {
-            DotNetCoreBuild(corePath, settings);
+            GetFiles(corePath)
+                .ToList()
+                .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
+
+            GetFiles(coreTestPath)
+                .ToList()
+                .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
         }
     });
 
@@ -166,7 +172,9 @@ Task("Test")
                  var settings = new DotNetCoreTestSettings() {
                     Configuration = configuration,
                     DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
-                    DiagnosticOutput = true
+                    DiagnosticOutput = true,
+                    NoRestore = true
+                    NoBuild = true,
                 };
                 
                 DotNetCoreTest(f.FullPath, settings);
