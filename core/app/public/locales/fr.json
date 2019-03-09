@@ -257,6 +257,7 @@
   "src.components.settings.documenttemplate.orders": "Orders",
   "src.components.settings.documenttemplate.ordersProducts": "Orders products",
   "src.components.settings.documenttemplate.payment": "Payment",
+  "src.components.settings.documenttemplate.stocks": "Stocks",
   "src.components.settings.documenttemplate.styles": "CSS styles code",
   "src.components.settings.documenttemplate.template": "Template code",
   "src.components.settings.documenttemplate.title": "Title",

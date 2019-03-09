@@ -4594,7 +4594,7 @@ function (_ServiceApi3) {
         },
         body: formData
       };
-      var url = "".concat(_helpers.config.apiUrl, "/import/csv");
+      var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type, "/import/csv");
       return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse).then(function (response) {
         return response;
       });
@@ -4975,6 +4975,43 @@ function (_ServiceApi8) {
         return response;
       });
     })
+  }, {
+    key: "Stocks",
+    value: function Stocks(id, filterDef, min, max, tempalteId) {
+      var f = filterDef.filters,
+          sort = filterDef.sort,
+          o = filterDef.operator;
+      var filters = f && _toConsumableArray(f) || [];
+      var operator = o || 'and';
+      var body;
+
+      switch (filters.length) {
+        case 0:
+          body = null;
+          break;
+
+        case 1:
+          body = filters[0];
+          break;
+
+        default:
+          body = operator === 'and' ? _Filter.Filter.And.apply(_Filter.Filter, _toConsumableArray(filters)) : _Filter.Filter.Or.apply(_Filter.Filter, _toConsumableArray(filters));
+          break;
+      }
+
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: body && JSON.stringify(body)
+      };
+      var querystring = sort ? "&sort=".concat(sort) : '';
+      var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type, "/").concat(tempalteId, "/stocks/").concat(id, "/").concat(min, "/").concat(max, "?").concat(querystring);
+      return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse).then(function (response) {
+        return response;
+      });
+    }
   }]);
 
   return DocumentTemplateApi;
@@ -6493,9 +6530,13 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6528,7 +6569,10 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ClientImport).call(this, props));
     _this._onDrop = _this._onDrop.bind(_assertThisInitialized(_this));
     _this._import = _this._import.bind(_assertThisInitialized(_this));
-    _this.state = {};
+    _this.state = {
+      hasHeaderRecord: true,
+      delimiter: ','
+    };
     return _this;
   }
 
@@ -6539,7 +6583,10 @@ function (_React$Component) {
 
       var _this$state = this.state,
           headers = _this$state.headers,
-          file = _this$state.file;
+          file = _this$state.file,
+          firstLine = _this$state.firstLine,
+          hasHeaderRecord = _this$state.hasHeaderRecord,
+          delimiter = _this$state.delimiter;
       var _this$props = this.props,
           intl = _this$props.intl,
           classes = _this$props.classes;
@@ -6555,33 +6602,81 @@ function (_React$Component) {
         onDrop: this._onDrop
       }, React.createElement(_core.Button, {
         className: classes.dropZoneLabel
-      }, intl.formatMessage(_ClientImportMessages.default.header)))), headers && React.createElement(_core.Grid, {
+      }, intl.formatMessage(_ClientImportMessages.default.header)))), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_core.List, null, Object.keys(headers).map(function (h) {
-        return React.createElement(_core.ListItem, {
-          key: "".concat(h)
-        }, React.createElement(_core.TextField, {
-          select: true,
-          label: h,
-          fullWidth: true,
-          value: headers[h] || '',
-          onChange: function onChange(value) {
-            var v = value.target.value;
+      }, React.createElement(_core.FormControlLabel, {
+        control: React.createElement(_core.Switch, {
+          checked: hasHeaderRecord,
+          onChange: function onChange(e) {
+            var v = e.target.checked;
 
-            _this2.setState(function (prev) {
+            _this2.setState(function () {
               return {
-                headers: _objectSpread({}, prev.headers, _defineProperty({}, h, v))
+                hasHeaderRecord: v
+              };
+            });
+          },
+          color: "primary"
+        }),
+        label: "first record is headers values"
+      })), React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.TextField, {
+        select: true,
+        label: "CSV delimiter",
+        fullWidth: true,
+        value: delimiter,
+        onChange: function onChange(value) {
+          var v = value.target.value;
+
+          _this2.setState(function () {
+            return {
+              delimiter: v
+            };
+          }, function () {
+            return _this2._RefreshHeaders();
+          });
+        }
+      }, React.createElement(_core.MenuItem, {
+        key: ",",
+        value: ","
+      }, "comma (,)"), React.createElement(_core.MenuItem, {
+        key: ";",
+        value: ";"
+      }, "semicolon (;)"))), firstLine && headers && React.createElement(_core.Grid, {
+        item: true
+      }, React.createElement(_core.List, null, ClientFields.map(function (prop, i) {
+        return React.createElement(_core.ListItem, {
+          key: "".concat(prop, "-").concat(i)
+        }, prop, " :", React.createElement(_core.TextField, {
+          select: true,
+          label: "CSV Header",
+          fullWidth: true,
+          value: headers[prop] === undefined ? -1 : headers[prop],
+          onChange: function onChange(value) {
+            var v = parseInt(value.target.value, 10);
+
+            var old = headers[prop],
+                newHeaders = _objectWithoutProperties(headers, [prop].map(_toPropertyKey));
+
+            if (v >= 0) {
+              newHeaders[prop] = v;
+            }
+
+            _this2.setState(function () {
+              return {
+                headers: newHeaders
               };
             });
           }
-        }, ClientFields.map(function (k) {
+        }, firstLine.map(function (h, j) {
           return React.createElement(_core.MenuItem, {
-            key: k,
-            value: k
-          }, k);
+            key: h,
+            value: j
+          }, "column ", j, " (", h, ")");
         }), React.createElement(_core.MenuItem, {
           key: "--none--",
-          value: undefined
+          value: -1
         }, "Do not import")));
       }))))), React.createElement(_core.DialogActions, null, React.createElement(_core.Button, {
         onClick: this.props.close,
@@ -6595,6 +6690,7 @@ function (_React$Component) {
   }, {
     key: "_GetHeaders",
     value: function _GetHeaders(file) {
+      var delimiter = this.state.delimiter;
       return new Promise(function (resolve, reject) {
         // Instantiate a new FileReader
         var reader = new FileReader(); // Read our file to an ArrayBuffer
@@ -6626,9 +6722,7 @@ function (_React$Component) {
             } // find out serparator : 
 
 
-            var splitOnComas = headerString.split(',');
-            var splitOnSemiColons = headerString.split(';');
-            return resolve(splitOnComas.length > splitOnSemiColons.length ? splitOnComas : splitOnSemiColons);
+            return resolve(headerString.split(delimiter));
           }
         };
 
@@ -6644,7 +6738,9 @@ function (_React$Component) {
 
       var _this$state2 = this.state,
           file = _this$state2.file,
-          headers = _this$state2.headers;
+          headers = _this$state2.headers,
+          hasHeaderRecord = _this$state2.hasHeaderRecord,
+          delimiter = _this$state2.delimiter;
 
       if (!file || !headers) {
         return;
@@ -6653,6 +6749,8 @@ function (_React$Component) {
       var data = new FormData();
       data.set("csv", file);
       data.set("headers", JSON.stringify(headers));
+      data.set("hasHeaderRecord", JSON.stringify(hasHeaderRecord));
+      data.set("delimiter", JSON.stringify(delimiter));
 
       _services.Clients.ImportCsv(data).then(function (clients) {
         _this3.props.enqueueSnackbar("".concat(clients.length, " clients imported"));
@@ -6673,20 +6771,45 @@ function (_React$Component) {
 
 
       var file = acceptedFiles[0];
+      this.setState(function () {
+        return {
+          file: file
+        };
+      }, function () {
+        return _this4._RefreshHeaders();
+      });
+    }
+  }, {
+    key: "_RefreshHeaders",
+    value: function _RefreshHeaders() {
+      var _this5 = this;
+
+      var file = this.state.file;
+
+      if (!file) {
+        return;
+      }
+
+      var headers = {};
+      var firstLine = [];
 
       this._GetHeaders(file).then(function (csvheaders) {
-        var headers = {};
-        csvheaders.forEach(function (h) {
+        csvheaders.forEach(function (h, i) {
+          firstLine.push(h);
           var prop = ClientFields.find(function (f) {
             return f.toLowerCase() === h.toLowerCase();
           });
-          headers[h] = prop;
+
+          if (prop) {
+            headers[prop] = i;
+          }
         });
 
-        _this4.setState(function () {
+        _this5.setState(function () {
           return {
             file: file,
-            headers: headers
+            headers: headers,
+            firstLine: firstLine
           };
         });
       });
@@ -7139,7 +7262,7 @@ function (_React$Component) {
             };
           }, _this4._refresh);
         }
-      }, ['FirstName', 'LastName', 'OrganizationName', 'City', 'CountryIso', 'State', 'Creation'].map(function (k) {
+      }, ['FirstName', 'LastName', 'OrganizationName', 'City', 'CountryIso', 'State'].map(function (k) {
         return React.createElement(_core.MenuItem, {
           key: k,
           value: k
@@ -13735,6 +13858,8 @@ var _StockListItem = _interopRequireDefault(require("../StockListItem/StockListI
 
 var _Stock = _interopRequireDefault(require("src/components/Stock/Stock"));
 
+var _print = require("src/_helpers/print");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -13833,8 +13958,26 @@ function (_React$Component) {
           classes = _this$props.classes,
           settingsCtx = _this$props.settingsCtx,
           warehouseCtx = _this$props.warehouseCtx,
-          authCtx = _this$props.authCtx;
+          authCtx = _this$props.authCtx,
+          templateCtx = _this$props.templateCtx;
       var loading = fetching;
+      var stocksTemplates = templateCtx.templates.filter(function (t) {
+        return t.ApplyTo === 'Stocks';
+      });
+      var ordersTemplatesBtn = stocksTemplates.length > 0 && {
+        icon: React.createElement(_icons.Print, null),
+        legend: stocksTemplates.length > 1 ? 'documents' : stocksTemplates[0].Title,
+        themeColor: 'gray',
+        onClick: stocksTemplates.length > 1 ? function () {
+          return _this3.setState(function () {
+            return {
+              templatesOpened: true
+            };
+          });
+        } : function () {
+          return _this3._printOrders(stocksTemplates[0].Id);
+        }
+      };
       return React.createElement(_GridContainer.GridContainer, {
         className: classes.containerCls,
         spacing: 0
@@ -13885,11 +14028,11 @@ function (_React$Component) {
         color: "default",
         onClick: this._handelClose
       }, "Close"))), React.createElement(_Fabs.default, {
-        map: [loading && {
+        map: [loading ? {
           icon: React.createElement(_icons.Cached, null),
           legend: 'loading',
           themeColor: 'gray'
-        }]
+        } : ordersTemplatesBtn]
       }));
     }
   }, {
@@ -14029,6 +14172,40 @@ function (_React$Component) {
     value: function _isRowLoaded(ind) {
       // No entry in this map signifies that the row has never been loaded before
       return !!this._loadedRowsMap[ind.index];
+    }
+  }, {
+    key: "_printOrders",
+    value: function _printOrders(templateId) {
+      var _this$props4 = this.props,
+          id = _this$props4.id,
+          min = _this$props4.min,
+          max = _this$props4.max,
+          sku = _this$props4.sku;
+      var filters = [];
+
+      if (sku) {
+        filters.push(_Filter.Filter.Like('SKU', sku));
+      }
+
+      var filterDef = {
+        filters: filters,
+        operator: 'and'
+      };
+
+      _services.DocumentTemplates.Stocks(id, filterDef, min === undefined ? -1 : min, max === undefined ? -1 : max, templateId).then(function (res) {
+        new _print.Printer({
+          content: function content() {
+            return React.createElement("div", {
+              dangerouslySetInnerHTML: {
+                __html: res.html
+              }
+            });
+          },
+          cssClasses: ['body--print-reciept'],
+          cssStyles: res.styles,
+          copyStyles: false
+        }).Print();
+      });
     }
   }]);
 
@@ -14273,15 +14450,7 @@ var StockListItem = function StockListItem(props) {
       divProps = _objectWithoutProperties(props, ["product", "classes", "productCtx", "title"]);
 
   if (!product) {
-    return React.createElement("div", _extends({}, divProps, {
-      className: classNames(divProps.className, classes.container)
-    }), React.createElement(_ItemPreview.default, null, React.createElement(_ItemPreview.Thumb, {
-      loading: true
-    }), React.createElement(_ItemPreview.Lines, null, React.createElement(_ItemPreview.Line, {
-      loading: true
-    }), React.createElement(_ItemPreview.Line, {
-      loading: true
-    }))));
+    return null;
   }
 
   return React.createElement("div", _extends({}, divProps, {
@@ -19692,7 +19861,7 @@ function (_React$Component) {
 
       var loadOptions = function loadOptions(inputValue) {
         return _services.Clients.Find({
-          filters: [_Filter.Filter.Like('Firstname', inputValue), _Filter.Filter.Like('Lastname', inputValue), _Filter.Filter.Like('Phone', inputValue), _Filter.Filter.Like('Email', inputValue)],
+          filters: [_Filter.Filter.Like('FirstName', inputValue), _Filter.Filter.Like('LastName', inputValue), _Filter.Filter.Like('Phone', inputValue), _Filter.Filter.Like('Email', inputValue)],
           operator: 'or'
         }, 0, 1000).then(function (result) {
           return result.Values.map(function (client) {
@@ -19918,7 +20087,9 @@ function (_React$Component) {
       var needsDispatchInfos = NeedsDispatch;
       var ownOrder = (current.UserId && current.UserId) === (user && user.Id);
       var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_OWN_ORDERS') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_ALL_ORDERS');
-      return React.createElement(_DetailGridContainer.default, null, React.createElement(_DetailGridColumn.default, null, React.createElement(_GridContainer.GridContainer, null, React.createElement(_core.Grid, {
+      return React.createElement(_DetailGridContainer.default, null, React.createElement(_DetailGridColumn.default, {
+        className: classes.detailGridColumn
+      }, React.createElement(_GridContainer.GridContainer, null, React.createElement(_core.Grid, {
         item: true,
         xs: 3
       }, React.createElement(_TextField.default, {
@@ -20514,6 +20685,10 @@ var _default = (0, _core.withStyles)(function (theme) {
     cancelledIcon: {
       marginRight: 5,
       fontSize: 20
+    },
+    detailGridColumn: {
+      height: '100%',
+      boxSizing: 'border-box'
     }
   };
 })((0, _reactIntl.injectIntl)(OrderFields)); // Client shipping information
@@ -28703,6 +28878,10 @@ var _default = (0, _reactIntl.defineMessages)({
     "id": "src.components.settings.documenttemplate.orders",
     "defaultMessage": "Orders"
   },
+  stocks: {
+    "id": "src.components.settings.documenttemplate.stocks",
+    "defaultMessage": "Stocks"
+  },
   ordersProducts: {
     "id": "src.components.settings.documenttemplate.ordersProducts",
     "defaultMessage": "Orders products"
@@ -28903,7 +29082,10 @@ function (_React$Component) {
       }), React.createElement(_core.MenuItem, {
         key: "OrdersProducts",
         value: "OrdersProducts"
-      }, intl.formatMessage(_DocumentTemplateDetailMessages.default.ordersProducts))))));
+      }, intl.formatMessage(_DocumentTemplateDetailMessages.default.ordersProducts)), React.createElement(_core.MenuItem, {
+        key: "Stocks",
+        value: "Stocks"
+      }, intl.formatMessage(_DocumentTemplateDetailMessages.default.stocks))))));
     }
   }, {
     key: "_onDrop",

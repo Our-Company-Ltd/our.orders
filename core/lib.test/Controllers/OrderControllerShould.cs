@@ -83,46 +83,46 @@ namespace our.orders.test.Controllers
         }
 
 
-        [Fact]
+        // [Fact]
 
-        public async Task ReturnCreatedEntries()
-        {
-            // create a user : 
-            var user = RandomObjects.RandomUser(new string[] { RoleStore.CRUD_ORDERS }).Generate();
+        // public async Task ReturnCreatedEntries()
+        // {
+        //     // create a user : 
+        //     var user = RandomObjects.RandomUser(new string[] { RoleStore.CRUD_ORDERS }).Generate();
 
-            var username = user.UserName;
-            var password = "randomPassword@#$123";
-            var httpClient = factory.CreateSecureClient();
+        //     var username = user.UserName;
+        //     var password = "randomPassword@#$123";
+        //     var httpClient = factory.CreateSecureClient();
 
-            var token = await _CreateUserAndGetToken(httpClient, user, password);
+        //     var token = await _CreateUserAndGetToken(httpClient, user, password);
 
-            var order = new OrderDto
-            {
-                Note = "test note"
-            };
+        //     var order = new OrderDto
+        //     {
+        //         Note = "test note"
+        //     };
 
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{TestStartup.PATH}/order");
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            requestMessage.Content = new JsonContent(order);
+        //     var requestMessage = new HttpRequestMessage(HttpMethod.Post, $"{TestStartup.PATH}/order");
+        //     requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //     requestMessage.Content = new JsonContent(order);
 
-            var response = await httpClient.SendAsync(requestMessage);
+        //     var response = await httpClient.SendAsync(requestMessage);
 
-            var content = await response.Content.ReadAsStringAsync();
+        //     var content = await response.Content.ReadAsStringAsync();
 
-            Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
+        //     Assert.True(response.IsSuccessStatusCode, response.ReasonPhrase ?? "");
 
 
-            var result = JsonConvert.DeserializeObject<ApiModel<OrderDto>>(content);
+        //     var result = JsonConvert.DeserializeObject<ApiModel<OrderDto>>(content);
 
-            Assert.True(result.Result.Success, result.Result.Errors?.FirstOrDefault().Value?.FirstOrDefault() ?? "");
-            Assert.Empty(result.Result.Errors);
+        //     Assert.True(result.Result.Success, result.Result.Errors?.FirstOrDefault().Value?.FirstOrDefault() ?? "");
+        //     Assert.Empty(result.Result.Errors);
 
-            var resultOrder = result.Value;
+        //     var resultOrder = result.Value;
 
-            Assert.NotNull(resultOrder);
+        //     Assert.NotNull(resultOrder);
 
-            Assert.Equal(order.Note, resultOrder.Note);
-        }
+        //     Assert.Equal(order.Note, resultOrder.Note);
+        // }
 
         // [Theory]
         // [InlineData(5)]
