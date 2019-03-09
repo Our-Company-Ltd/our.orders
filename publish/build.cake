@@ -139,25 +139,22 @@ Task("Build")
         if (IsRunningOnLinuxOrDarwin())
         {
             settings.Framework = "netcoreapp2.2";
-
-            GetFiles(corePath)
-                .ToList()
-                .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
-
-            GetFiles(coreTestPath)
-                .ToList()
-                .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
         }
-        else
+
+        GetFiles(corePath)
+            .ToList()
+            .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
+
+        var testSettings = new DotNetCoreBuildSettings
         {
-            GetFiles(corePath)
-                .ToList()
-                .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
+            Configuration = configuration,
+            NoIncremental = true,
+            NoRestore = true
+        };
 
-            GetFiles(coreTestPath)
-                .ToList()
-                .ForEach(f => DotNetCoreBuild(f.FullPath, settings));
-        }
+        GetFiles(coreTestPath)
+            .ToList()
+            .ForEach(f => DotNetCoreBuild(f.FullPath, testSettings));
     });
 
 Task("Test")
@@ -173,8 +170,8 @@ Task("Test")
                     Configuration = configuration,
                     DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
                     DiagnosticOutput = true,
-                    NoRestore = true
-                    NoBuild = true,
+                    NoRestore = true,
+                    NoBuild = true
                 };
                 
                 DotNetCoreTest(f.FullPath, settings);
