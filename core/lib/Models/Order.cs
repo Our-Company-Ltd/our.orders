@@ -190,6 +190,6 @@ namespace our.orders.Models
 
         public string PrettyTotal => Total.ToString("0.00", CultureInfo.InvariantCulture);
 
-        public string PrettyDelivery => Delivery.Final.ToString("0.00", CultureInfo.InvariantCulture);
+        public string PrettyDelivery => Delivery?.Final.ToString("0.00", CultureInfo.InvariantCulture) ?? "0.00";
     }
 }
