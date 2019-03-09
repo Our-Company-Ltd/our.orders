@@ -36,9 +36,9 @@ msbuild.wrn
 .vs/
 temp
 /app/extracted
-# *.code-workspace
+*.code-workspace
 /demo/our.orders.config
 publish/tools
 publish/artifacts
+core/app/src/i18n
 demo/wwwroot/dropbox
-core/app/src/i18n/src
