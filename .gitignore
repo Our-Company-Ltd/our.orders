@@ -42,3 +42,8 @@ publish/tools
 publish/artifacts
 demo/wwwroot/dropbox
 core/app/src/i18n/src
+.vscode/settings.json
+/publish/coverage-hits.txt
+/publish/coverage.json
+/publish/coverage.xml
+/core/lib/.vscode/settings.json
