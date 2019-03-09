@@ -83,6 +83,7 @@ deploy:
     prerelease: false
     on:
       branch: master
+      APPVEYOR_REPO_TAG: true
   # Features releases
   # - provider: GitHub
   #   # By convention release versions start with `v`
@@ -110,17 +111,18 @@ deploy:
   #   on:
   #     branch: /develop\/.+/
   - provider: NuGet
-    server: https://www.nuget.org/F/our-orders/api/v2/package
+    server: https://www.nuget.org/F/Our.Orders/api/v2/package
     api_key:
       # Encrypted `NuGet` token - https://www.myget.org/profile/Me#!/AccessTokens
       # https://www.appveyor.com/docs/deployment/nuget/#provider-settings
       secure: MI3IYH1hzPTuOrzmjLzd24MpuONLVx1j/fGzaIG5NevSO/HZJpwVAFzXy5+ouY2/
     skip_symbols: false
-    symbol_server: https://www.nuget.org/F/our-orders/api/v2/package
+    symbol_server: https://www.nuget.org/F/Our.Orders/api/v2/package
     
     prerelease: false
     on:
       branch: master
+      APPVEYOR_REPO_TAG: true
   - provider: NuGet
     server: https://www.myget.org/F/our-orders/api/v2/package
     api_key:
