@@ -27,6 +27,7 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
+    "./script-compiled.js",
     "public"
   ]
 }
