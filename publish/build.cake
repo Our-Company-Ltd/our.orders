@@ -165,8 +165,6 @@ Task("Test")
             
                  var settings = new DotNetCoreTestSettings() {
                     Configuration = configuration,
-                    NoRestore = true,
-                    NoBuild = true,
                     DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
                     DiagnosticOutput = true
                 };
@@ -178,7 +176,7 @@ Task("Test")
             .WithAssembliesMatching(coreTestDir + "/**/*.dll")
             .WithSourcesMatching(coreDir + "/**/*.cs")
             .WithNonFatalThreshold()
-            .GenerateReport(ReportType.CONSOLE)
+            .GenerateReport(ReportType.CONSOLE | ReportType.XML)
     );
 
         // GetFiles(coreTestPath)
