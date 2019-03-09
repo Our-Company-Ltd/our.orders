@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using our.orders.helpers;
 using our.orders.Identity;
 using our.orders.Models;
 using our.orders.test.Fixtures;
@@ -226,10 +227,8 @@ namespace our.orders.test.Identity
 
         public async Task FindById_SavedUser_ReturnsUser(string userName)
         {
-            var user = new User
-            {
-                UserName = userName
-            };
+            var user = RandomObjects.RandomUser(new string[] { }).Generate();
+            user.UserName = userName;
 
             await manager.CreateAsync(user).ContinueWith(async t =>
             {

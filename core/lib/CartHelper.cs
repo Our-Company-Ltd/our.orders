@@ -7,7 +7,7 @@ using our.orders.Dtos;
 using our.orders.Models;
 using our.orders.Services;
 
-namespace api
+namespace our.orders
 {
     public class Cart
     {
