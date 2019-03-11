@@ -221,22 +221,65 @@ Task("Test")
 
 
 // Get coverage.
+#tool "nuget:?package=OpenCover"
+#tool "nuget:?package=Codecov&version=1.0.3"
+#addin "nuget:?package=Cake.Codecov"
 Task("Coverage")
     .IsDependentOn("Test")
     .WithCriteria(() => HasArgument("coverage"))
     .Does(() =>
     {
         
-    if (!TravisCI.IsRunningOnTravisCI)
-    {
-        Warning("Not running on travis, cannot publish coverage");
-        return;
-    }
+        if (!TravisCI.IsRunningOnTravisCI)
+        {
+            Warning("Not running on travis, cannot publish coverage");
+            return;
+        }
 
-    MiniCoverReport(new MiniCoverSettings()
-        .WithCoverallsSettings(c => c.UseTravisDefaults())
-        .GenerateReport(ReportType.COVERALLS)
-    );
+        // publish to caverall
+        MiniCoverReport(new MiniCoverSettings()
+            .WithCoverallsSettings(c => c.UseTravisDefaults())
+            .GenerateReport(ReportType.COVERALLS)
+        );
+
+
+       
+        var resultsFile = artifactsDirectory.CombineWithFilePath("coverage.xml");
+        foreach(var f in GetFiles(coreTestPath))
+        {
+            OpenCover(
+                x => {   
+                    var settings = new DotNetCoreTestSettings() {
+                        Configuration = configuration,
+                        DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
+                        DiagnosticOutput = true,
+                        NoRestore = true,
+                        NoBuild = true
+                    };
+                
+                    return x.DotNetCoreTest(
+                     project.FullPath,
+                     settings
+                    );
+                },
+                resultsFile,
+                new OpenCoverSettings()
+                {
+                    ArgumentCustomization = args => args
+                        .Append("-threshold:40")
+                        .Append("-returntargetcode")
+                        .Append("-hideskipped:Filter;Attribute"),
+                    Register = "user",
+                    OldStyle = true,
+                    MergeOutput = true
+                }
+                    .WithFilter("+[Skeleton*]*")
+                    .WithFilter("-[xunit*]*")
+                    .ExcludeByAttribute("*.ExcludeFromCodeCoverage*")
+            );
+        }
+
+        Codecov(resultsFile.FullPath);
     });
 
 Task("Pack")
