@@ -20082,11 +20082,21 @@ function (_React$Component) {
           Paid = current.Paid,
           Reference = current.Reference,
           NeedsDispatch = current.NeedsDispatch,
+          Categories = current.Categories,
           orderType = current.OrderType,
           UserId = current.UserId;
       var needsDispatchInfos = NeedsDispatch;
       var ownOrder = (current.UserId && current.UserId) === (user && user.Id);
       var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_OWN_ORDERS') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_ALL_ORDERS');
+      var categoriesPreview = (Categories || []).map(function (cat) {
+        return categoryCtx.Categories.find(function (c) {
+          return c.Id === cat;
+        });
+      }).filter(function (c) {
+        return !!c;
+      }).map(function (c) {
+        return c.Title;
+      }).join(', ');
       return React.createElement(_DetailGridContainer.default, null, React.createElement(_DetailGridColumn.default, {
         className: classes.detailGridColumn
       }, React.createElement(_GridContainer.GridContainer, null, React.createElement(_core.Grid, {
@@ -20302,6 +20312,9 @@ function (_React$Component) {
         intl: intl,
         authCtx: authCtx
       })), React.createElement(_core.Grid, {
+        item: true,
+        xs: 12
+      }, "Categories : ", categoriesPreview), React.createElement(_core.Grid, {
         item: true,
         xs: 12,
         style: {
@@ -20935,6 +20948,7 @@ function (_React$Component) {
       var _this$props = this.props,
           intl = _this$props.intl,
           warehouseCtx = _this$props.warehouseCtx,
+          categoryCtx = _this$props.categoryCtx,
           orderPaid = _this$props.orderPaid,
           currency = _this$props.currency,
           classes = _this$props.classes,
@@ -20958,7 +20972,9 @@ function (_React$Component) {
           Description = current.Description,
           Quantity = current.Quantity,
           NeedsDispatch = current.NeedsDispatch,
-          DispatchInfos = current.DispatchInfos;
+          DispatchInfos = current.DispatchInfos,
+          Categories = current.Categories;
+      var categories = Categories || [];
       var empty = !(SKU || Title || Description);
       var isItemDispatched = DispatchInfos && (Quantity || 0) <= DispatchInfos.Quantity;
       var actionAddSubitem = React.createElement(_ItemPreview.Line, null, hasRights && !leaf && React.createElement(_core.Button, {
@@ -21239,7 +21255,56 @@ function (_React$Component) {
           disabled: !hasRights
         }),
         label: intl.formatMessage(_OrderItemFieldsMessages.OrderItemFieldsMessages.needsDispatch)
-      })), UID && React.createElement(_core.Grid, {
+      })), React.createElement(_core.Grid, {
+        item: true,
+        xs: 12
+      }, React.createElement(_core.FormControl, {
+        fullWidth: true
+      }, React.createElement(_core.InputLabel, {
+        htmlFor: "select-categories"
+      }, React.createElement(_reactIntl.FormattedMessage, _OrderItemFieldsMessages.OrderItemFieldsMessages.categories)), React.createElement(_core.Select, {
+        fullWidth: true,
+        multiple: true,
+        value: categories,
+        disabled: !hasRights // tslint:disable-next-line:no-any
+        ,
+        onChange: function onChange(e) {
+          return _this2.props.onChange(_objectSpread({}, changes, {
+            Categories: e.target.value
+          }));
+        },
+        input: React.createElement(_core.Input, {
+          id: "select-categories"
+        }),
+        renderValue: function renderValue(cats) {
+          return React.createElement("div", {
+            style: {
+              display: 'flex',
+              flexWrap: 'wrap'
+            }
+          }, cats.map(function (value) {
+            var cat = categoryCtx.Categories.find(function (c) {
+              return c.Id === value;
+            });
+            return cat ? React.createElement(_core.Chip, {
+              key: cat.Id,
+              label: cat.Title,
+              style: {
+                marginRight: '5px'
+              }
+            }) : null;
+          }));
+        }
+      }, categoryCtx.Categories.map(function (cat) {
+        var selected = categories.indexOf(cat.Id) >= 0;
+        return React.createElement(_core.MenuItem, {
+          key: cat.Id,
+          value: cat.Id,
+          style: {
+            fontWeight: selected ? 'bold' : 'inherit'
+          }
+        }, cat.Title);
+      })))), UID && React.createElement(_core.Grid, {
         item: true,
         xs: 12
       }, React.createElement(_core.FormControlLabel, {
@@ -21463,11 +21528,15 @@ var OrderItemFieldsMessages = (0, _reactIntl.defineMessages)({
   },
   needsDispatch: {
     "id": "src.components.forms.orderitem.needsDispatch",
-    "defaultMessage": "Needs Delivery"
+    "defaultMessage": "Needs Dispatch"
   },
   dispatched: {
     "id": "src.components.forms.orderitem.dispatched",
     "defaultMessage": "Dispatched"
+  },
+  categories: {
+    "id": "src.components.forms.orderitem.categories",
+    "defaultMessage": "Categories"
   },
   addSubitem: {
     "id": "src.components.forms.orderitem.addSubitem",
@@ -21693,7 +21762,8 @@ function (_React$Component) {
           warehouseCtx: warehouseCtx,
           settingsCtx: settingsCtx,
           orderPaid: orderPaid,
-          currency: currency
+          currency: currency,
+          categoryCtx: categoryCtx
         }, {
           initial: item,
           changes: item,
@@ -24974,7 +25044,7 @@ var PriceField = function PriceField(props) {
       }
 
       props.onChange({
-        Value: parseInt(val, 10),
+        Value: parseFloat(val),
         Currency: currency.Code
       });
     } : undefined,

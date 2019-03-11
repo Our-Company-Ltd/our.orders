@@ -244,7 +244,7 @@ Task("Coverage")
 
 
        
-        var resultsFile = artifactsDirectory.CombineWithFilePath("coverage.xml");
+        var resultsFile = artifactsDir.CombineWithFilePath("coverage.xml");
         foreach(var f in GetFiles(coreTestPath))
         {
             OpenCover(

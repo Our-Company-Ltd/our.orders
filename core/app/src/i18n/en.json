@@ -153,6 +153,7 @@
   "src.components.forms.orderitem.addSubitem": "add sub-item",
   "src.components.forms.orderitem.amount": "Amount",
   "src.components.forms.orderitem.basePrice": "Base Price",
+  "src.components.forms.orderitem.categories": "Categories",
   "src.components.forms.orderitem.close": "Close",
   "src.components.forms.orderitem.currency": "Currency",
   "src.components.forms.orderitem.date": "Date",
