@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Select, FormControl, InputLabel, Grid, WithStyles, withStyles } from '@material-ui/core';
 import DispatchList from '../../Forms/Dispatch/DispatchList';
-import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem } from 'src/@types/our-orders';
+import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem, Category } from 'src/@types/our-orders';
 import { DateTimePicker } from 'material-ui-pickers';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 
@@ -124,6 +124,7 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
             Paid,
             Reference,
             NeedsDispatch,
+            Categories,
             OrderType: orderType,
             UserId
         } = current;
@@ -133,6 +134,11 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
         const ownOrder = (current.UserId && current.UserId) === (user && user.Id);
         const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_OWN_ORDERS') ||
             IsAdminOrInRole(user, 'CRUD_ALL_ORDERS');
+
+        const categoriesPreview = (Categories || [])
+            .map(cat => categoryCtx.Categories.find(c => c.Id === cat) as Category)
+            .filter(c => !!c)
+            .map(c => c.Title).join(', ');
 
         return (
             <DetailGridContainer>
@@ -265,6 +271,10 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
                             />
                         </Grid>
 
+                        <Grid item={true} xs={12}>
+                            Categories : {categoriesPreview}
+                        </Grid>
+
                         <Grid item={true} xs={12} style={{ marginTop: '4rem' }}>
                             <OrderItemList
                                 {...{
@@ -346,7 +356,7 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
                         </Grid>
                     </GridContainer>
                 </DetailGridColumn>
-            </DetailGridContainer>);
+            </DetailGridContainer >);
     }
 
     private _renderShippingsDropdown() {

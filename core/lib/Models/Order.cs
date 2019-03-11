@@ -88,6 +88,7 @@ namespace our.orders.Models
 
         string Note { get; set; }
 
+        IEnumerable<string> Categories { get; set; }
 
         string Category { get; set; }
 
@@ -160,6 +161,8 @@ namespace our.orders.Models
         [JsonField]
         public List<Dispatch> Dispatches { get; set; } = new List<Dispatch>();
 
+        [JsonField]
+        public IEnumerable<string> Categories { get; set; }
 
         public decimal PaidAmount { get; set; }
 

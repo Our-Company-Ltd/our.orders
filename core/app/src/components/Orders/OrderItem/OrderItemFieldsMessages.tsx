@@ -58,7 +58,11 @@ export const OrderItemFieldsMessages = defineMessages({
         defaultMessage: 'Dispatched',
         description: 'Order item Dispatched'
     },
-
+    categories: {
+        id: 'src.components.forms.orderitem.categories',
+        defaultMessage: 'Categories',
+        description: 'Order item Categories'
+    },
     addSubitem: {
         id: 'src.components.forms.orderitem.addSubitem',
         defaultMessage: 'add sub-item',

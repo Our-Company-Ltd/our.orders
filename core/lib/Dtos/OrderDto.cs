@@ -25,6 +25,8 @@ namespace our.orders.Dtos
 
         public string UserId { get; set; }
 
+        public IEnumerable<string> Categories { get; set; } = Enumerable.Empty<string>();
+
         public IEnumerable<OrderItem> Items { get; set; } = new OrderItem[] { };
 
         public bool NeedsDispatch { get; set; }

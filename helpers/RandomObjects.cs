@@ -326,10 +326,6 @@ namespace our.orders.helpers
         }
         public static Faker<OrderItem> RandomOrderItem(int subitemsdepth = 0)
         {
-            // random product
-
-
-
             return
                 new Faker<OrderItem>()
                     .StrictMode(false)

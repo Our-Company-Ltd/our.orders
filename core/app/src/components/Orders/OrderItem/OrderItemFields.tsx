@@ -6,7 +6,7 @@ import {
 } from 'react-intl';
 
 import ItemPreview, { Lines, Line, Thumb } from '../../ItemPreview/ItemPreview';
-import { InjectedWarehouseProps, InjectedSettingsProps } from '../../../_context';
+import { InjectedWarehouseProps, InjectedSettingsProps, InjectedCategoryProps } from '../../../_context';
 
 import {
     Grid,
@@ -22,7 +22,9 @@ import {
     Avatar,
     IconButton,
     WithStyles,
-    withStyles
+    withStyles,
+    Input,
+    Chip
 } from '@material-ui/core';
 
 import TextField from '@material-ui/core/TextField';
@@ -51,6 +53,7 @@ type injectedClasses =
 export type OrderItemFieldsProps =
     WithStyles<injectedClasses> &
     InjectedIntlProps &
+    InjectedCategoryProps &
     InjectedWarehouseProps &
     InjectedSettingsProps &
     {
@@ -85,6 +88,7 @@ class OrderItemFields extends React.Component<OrderItemFieldsProps, State> {
 
         const {
             intl, warehouseCtx,
+            categoryCtx,
             orderPaid,
             currency,
             classes,
@@ -100,7 +104,9 @@ class OrderItemFields extends React.Component<OrderItemFieldsProps, State> {
         const currentOption = current.Option || {};
 
         const { FinalPrice } = preview;
-        const { UID, SKU, Title, Src, Description, Quantity, NeedsDispatch, DispatchInfos } = current;
+        const { UID, SKU, Title, Src, Description, Quantity, NeedsDispatch, DispatchInfos, Categories } = current;
+
+        const categories = Categories || [];
 
         const empty = !(SKU || Title || Description);
 
@@ -421,6 +427,63 @@ class OrderItemFields extends React.Component<OrderItemFieldsProps, State> {
                                     label={intl.formatMessage(OrderItemFieldsMessages.needsDispatch)}
                                 />
                             </Grid>
+
+                            <Grid item={true} xs={12}>
+                                <FormControl fullWidth={true}>
+                                    <InputLabel htmlFor="select-categories">
+                                        <FormattedMessage {...OrderItemFieldsMessages.categories} />
+                                    </InputLabel>
+                                    <Select
+                                        fullWidth={true}
+                                        multiple={true}
+                                        value={categories}
+                                        disabled={!hasRights}
+                                        // tslint:disable-next-line:no-any
+                                        onChange={(e: any) =>
+                                            this.props.onChange({ ...changes, Categories: e.target.value })}
+
+                                        input={<Input id="select-categories" />}
+                                        renderValue={cats => (
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    flexWrap: 'wrap',
+                                                }}
+                                            >
+                                                {(cats as string[]).map(value => {
+                                                    const cat = categoryCtx.Categories.find(c => c.Id === value);
+                                                    return cat ?
+                                                        (<Chip
+                                                            key={cat.Id}
+                                                            label={cat.Title}
+                                                            style={{
+                                                                marginRight: '5px'
+                                                            }}
+                                                        />) :
+                                                        null;
+                                                }
+                                                )}
+                                            </div>)
+                                        }
+                                    >
+                                        {categoryCtx.Categories.map(cat => {
+                                            const selected = categories.indexOf(cat.Id) >= 0;
+                                            return (
+                                                <MenuItem
+                                                    key={cat.Id}
+                                                    value={cat.Id}
+                                                    style={{
+                                                        fontWeight: selected ? 'bold' : 'inherit'
+                                                    }}
+                                                >
+                                                    {cat.Title}
+                                                </MenuItem>);
+                                        }
+                                        )}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+
                             {UID && <Grid item={true} xs={12}>
                                 <FormControlLabel
                                     control={
@@ -526,6 +589,7 @@ class OrderItemFields extends React.Component<OrderItemFieldsProps, State> {
                                     </Grid>
                                 </React.Fragment>
                             }
+
                         </GridContainer>
                     </DialogContent>
                     <DialogActions>

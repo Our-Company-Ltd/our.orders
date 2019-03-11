@@ -97,7 +97,7 @@ class OrderItemList extends React.Component<OrderItemListProps, State> {
                         return (
                             <SortableListItem key={item.UID} index={index}>
                                 <OrderItemFields
-                                    {...{ intl, warehouseCtx, settingsCtx, orderPaid, currency }}
+                                    {...{ intl, warehouseCtx, settingsCtx, orderPaid, currency, categoryCtx }}
                                     initial={item}
                                     changes={item}
                                     preview={itemPreview}

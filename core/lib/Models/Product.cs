@@ -70,8 +70,6 @@ namespace our.orders.Models
 
         public int? MaxQuantity { get; set; }
 
-        private string __Categories { get; set; }
-
         [JsonField]
         public IEnumerable<string> Categories { get; set; }
 

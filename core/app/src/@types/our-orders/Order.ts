@@ -4,6 +4,8 @@ export interface Order extends ModelBase {
 
     OrderType?: OrderType;
 
+    Categories?: string[];
+
     Tax: number;
     Delivery?: Amount;
     Price: number;

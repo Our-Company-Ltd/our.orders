@@ -53,6 +53,8 @@ namespace our.orders.Models
 
         public string SKU { get; set; }
 
+        [JsonField]
+        public IEnumerable<string> Categories { get; set; }
 
         [JsonField]
         public DispatchInfo DispatchInfos { get; set; }

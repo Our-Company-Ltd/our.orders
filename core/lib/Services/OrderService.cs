@@ -159,6 +159,7 @@ namespace our.orders.Services
 
         public async Task UpdateValuesAsync(IOrder order, CancellationToken cancellationToken = default(CancellationToken))
         {
+            _UpdateCategories(order);
             _UpdateWeight(order);
             _UpdateUnits(order);
             _UpdateNeedsStockUpdate(order);
@@ -173,6 +174,35 @@ namespace our.orders.Services
                 _UpdateStatus(order);
             });
 
+
+        }
+
+        private IEnumerable<string> _GetCategories(OrderItem item)
+        {
+            var result = new List<string>();
+            if (item.Categories != null)
+            {
+                result.AddRange(item.Categories);
+            }
+            if (item.Items != null)
+            {
+                foreach (var subitems in item.Items)
+                {
+                    result.AddRange(_GetCategories(subitems));
+                }
+            }
+            return result;
+
+        }
+        private void _UpdateCategories(IOrder order)
+        {
+            var items = order.Items ?? Enumerable.Empty<OrderItem>();
+            var categories = new List<string>();
+            foreach (var item in items)
+            {
+                categories.AddRange(_GetCategories(item));
+            }
+            order.Categories = categories;
 
         }
 
@@ -207,7 +237,7 @@ namespace our.orders.Services
         }
 
 
-       
+
 
         private int _CountUnits(OrderItem orderItem)
         {
