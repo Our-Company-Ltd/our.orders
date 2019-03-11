@@ -50,8 +50,8 @@ export const OrderItemFieldsMessages = defineMessages({
     },
     needsDispatch: {
         id: 'src.components.forms.orderitem.needsDispatch',
-        defaultMessage: 'Needs Delivery',
-        description: 'Order item Needs Delivery'
+        defaultMessage: 'Needs Dispatch',
+        description: 'Order item Needs Dispatch'
     },
     dispatched: {
         id: 'src.components.forms.orderitem.dispatched',

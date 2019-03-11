@@ -51,7 +51,7 @@ export const PriceField: React.SFC<PriceFieldProps> = (props) => {
                 if (val === '') {
                     props.onChange!(null);
                 }
-                props.onChange!({ Value: parseInt(val, 10), Currency: currency.Code });
+                props.onChange!({ Value: parseFloat(val), Currency: currency.Code });
 
             } : undefined}
             inputProps={{

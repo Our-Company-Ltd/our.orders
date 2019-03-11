@@ -25,19 +25,12 @@ namespace our.orders.Services
 
             this.shippingTemplateProvider = shippingTemplateProvider;
         }
-        private static string _GetFormNumber()
-        {
-            byte[] buffer = Guid.NewGuid().ToByteArray();
-            var FormNumber = BitConverter.ToUInt32(buffer, 0) ^ BitConverter.ToUInt32(buffer, 4) ^ BitConverter.ToUInt32(buffer, 8) ^ BitConverter.ToUInt32(buffer, 12);
-            return FormNumber.ToString("X");
-
-        }
 
         public override async Task<IOrder> NewAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var newModel = await base.NewAsync(cancellationToken);
             newModel.Currency = configuration.Currencies.FirstOrDefault()?.Code;
-            newModel.Reference = DateTime.Now.ToString("yyyyMMdd") + "-" + _GetFormNumber();
+            newModel.Reference = appSettings.OrderReferenceGenerator(newModel);
             return newModel;
         }
 

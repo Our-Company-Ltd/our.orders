@@ -34,6 +34,13 @@ namespace our.orders.Helpers
 
         public Func<decimal, decimal> RoundPolicy { get; set; } = (value) => Math.Round(value, 2);
 
+        public Func<IOrder, string> OrderReferenceGenerator { get; set; } = (order) =>
+        {
+            byte[] buffer = Guid.NewGuid().ToByteArray();
+            var FormNumber = BitConverter.ToUInt32(buffer, 0) ^ BitConverter.ToUInt32(buffer, 4) ^ BitConverter.ToUInt32(buffer, 8) ^ BitConverter.ToUInt32(buffer, 12);
+            return FormNumber.ToString("X");
+        };
+
     };
 
     public interface IAppSettings
@@ -55,6 +62,8 @@ namespace our.orders.Helpers
         Type ClientType { get; set; }
 
         Func<decimal, decimal> RoundPolicy { get; set; }
+
+        Func<IOrder, string> OrderReferenceGenerator { get; set; }
 
         List<Type> ExternalControllers { get; set; }
 

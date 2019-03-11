@@ -171,7 +171,7 @@
   "src.components.forms.orderitem.lightboxTitleLeaf": "Order sub-item: {Title}",
   "src.components.forms.orderitem.list.addItem": "Add item",
   "src.components.forms.orderitem.list.newProduct": "Add product",
-  "src.components.forms.orderitem.needsDispatch": "Needs Delivery",
+  "src.components.forms.orderitem.needsDispatch": "Needs Dispatch",
   "src.components.forms.orderitem.newProduct": "Empty product",
   "src.components.forms.orderitem.optionsAddOption": "add option",
   "src.components.forms.orderitem.optionsPrice": "Option price",
