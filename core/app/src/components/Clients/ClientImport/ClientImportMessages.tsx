@@ -7,6 +7,11 @@ export const ClientListMesseges = defineMessages({
         id: 'src.components.client.clientImports.import',
         defaultMessage: 'import',
         description: 'Legend for import select in client csv import'
+    },
+    loadMore: {
+        id: 'src.components.client.clientImports.loadMore',
+        defaultMessage: 'Load more',
+        description: 'Legend for import more files client csv import'
     }
 });
 

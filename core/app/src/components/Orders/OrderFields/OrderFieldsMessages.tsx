@@ -112,6 +112,11 @@ export const OrderFieldsMessages = defineMessages({
         id: 'src.components.forms.order.offer',
         defaultMessage: 'offer',
         description: 'Legend for offer type switch'
+    },
+    categories: {
+        id: 'src.components.forms.order.categories',
+        defaultMessage: 'Categories',
+        description: 'Legend for order categories'
     }
 });
 

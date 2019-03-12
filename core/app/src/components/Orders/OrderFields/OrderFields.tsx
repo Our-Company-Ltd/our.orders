@@ -19,7 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Select, FormControl, InputLabel, Grid, WithStyles, withStyles } from '@material-ui/core';
 import DispatchList from '../../Forms/Dispatch/DispatchList';
-import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem, Category } from 'src/@types/our-orders';
+import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem } from 'src/@types/our-orders';
 import { DateTimePicker } from 'material-ui-pickers';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 
@@ -124,7 +124,6 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
             Paid,
             Reference,
             NeedsDispatch,
-            Categories,
             OrderType: orderType,
             UserId
         } = current;
@@ -134,11 +133,6 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
         const ownOrder = (current.UserId && current.UserId) === (user && user.Id);
         const hasRights = ownOrder && IsAdminOrInRole(user, 'CRUD_OWN_ORDERS') ||
             IsAdminOrInRole(user, 'CRUD_ALL_ORDERS');
-
-        const categoriesPreview = (Categories || [])
-            .map(cat => categoryCtx.Categories.find(c => c.Id === cat) as Category)
-            .filter(c => !!c)
-            .map(c => c.Title).join(', ');
 
         return (
             <DetailGridContainer>
@@ -270,11 +264,44 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
                                 authCtx={authCtx}
                             />
                         </Grid>
-
-                        <Grid item={true} xs={12}>
-                            Categories : {categoriesPreview}
-                        </Grid>
-
+                        {
+                            // <Grid item={true} xs={12}>
+                            //     <FormControl fullWidth={true}>
+                            //         <InputLabel htmlFor="categories">
+                            //             {intl.formatMessage(OrderFieldsMessages.categories)}
+                            //         </InputLabel>
+                            //         <Select
+                            //             fullWidth={true}
+                            //             multiple={true}
+                            //             value={categoriesPreview}
+                            //             disabled={true}
+                            //             input={<Input id="categories" />}
+                            //             renderValue={cats => (
+                            //                 <div
+                            //                     style={{
+                            //                         display: 'flex',
+                            //                         flexWrap: 'wrap',
+                            //                     }}
+                            //                 >
+                            //                     {(cats as string[]).map(value => {
+                            //                         const cat = categoryCtx.Categories.find(c => c.Id === value);
+                            //                         return cat ?
+                            //                             (<Chip
+                            //                                 key={cat.Id}
+                            //                                 label={cat.Title}
+                            //                                 style={{
+                            //                                     marginRight: '5px'
+                            //                                 }}
+                            //                             />) :
+                            //                             null;
+                            //                     }
+                            //                     )}
+                            //                 </div>)
+                            //             }
+                            //         />
+                            //     </FormControl>
+                            // </Grid>
+                        }
                         <Grid item={true} xs={12} style={{ marginTop: '4rem' }}>
                             <OrderItemList
                                 {...{

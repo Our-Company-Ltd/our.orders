@@ -72,7 +72,8 @@ export type injectedClasses =
     'drawerContent' |
     'menuSort' |
     'tooltip' |
-    'content';
+    'content' |
+    'dialogImport';
 export type ClientListProps =
     InjectedCategoryProps &
     InjectedAuthProps &
@@ -503,8 +504,9 @@ class ClientList extends React.Component<ClientListProps, State> {
                 }
                 <Dialog
                     open={!!importOpened}
-                    fullScreen={true}
+                    // fullScreen={true}
                     onClose={close}
+                    className={classes.dialogImport}
                 >
 
                     <ClientImport
@@ -796,6 +798,10 @@ export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
             color: theme.palette.text.primary,
             boxShadow: theme.shadows[1],
             fontSize: 11,
+        },
+        dialogImport: {
+            width: '90%',
+            height: '90%'
         }
     };
 })(withSnackbar(ClientList));
