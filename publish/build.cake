@@ -258,7 +258,7 @@ Task("Coverage")
                     };
                 
                     return x.DotNetCoreTest(
-                     project.FullPath,
+                     f.FullPath,
                      settings
                     );
                 },
