@@ -247,21 +247,16 @@ Task("Coverage")
         var resultsFile = artifactsDir.CombineWithFilePath("coverage.xml");
         foreach(var f in GetFiles(coreTestPath))
         {
+            var settings = new DotNetCoreTestSettings() {
+                Configuration = configuration,
+                DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
+                DiagnosticOutput = true,
+                NoRestore = true,
+                NoBuild = true
+            };
+
             OpenCover(
-                x => {   
-                    var settings = new DotNetCoreTestSettings() {
-                        Configuration = configuration,
-                        DiagnosticFile = testsResultsDir.Combine($"{f.GetFilenameWithoutExtension()}.xml").FullPath,
-                        DiagnosticOutput = true,
-                        NoRestore = true,
-                        NoBuild = true
-                    };
-                
-                    return x.DotNetCoreTest(
-                     f.FullPath,
-                     settings
-                    );
-                },
+                x => x.DotNetCoreTest(f.FullPath,settings),
                 resultsFile,
                 new OpenCoverSettings()
                 {
