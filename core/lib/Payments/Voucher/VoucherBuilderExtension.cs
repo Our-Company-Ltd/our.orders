@@ -13,8 +13,24 @@ namespace our.orders.Payments.Voucher
 
             builder.AppEvents.Configure += (sender, services) =>
             {
-                services.AddTransient<IPaymentProvider, VoucherPaymentProvider>();
+                services.AddTransient<VoucherPaymentProvider>();
+                services.AddTransient<IPaymentProvider, VoucherPaymentProvider>((s) => s.GetService<VoucherPaymentProvider>());
             };
+
+            builder.AppEvents.ApplicationStarted += (sender, app) =>
+            {
+
+                var voucherProvider = app.GetService<VoucherPaymentProvider>();
+
+            };
+            builder.HostServices.AddTransient<IPaymentProvider>((s) =>
+            {
+                return builder.appEvents.Services.GetService<VoucherPaymentProvider>();
+            });
+            
+            builder.HostServices.AddTransient<VoucherPaymentProvider>((s) => {
+                return builder.appEvents.Services.GetService<VoucherPaymentProvider>();
+            });
 
             return builder;
         }

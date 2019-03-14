@@ -20,6 +20,7 @@ using our.orders.Helpers;
 using our.orders.Models;
 using our.orders.Repositories;
 using our.orders.Services;
+using static our.orders.Payments.PostFinance.PostFinancePaymentProvider;
 
 namespace our.orders.Payments.PostFinance
 {
@@ -54,113 +55,13 @@ namespace our.orders.Payments.PostFinance
 
         }
 
-        public const string FORM_ACTION_PROD = "https://e-payment.postfinance.ch/ncol/prod/orderstandard.asp";
-        public const string FORM_ACTION_TEST = "https://e-payment.postfinance.ch/ncol/test/orderstandard.asp";
 
-        public class FromBindings
-        {
-            [Required]
-            public string OrderID { get; set; }
-
-            /// <summary>
-            /// Amount to be paid
-            /// </summary>
-            /// <returns></returns>
-            [Required]
-            public decimal Amount { get; set; }
-
-
-            public string RedirectUri { get; set; }
-
-        }
-
+    
         [HttpPost("form")]
-        public async Task<IActionResult> FormAsync([FromServices]PostFinancePaymentProvider provider, [FromServices]PostFinanceConfiguration configuration, [FromServices]OrderService orderService, [FromBody]FromBindings bindings, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<IActionResult> FormAsync([FromServices]PostFinancePaymentProvider provider, [FromBody]PostFinanceFormBindings bindings, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var order = await orderService.GetByIdAsync(bindings.OrderID, cancellationToken);
-
-            var message = new HttpResponseMessage();
-            dynamic resp = new System.Dynamic.ExpandoObject();
-
-            resp.method = "POST";
-
-            resp.action = configuration.Sandbox ? FORM_ACTION_TEST : FORM_ACTION_PROD;
-            var amount = bindings.Amount;
-            var transactionUID = order.Reference + DateTime.Now.ToString("hh:mm:ss:ff").ShortMD5();
-            // var payment = new Payment()
-            // {
-            //     Title = "PostFinance Payment",
-            //     Provider = provider.Name,
-            //     Reference = $"{transactionUID}",
-            //     Status = PaymentStatus.Pending,
-            //     Date = DateTime.UtcNow,
-            //     Method = PaymentMethod.Electronic,
-            //     Details = $"Payment Order #{order.Reference ?? order.Id}",
-            //     Currency = order.Currency,
-            //     Amount = amount,
-            //     UID = transactionUID
-            // };
-            // await orderService.AddPayment(order, payment, cancellationToken);
-
-            resp.amount = amount.ToString("0.00", CultureInfo.InvariantCulture);
-            resp.txid = transactionUID;
-
-
-            var formParams = new Dictionary<string, string>
-                {
-                    {"PSPID", configuration.PSPID },
-                    {"orderID",  transactionUID},
-                    {"amount", Math.Ceiling(amount * 100).ToString("0", CultureInfo.InvariantCulture)},
-                    {"currency",  "CHF"},
-                    {"language", "de" },
-                    {"CN", (order.Client?.FirstName ?? "")+ " " + (order.Client?.LastName ?? "")},
-                    {"EMAIL", order.Client?.Email ?? ""},
-                    {"COM", configuration.COM},
-                    { "PARAMPLUS", "ORDER=" + order.Id }
-            };
-
-            // if (PMLIST != null)
-            //     formParams.Add("PMLIST", string.Join(";", PMLIST));
-            // var redirectUri = bindings.RedirectUri;
-            // formParams.Add("backurl", redirectUri + "/Orders/" + member.UserName + "#back");
-            // formParams.Add("accepturl", redirectUri + "/Thanks/" + member.UserName);
-            // formParams.Add("declineurl", redirectUri + "/Pay/" + member.UserName + "#decline");
-            // formParams.Add("cancelurl", redirectUri + "/Pay/" + member.UserName + "#cancel");
-            // formParams.Add("exceptionurl", redirectUri + "/Pay/" + member.UserName + "#exception");
-
-
-            ////if (PARAMPLUS != null)
-            //    formParams.Add("PARAMPLUS", PARAMPLUS(member));
-
-            var strb = new StringBuilder();
-            foreach (var kv in formParams.Where(kv => !string.IsNullOrEmpty(kv.Value as string)).OrderBy(k => k.Key))
-            {
-                strb.Append(kv.Key.ToUpperInvariant());
-                strb.Append("=");
-                strb.Append(formParams[kv.Key].ToString());
-                strb.Append(configuration.SHASIGN);
-
-            }
-
-            var bytes = Encoding.UTF8.GetBytes(strb.ToString());
-            var sha = new SHA1CryptoServiceProvider();
-            var hashed = sha.ComputeHash(bytes);
-
-            strb = new StringBuilder(hashed.Length * 2);
-            foreach (byte b in hashed)
-            {
-                strb.Append(b.ToString("X2"));
-            }
-
-            formParams.Add("SHASIGN", strb.ToString());
-
-            resp.param = formParams;
-
-
-            message.Content = new StringContent(JsonConvert.SerializeObject(resp));
-            message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            return Ok(ApiModel.AsSuccess(resp));
+            var formResponse = await provider.GetFormAsync(bindings, cancellationToken);
+            return Ok(ApiModel.AsSuccess(formResponse));
         }
 
         public class PostFinanceFeedbackBindings

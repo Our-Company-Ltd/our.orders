@@ -21,6 +21,7 @@ namespace our.orders.Payments.Voucher
     [Authorize]
     public class VoucherPaymentProvider : BaseController, IPaymentProvider
     {
+        private readonly IService<Models.Voucher> voucherService;
         private readonly OrderService orderService;
         public VoucherPaymentProvider(
             IAntiforgery antiForgery,
@@ -28,10 +29,11 @@ namespace our.orders.Payments.Voucher
             IHostingEnvironment env, IMapper mapper,
             IAppSettings appSettings,
             IRepository<IOrder> orderProvider,
-            IRepository<IShippingTemplate> shippingTemplateProvider,
+            IService<Models.Voucher> voucherService,
             OrderService orderService,
             AppEvents appEvents) : base(antiForgery, httpContextAccessor, env, mapper, appSettings)
         {
+            this.voucherService = voucherService;
             this.orderService = orderService;
 
         }
@@ -51,8 +53,6 @@ namespace our.orders.Payments.Voucher
 
         [HttpPost("use")]
         public async Task<IActionResult> UseAsync(
-            [FromServices] OrderService orderService,
-            [FromServices] IService<Models.Voucher> voucherService,
             [FromBody]UseBindings bindings,
             CancellationToken cancellationToken = default(CancellationToken))
         {

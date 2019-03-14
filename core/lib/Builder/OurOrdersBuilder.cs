@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using our.orders.Models;
 using our.orders.Services;
+using System;
 
 namespace our.orders.Builder
 {
@@ -27,6 +28,11 @@ namespace our.orders.Builder
         /// Gets the host <see cref="IServiceCollection"/>
         /// </summary>
         public IServiceCollection HostServices { get; }
+
+        /// <summary>
+        /// Gets the host <see cref="IServiceCollection"/>
+        /// </summary>
+        public IServiceProvider OurOrdersServices { get; }
 
         /// <summary>
         /// Gets the <see cref="AppEvents"/>

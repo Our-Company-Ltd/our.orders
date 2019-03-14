@@ -277,8 +277,6 @@ namespace our.orders
 
             AppEvents.OnApplicationStarted(serviceProvider);
 
-
-
         }
     }
 }

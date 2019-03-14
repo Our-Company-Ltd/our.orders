@@ -47,6 +47,7 @@ namespace our.orders.Payments.PostFinance
                           services.AddSingleton(postfinanceConfiguration);
                       };
 
+            
             builder.HostServices.AddSingleton(postfinanceConfiguration);
             builder.HostServices.AddTransient<IPaymentProvider, PostFinancePaymentProvider>();
             builder.HostServices.AddTransient<PostFinancePaymentProvider>();

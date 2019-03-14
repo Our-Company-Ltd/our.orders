@@ -14,7 +14,8 @@ namespace our.orders.Payments.Cash
             {
                 services.AddTransient<IPaymentProvider, CashPaymentProvider>();
             };
-
+            builder.HostServices.AddTransient<IPaymentProvider, CashPaymentProvider>();
+            builder.HostServices.AddTransient<CashPaymentProvider>();
             return builder;
         }
 
