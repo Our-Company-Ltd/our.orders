@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading;
 using System.Threading.Tasks;
 using Bogus;
@@ -56,6 +57,28 @@ namespace our.orders.test.Services
 
             Assert.Equal(expectedCats, found.Categories);
         }
+
+        [Fact]
+        public async Task CalculateShippingWithPercentItemsPrice()
+        {
+            // var model = await Service.NewAsync(cancellationToken);
+            var model = RandomObjects.RandomOrder().Generate();
+            var shippingtemplateService = this.databaseFixture.ServiceProvider.GetService<IService<IShippingTemplate>>();
+            var t = await shippingtemplateService.NewAsync(cancellationToken);
+            var template = t as ShippingTemplate;
+            template.PercentItemsPrice = 0.1m;
+
+            await shippingtemplateService.CreateAsync(template, cancellationToken);
+
+            model.ShippingTemplateId = template.Id;
+
+            var result = await Service.CreateAsync(model, cancellationToken);
+
+            var expectedDelivery = result.Price * template.PercentItemsPrice;
+
+            Assert.Equal(expectedDelivery, result.Delivery.Final);
+        }
+        
 
 
     }

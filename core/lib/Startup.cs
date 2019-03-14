@@ -118,18 +118,19 @@ namespace our.orders
             services.AddSingleton<IRoleStore<Role>>(roleStore);
 
 
-            services.AddTransient<IOrder, Order>();
-            services.AddTransient<IProduct, Product>();
-            services.AddTransient<IClient, Client>();
-            services.AddTransient<ShippingTemplate>();
-            services.AddTransient<DocumentTemplate>();
-            services.AddTransient<Shop>();
-            services.AddTransient<Movement>();
-            services.AddTransient<Voucher>();
-            services.AddTransient<StockUnit>();
-            services.AddTransient<Warehouse>();
-            services.AddTransient<Category>();
-            services.AddTransient<User>();
+            services.TryAddTransient<IOrder, Order>();
+            services.TryAddTransient<IProduct, Product>();
+            services.TryAddTransient<IClient, Client>();
+            services.TryAddTransient<ShippingTemplate>();
+            services.TryAddTransient<IShippingTemplate, ShippingTemplate>();
+            services.TryAddTransient<DocumentTemplate>();
+            services.TryAddTransient<Shop>();
+            services.TryAddTransient<Movement>();
+            services.TryAddTransient<Voucher>();
+            services.TryAddTransient<StockUnit>();
+            services.TryAddTransient<Warehouse>();
+            services.TryAddTransient<Category>();
+            services.TryAddTransient<User>();
 
 
 

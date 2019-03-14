@@ -48,7 +48,7 @@ namespace our.orders.Models
 
         [JsonField]
         public IEnumerable<ShippingPrice> PerUnit { get; set; }
-        public decimal PercentItemPrice { get; set; } = 0;
+        public decimal PercentItemsPrice { get; set; } = 0;
 
         public decimal TaxRateIncluded { get; set; } = 0;
 
@@ -83,7 +83,7 @@ namespace our.orders.Models
                 finalBase += baseUnitPrice + perUnit * units;
             }
 
-            finalBase += order.Price * PercentItemPrice;
+            finalBase += order.Price * PercentItemsPrice;
 
             var final =
                 new Amount

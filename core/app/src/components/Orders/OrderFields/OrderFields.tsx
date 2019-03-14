@@ -340,7 +340,7 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
                                             changes={{}}
                                             onChange={this._handleShippingPersonChange}
                                             current={current}
-                                            hasRights={!hasRights}
+                                            hasRights={!!hasRights}
                                         />
                                     </Grid>}
                             </React.Fragment>

@@ -108,7 +108,7 @@ interface State {
     changes: Partial<Product>;
     openDialog?: boolean;
     openSubProductSelector?: boolean;
-    openSubProduct: { [id: string]: boolean };
+    openSubProduct: { [id: number]: boolean };
 }
 
 const Transition: (direction: 'left' | 'right' | 'up' | 'down') =>
@@ -211,14 +211,14 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
                                 spBasePrice.find(p => p.Currency === defaultCurrency) ||
                                 spBasePrice.find(() => true);
                             const open = () =>
-                                this.setState(() => ({ openSubProduct: { ...openSubProduct, [sp.Id]: true } }));
+                                this.setState(() => ({ openSubProduct: { ...openSubProduct, [i]: true } }));
                             const close = () =>
-                                this.setState(() => ({ openSubProduct: { ...openSubProduct, [sp.Id]: false } }));
+                                this.setState(() => ({ openSubProduct: { ...openSubProduct, [i]: false } }));
 
                             const actionDelete = (
                                 <IconButton
                                     className="order-items-fields__delete"
-                                    onClick={() => this._handleRemoveItem(sp.Id)}
+                                    onClick={() => this._handleRemoveItem(i)}
                                 >
                                     <Close className={classNames(classes.svgIcon, classes.svgIconRemove)} />
                                 </IconButton>);
@@ -270,7 +270,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
                                     <SideDialog
                                         onClose={close}
                                         key={sp.Id}
-                                        open={!!openSubProduct[sp.Id]}
+                                        open={!!openSubProduct[i]}
                                     >
                                         <DialogContent>
                                             <ProductFields
@@ -279,7 +279,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
                                                 initial={sp}
                                                 changes={sp}
                                                 onChange={(p) => {
-                                                    this._handleItemChange(sp.Id, p);
+                                                    this._handleItemChange(i, p);
                                                 }}
                                                 key={sp.Id}
                                             />
@@ -289,7 +289,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
                                                 size="small"
                                                 color="secondary"
                                                 variant="contained"
-                                                onClick={() => this._handleRemoveItem(sp.Id)}
+                                                onClick={() => this._handleRemoveItem(i)}
                                             >
                                                 <FormattedMessage {...ProductsViewMessages.removeSubItems} />
                                                 <Delete />
@@ -446,12 +446,11 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
         });
     }
 
-    private _handleRemoveItem(id: string) {
+    private _handleRemoveItem(index: number) {
         const preview = { ...this.state.initial, ...this.state.changes } as Product;
 
         const subProducts = preview.Products || [];
         const newItems = [...subProducts];
-        const index = newItems.findIndex(i => i.Id === id);
 
         if (index < 0) {
             return;
@@ -462,13 +461,12 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
         this._OnChange({ Products: newItems });
     }
 
-    private _handleItemChange(id: string, value: Partial<Product>) {
+    private _handleItemChange(index: number, value: Partial<Product>) {
         const preview = { ...this.state.initial, ...this.state.changes } as Product;
 
         const subProducts = preview.Products || [];
 
         const newItems = [...subProducts];
-        const index = newItems.findIndex(i => i.Id === id);
 
         if (index < 0) {
             newItems.push(value as Product);

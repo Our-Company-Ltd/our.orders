@@ -85,7 +85,7 @@ export const OrderProductSelectionEditor: React.SFC<
                                 </InputLabel>
                                 <Select
                                     fullWidth={true}
-                                    value={(Option && Option.index) || ''}
+                                    value={Option ? Option.index : ''}
                                     onChange={(e) =>
                                         onChange({
                                             ...selection, Option:
@@ -102,18 +102,19 @@ export const OrderProductSelectionEditor: React.SFC<
                                 >
                                     {props.product.Options!.map((opt, i) => {
                                         const price = getPrice(opt.BasePrice);
-                                        return (<MenuItem key={i} value={i}>
-                                            <span>{opt.Title}</span>
-                                            {price && price.Value > 0 ?
+                                        return (
+                                            <MenuItem key={i} value={i}>
+                                                <span>{opt.Title}</span>
+                                                {!!price && (price.Value > 0 ?
                                                     <span style={{ fontStyle: 'italic', marginLeft: '0.2rem' }}>
                                                         (+ <FormattedNumber
                                                             style="currency"
                                                             currency={price.Currency}
                                                             value={price.Value}
                                                         />)
-                                                </span> : null
-                                            }
-                                        </MenuItem>);
+                                                </span> : null)
+                                                }
+                                            </MenuItem>);
                                     })}
                                 </Select>
                             </FormControl>
