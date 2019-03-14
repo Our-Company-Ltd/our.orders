@@ -926,7 +926,8 @@ class OrderList extends React.Component<OrdersListProps, State> {
 
         this.setState(
             () => ({
-                editing: -1
+                editing: -1,
+                creating: undefined
             }),
             () => this._refresh());
     }

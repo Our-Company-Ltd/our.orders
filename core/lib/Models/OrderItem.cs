@@ -26,7 +26,7 @@ namespace our.orders.Models
     public class OrderItem
     {
         [Key]
-        public string UID { get; set; }
+        public string UID { get; set; } = Guid.NewGuid().ToString();
 
         public string ProductId { get; set; }
 
