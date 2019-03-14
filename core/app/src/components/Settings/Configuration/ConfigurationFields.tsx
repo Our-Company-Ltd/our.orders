@@ -91,7 +91,7 @@ class ConfigurationFields extends React.Component<ConfigurationFieldsProps, Stat
                             <Grid item={true} xs={12}>
                                 <NumberField
                                     fullWidth={true}
-                                    label={formatMessage(ConfigurationMessages.taxRateExcluded)}
+                                    label={formatMessage(ConfigurationMessages.taxRateIncluded)}
                                     step="0.01"
                                     value={preview.TaxRateIncluded}
                                     onNumberChange={(value) =>
@@ -101,7 +101,7 @@ class ConfigurationFields extends React.Component<ConfigurationFieldsProps, Stat
                             <Grid item={true} xs={12}>
                                 <NumberField
                                     fullWidth={true}
-                                    label={formatMessage(ConfigurationMessages.taxRateIncluded)}
+                                    label={formatMessage(ConfigurationMessages.taxRateExcluded)}
                                     step="0.01"
                                     value={preview.TaxRateExcluded}
                                     onNumberChange={(value) =>
