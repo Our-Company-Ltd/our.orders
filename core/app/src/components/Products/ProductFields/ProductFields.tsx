@@ -116,18 +116,20 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
             <GridContainer>
                 <Grid item={true} xs={12}>
                     <ItemPreview noDividers={true}>
-                        <Thumb
-                            src={preview.Src}
-                            style={{ backgroundColor: colorHash.hex(preview.Id) }}
+                        <Dropzone
+                            className={classes.dropZone}
+                            onDrop={this._onDrop}
+                            disabled={!hasRights}
                         >
-                            <Dropzone
-                                className={classes.dropZone}
-                                onDrop={this._onDrop}
-                                disabled={!hasRights}
+                            <Thumb
+                                src={preview.Src}
+                                style={{ backgroundColor: colorHash.hex(preview.Id) }}
                             >
+
                                 <label className={classes.dropZoneLabel} />
-                            </Dropzone>
-                        </Thumb>
+
+                            </Thumb>
+                        </Dropzone>
                         <Lines>
                             <Line className={'forms-fields'}>
                                 <GridContainer>
@@ -442,7 +444,7 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
 export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
     return {
         dropZone: {
-            width: '100%',
+            width: 'auto',
             height: '100%'
         },
         dropZoneNoImage: {

@@ -3909,9 +3909,7 @@ var IsAdminOrInRole = function IsAdminOrInRole(user) {
     roles[_key - 1] = arguments[_key];
   }
 
-  return user && (roles.some(function (role) {
-    return user.Roles.indexOf('ADMIN') >= 0;
-  }) || roles.some(function (role) {
+  return user && (user.Roles.indexOf('ADMIN') >= 0 || roles.some(function (role) {
     return user.Roles.indexOf(role) >= 0;
   }));
 };
@@ -6518,11 +6516,15 @@ var _core = require("@material-ui/core");
 
 var _GridContainer = require("src/components/GridContainer/GridContainer");
 
-var _ClientImportMessages = _interopRequireDefault(require("./ClientImportMessages"));
-
 var _reactDropzone = _interopRequireDefault(require("react-dropzone"));
 
 var _notistack = require("notistack");
+
+var _icons = require("@material-ui/icons");
+
+var _ClientImportMessages = _interopRequireDefault(require("./ClientImportMessages"));
+
+var classNames = _interopRequireWildcard(require("classnames"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6588,22 +6590,24 @@ function (_React$Component) {
           hasHeaderRecord = _this$state.hasHeaderRecord,
           delimiter = _this$state.delimiter;
       var _this$props = this.props,
-          intl = _this$props.intl,
-          classes = _this$props.classes;
+          classes = _this$props.classes,
+          intl = _this$props.intl;
       return React.createElement(React.Fragment, null, React.createElement(_core.DialogTitle, {
         id: "draggable-dialog-title"
       }, "Subscribe"), React.createElement(_core.DialogContent, null, React.createElement(_GridContainer.GridContainer, {
         className: classes.container,
         spacing: 0
       }, React.createElement(_core.Grid, {
-        item: true
+        item: true,
+        className: classNames(classes.dropZoneContainer, firstLine && headers && classes.dropZoneContainerHide)
       }, React.createElement(_reactDropzone.default, {
         className: classes.dropZone,
         onDrop: this._onDrop
       }, React.createElement(_core.Button, {
         className: classes.dropZoneLabel
-      }, intl.formatMessage(_ClientImportMessages.default.header)))), React.createElement(_core.Grid, {
-        item: true
+      }, React.createElement(_icons.CloudDownload, null)))), firstLine && headers && React.createElement(_core.Grid, {
+        item: true,
+        className: classes.headerRecord
       }, React.createElement(_core.FormControlLabel, {
         control: React.createElement(_core.Switch, {
           checked: hasHeaderRecord,
@@ -6619,8 +6623,9 @@ function (_React$Component) {
           color: "primary"
         }),
         label: "first record is headers values"
-      })), React.createElement(_core.Grid, {
-        item: true
+      })), firstLine && headers && React.createElement(_core.Grid, {
+        item: true,
+        className: classes.delimiter
       }, React.createElement(_core.TextField, {
         select: true,
         label: "CSV delimiter",
@@ -6644,11 +6649,17 @@ function (_React$Component) {
         key: ";",
         value: ";"
       }, "semicolon (;)"))), firstLine && headers && React.createElement(_core.Grid, {
-        item: true
+        item: true,
+        className: classes.listContent
       }, React.createElement(_core.List, null, ClientFields.map(function (prop, i) {
         return React.createElement(_core.ListItem, {
-          key: "".concat(prop, "-").concat(i)
-        }, prop, " :", React.createElement(_core.TextField, {
+          key: "".concat(prop, "-").concat(i),
+          className: classes.row
+        }, React.createElement("div", {
+          className: classes.rowLegend
+        }, prop, ":"), React.createElement("div", {
+          className: classes.rowInput
+        }, React.createElement(_core.TextField, {
           select: true,
           label: "CSV Header",
           fullWidth: true,
@@ -6677,8 +6688,12 @@ function (_React$Component) {
         }), React.createElement(_core.MenuItem, {
           key: "--none--",
           value: -1
-        }, "Do not import")));
-      }))))), React.createElement(_core.DialogActions, null, React.createElement(_core.Button, {
+        }, "Do not import"))));
+      }))))), React.createElement(_core.DialogActions, null, firstLine && headers && React.createElement(_reactDropzone.default, {
+        onDrop: this._onDrop
+      }, React.createElement(_core.Button, {
+        color: "primary"
+      }, intl.formatMessage(_ClientImportMessages.default.loadMore))), React.createElement(_core.Button, {
         onClick: this.props.close,
         color: "primary"
       }, "Cancel"), React.createElement(_core.Button, {
@@ -6719,7 +6734,7 @@ function (_React$Component) {
                 // We found a new line character, stop processing
                 break;
               }
-            } // find out serparator : 
+            } // find out serparator :
 
 
             return resolve(headerString.split(delimiter));
@@ -6821,6 +6836,13 @@ function (_React$Component) {
 
 var _default = (0, _core.withStyles)(function (theme) {
   return {
+    dropZoneContainer: {
+      width: '100%',
+      height: '100%'
+    },
+    dropZoneContainerHide: {
+      display: 'none'
+    },
     dropZone: {
       width: '100%',
       height: '100%'
@@ -6839,6 +6861,28 @@ var _default = (0, _core.withStyles)(function (theme) {
       color: theme.palette.text.primary,
       boxShadow: theme.shadows[1],
       fontSize: 11
+    },
+    delimiter: {
+      width: '50%;'
+    },
+    headerRecord: {
+      width: '50%;'
+    },
+    listContent: {
+      width: '100%;'
+    },
+    row: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: 0,
+      paddingRight: 0
+    },
+    rowLegend: {
+      width: '40%'
+    },
+    rowInput: {
+      width: '60%'
     }
   };
 })((0, _notistack.withSnackbar)(ClientImport));
@@ -6857,6 +6901,10 @@ var ClientListMesseges = (0, _reactIntl.defineMessages)({
   header: {
     "id": "src.components.client.clientImports.import",
     "defaultMessage": "import"
+  },
+  loadMore: {
+    "id": "src.components.client.clientImports.loadMore",
+    "defaultMessage": "Load more"
   }
 });
 exports.ClientListMesseges = ClientListMesseges;
@@ -7361,9 +7409,10 @@ function (_React$Component) {
           _this4._handleOrderDeleted();
         }
       }))), React.createElement(_core.Dialog, {
-        open: !!importOpened,
-        fullScreen: true,
-        onClose: close
+        open: !!importOpened // fullScreen={true}
+        ,
+        onClose: close,
+        className: classes.dialogImport
       }, React.createElement(_ClientImport.default, _extends({
         intl: intl,
         settingsCtx: settingsCtx
@@ -7686,6 +7735,10 @@ var _default = (0, _core.withStyles)(function (theme) {
       color: theme.palette.text.primary,
       boxShadow: theme.shadows[1],
       fontSize: 11
+    },
+    dialogImport: {
+      width: '90%',
+      height: '90%'
     }
   };
 })((0, _notistack.withSnackbar)(ClientList));
@@ -20082,21 +20135,11 @@ function (_React$Component) {
           Paid = current.Paid,
           Reference = current.Reference,
           NeedsDispatch = current.NeedsDispatch,
-          Categories = current.Categories,
           orderType = current.OrderType,
           UserId = current.UserId;
       var needsDispatchInfos = NeedsDispatch;
       var ownOrder = (current.UserId && current.UserId) === (user && user.Id);
       var hasRights = ownOrder && (0, _roles.IsAdminOrInRole)(user, 'CRUD_OWN_ORDERS') || (0, _roles.IsAdminOrInRole)(user, 'CRUD_ALL_ORDERS');
-      var categoriesPreview = (Categories || []).map(function (cat) {
-        return categoryCtx.Categories.find(function (c) {
-          return c.Id === cat;
-        });
-      }).filter(function (c) {
-        return !!c;
-      }).map(function (c) {
-        return c.Title;
-      }).join(', ');
       return React.createElement(_DetailGridContainer.default, null, React.createElement(_DetailGridColumn.default, {
         className: classes.detailGridColumn
       }, React.createElement(_GridContainer.GridContainer, null, React.createElement(_core.Grid, {
@@ -20313,9 +20356,6 @@ function (_React$Component) {
         authCtx: authCtx
       })), React.createElement(_core.Grid, {
         item: true,
-        xs: 12
-      }, "Categories : ", categoriesPreview), React.createElement(_core.Grid, {
-        item: true,
         xs: 12,
         style: {
           marginTop: '4rem'
@@ -20350,7 +20390,7 @@ function (_React$Component) {
         changes: {},
         onChange: this._handleShippingPersonChange,
         current: current,
-        hasRights: !hasRights
+        hasRights: !!hasRights
       }))), React.createElement(_core.Grid, {
         item: true,
         xs: 12,
@@ -20815,6 +20855,10 @@ var OrderFieldsMessages = (0, _reactIntl.defineMessages)({
   offer: {
     "id": "src.components.forms.order.offer",
     "defaultMessage": "offer"
+  },
+  categories: {
+    "id": "src.components.forms.order.categories",
+    "defaultMessage": "Categories"
   }
 });
 exports.OrderFieldsMessages = OrderFieldsMessages;
@@ -22102,7 +22146,7 @@ var OrderProductSelectionEditor = function OrderProductSelectionEditor(props) {
     htmlFor: "selectOption"
   }, intl.formatMessage(OrderProductSelectionEditorMessages.option)), React.createElement(_core.Select, {
     fullWidth: true,
-    value: Option && Option.index || '',
+    value: Option ? Option.index : '',
     onChange: function (_onChange2) {
       function onChange(_x2) {
         return _onChange2.apply(this, arguments);
@@ -22130,7 +22174,7 @@ var OrderProductSelectionEditor = function OrderProductSelectionEditor(props) {
     return React.createElement(_core.MenuItem, {
       key: i,
       value: i
-    }, React.createElement("span", null, opt.Title), price && price.Value > 0 ? React.createElement("span", {
+    }, React.createElement("span", null, opt.Title), !!price && (price.Value > 0 ? React.createElement("span", {
       style: {
         fontStyle: 'italic',
         marginLeft: '0.2rem'
@@ -22139,7 +22183,7 @@ var OrderProductSelectionEditor = function OrderProductSelectionEditor(props) {
       style: "currency",
       currency: price.Currency,
       value: price.Value
-    }), ")") : null);
+    }), ")") : null));
   })))), React.createElement(_core.Grid, {
     item: true,
     xs: 3
@@ -25399,7 +25443,7 @@ function (_React$Component) {
         var open = function open() {
           return _this2.setState(function () {
             return {
-              openSubProduct: _objectSpread({}, openSubProduct, _defineProperty({}, sp.Id, true))
+              openSubProduct: _objectSpread({}, openSubProduct, _defineProperty({}, i, true))
             };
           });
         };
@@ -25407,7 +25451,7 @@ function (_React$Component) {
         var close = function close() {
           return _this2.setState(function () {
             return {
-              openSubProduct: _objectSpread({}, openSubProduct, _defineProperty({}, sp.Id, false))
+              openSubProduct: _objectSpread({}, openSubProduct, _defineProperty({}, i, false))
             };
           });
         };
@@ -25415,7 +25459,7 @@ function (_React$Component) {
         var actionDelete = React.createElement(_core.IconButton, {
           className: "order-items-fields__delete",
           onClick: function onClick() {
-            return _this2._handleRemoveItem(sp.Id);
+            return _this2._handleRemoveItem(i);
           }
         }, React.createElement(_icons.Close, {
           className: classNames(classes.svgIcon, classes.svgIconRemove)
@@ -25447,7 +25491,7 @@ function (_React$Component) {
         }))), React.createElement(_ItemPreview.Line, null, hasRights && actionDelete)))), React.createElement(_SideDialog.default, {
           onClose: close,
           key: sp.Id,
-          open: !!openSubProduct[sp.Id]
+          open: !!openSubProduct[i]
         }, React.createElement(_core.DialogContent, null, React.createElement(_ProductFields.default, _extends({
           settingsCtx: settingsCtx,
           intl: intl,
@@ -25458,7 +25502,7 @@ function (_React$Component) {
           initial: sp,
           changes: sp,
           onChange: function onChange(p) {
-            _this2._handleItemChange(sp.Id, p);
+            _this2._handleItemChange(i, p);
           },
           key: sp.Id
         }))), React.createElement(_core.DialogActions, null, hasRights && React.createElement(_core.Button, {
@@ -25466,7 +25510,7 @@ function (_React$Component) {
           color: "secondary",
           variant: "contained",
           onClick: function onClick() {
-            return _this2._handleRemoveItem(sp.Id);
+            return _this2._handleRemoveItem(i);
           }
         }, React.createElement(_reactIntl.FormattedMessage, ProductsViewMessages.removeSubItems), React.createElement(_icons.Delete, null)), React.createElement(_core.Button, {
           size: "small",
@@ -25623,16 +25667,12 @@ function (_React$Component) {
     }
   }, {
     key: "_handleRemoveItem",
-    value: function _handleRemoveItem(id) {
+    value: function _handleRemoveItem(index) {
       var preview = _objectSpread({}, this.state.initial, this.state.changes);
 
       var subProducts = preview.Products || [];
 
       var newItems = _toConsumableArray(subProducts);
-
-      var index = newItems.findIndex(function (i) {
-        return i.Id === id;
-      });
 
       if (index < 0) {
         return;
@@ -25646,16 +25686,12 @@ function (_React$Component) {
     }
   }, {
     key: "_handleItemChange",
-    value: function _handleItemChange(id, value) {
+    value: function _handleItemChange(index, value) {
       var preview = _objectSpread({}, this.state.initial, this.state.changes);
 
       var subProducts = preview.Products || [];
 
       var newItems = _toConsumableArray(subProducts);
-
-      var index = newItems.findIndex(function (i) {
-        return i.Id === id;
-      });
 
       if (index < 0) {
         newItems.push(value);
@@ -25967,15 +26003,15 @@ function (_React$Component) {
         xs: 12
       }, React.createElement(_ItemPreview.default, {
         noDividers: true
+      }, React.createElement(_reactDropzone.default, {
+        className: classes.dropZone,
+        onDrop: this._onDrop,
+        disabled: !hasRights
       }, React.createElement(_ItemPreview.Thumb, {
         src: preview.Src,
         style: {
           backgroundColor: colorHash.hex(preview.Id)
         }
-      }, React.createElement(_reactDropzone.default, {
-        className: classes.dropZone,
-        onDrop: this._onDrop,
-        disabled: !hasRights
       }, React.createElement("label", {
         className: classes.dropZoneLabel
       }))), React.createElement(_ItemPreview.Lines, null, React.createElement(_ItemPreview.Line, {
@@ -26326,7 +26362,7 @@ function (_React$Component) {
 var _default = (0, _core.withStyles)(function (theme) {
   return {
     dropZone: {
-      width: '100%',
+      width: 'auto',
       height: '100%'
     },
     dropZoneNoImage: {},
@@ -28587,7 +28623,7 @@ function (_React$Component) {
         xs: 12
       }, React.createElement(_NumberField.default, {
         fullWidth: true,
-        label: formatMessage(_ConfigurationMessages.default.taxRateExcluded),
+        label: formatMessage(_ConfigurationMessages.default.taxRateIncluded),
         step: "0.01",
         value: preview.TaxRateIncluded,
         onNumberChange: function onNumberChange(value) {
@@ -28600,7 +28636,7 @@ function (_React$Component) {
         xs: 12
       }, React.createElement(_NumberField.default, {
         fullWidth: true,
-        label: formatMessage(_ConfigurationMessages.default.taxRateIncluded),
+        label: formatMessage(_ConfigurationMessages.default.taxRateExcluded),
         step: "0.01",
         value: preview.TaxRateExcluded,
         onNumberChange: function onNumberChange(value) {
@@ -28712,11 +28748,11 @@ var ConfigurationMessages = (0, _reactIntl.defineMessages)({
   },
   taxRateIncluded: {
     "id": "src.components.settings.configuration.taxRateIncluded",
-    "defaultMessage": "Tax rate included value"
+    "defaultMessage": "Default Tax rate included value"
   },
   taxRateExcluded: {
     "id": "src.components.settings.configuration.taxRateExcluded",
-    "defaultMessage": "Tax rate excluded value"
+    "defaultMessage": "Default Tax rate excluded value"
   },
   bankTransferSentence: {
     "id": "src.components.settings.configuration.bankTransferSentence",
