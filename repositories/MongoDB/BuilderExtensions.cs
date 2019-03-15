@@ -91,6 +91,7 @@ namespace our.orders.Repositories.mongoDb
                     .MapIdMember(idMember)
                     .SetElementName("_id")
                     .SetSerializer(new StringSerializer(BsonType.ObjectId))
+                    .SetDefaultValue(() => ObjectId.GenerateNewId())
                     .SetIdGenerator(StringObjectIdGenerator.Instance);
             }
 

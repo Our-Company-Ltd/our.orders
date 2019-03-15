@@ -52,19 +52,20 @@ namespace our.orders.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody]PostBindings bindings, CancellationToken cancellationToken = default(CancellationToken))
         {
-            
+
             var items = new List<OrderItem>();
             foreach (var selection in bindings.Selections)
             {
-                var product = await _productService.GetByIdAsync(selection.ProductId, cancellationToken);
-
+                var products = await _productService.FindAsync(Filter.Eq("UID", selection.ProductId), cancellationToken: cancellationToken);
+                var product = products.FirstOrDefault();
+                if (product == null) continue;
                 var item = _productService.ToOrderItem(bindings.Currency, product, selection);
 
                 var subitems = new List<OrderItem>();
                 if (selection.Products != null)
                     foreach (var subSelection in selection.Products)
                     {
-                        var subproduct = product.Products?.FirstOrDefault(p => p.Id == subSelection.ProductId);
+                        var subproduct = product.Products?.FirstOrDefault(p => p.UID == subSelection.ProductId);
                         if (subproduct == null) continue;
 
 

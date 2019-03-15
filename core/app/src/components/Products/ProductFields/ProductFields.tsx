@@ -123,7 +123,7 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
                         >
                             <Thumb
                                 src={preview.Src}
-                                style={{ backgroundColor: colorHash.hex(preview.Id) }}
+                                style={{ backgroundColor: colorHash.hex(preview.UID) }}
                             >
 
                                 <label className={classes.dropZoneLabel} />

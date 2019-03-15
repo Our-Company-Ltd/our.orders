@@ -1,6 +1,8 @@
-import { ModelBase, Price, ProductOption } from '.';
+import {  Price, ProductOption } from '.';
+import { ModelBase } from './ModelBase';
 
 export type Product = ModelBase & {
+    UID: string;
     Type: 'product';
     Title: string;
     Src?: string;

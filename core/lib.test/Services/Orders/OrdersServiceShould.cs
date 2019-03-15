@@ -58,6 +58,8 @@ namespace our.orders.test.Services
             Assert.Equal(expectedCats, found.Categories);
         }
 
+      
+
         [Fact]
         public async Task CalculateShippingWithPercentItemsPrice()
         {
@@ -78,7 +80,7 @@ namespace our.orders.test.Services
 
             Assert.Equal(expectedDelivery, result.Delivery.Final);
         }
-        
+
 
 
     }

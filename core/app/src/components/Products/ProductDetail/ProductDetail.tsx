@@ -121,7 +121,7 @@ const TransitionUp = Transition('up');
 class ProductDetail extends React.Component<ProductDetailProps, State> {
     static getDerivedStateFromProps(props: ProductDetailProps, state: State) {
 
-        if (props.initial.Id !== state.initial.Id) {
+        if (props.initial.UID !== state.initial.UID) {
             return {
                 changes: props.changes || {},
                 initial: props.initial
@@ -269,7 +269,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
                                     </Grid>
                                     <SideDialog
                                         onClose={close}
-                                        key={sp.Id}
+                                        key={sp.UID}
                                         open={!!openSubProduct[i]}
                                     >
                                         <DialogContent>
@@ -281,7 +281,7 @@ class ProductDetail extends React.Component<ProductDetailProps, State> {
                                                 onChange={(p) => {
                                                     this._handleItemChange(i, p);
                                                 }}
-                                                key={sp.Id}
+                                                key={sp.UID}
                                             />
                                         </DialogContent>
                                         <DialogActions>

@@ -108,14 +108,14 @@ export class ProductPage extends React.Component<ProductPageProps, State> {
 
                         <ProductDetail
                             {...{ intl, warehouseCtx, settingsCtx, categoryCtx, productCtx, authCtx }}
-                            key={editing.Id}
+                            key={editing.UID}
                             warehouseCtx={warehouseCtx}
                             cancel={closeEditing}
                             changed={(p) => {
                                 this._editingChanged(p);
                             }}
                             onDelete={() => {
-                                this._editingDeleted(editing.Id);
+                                this._editingDeleted(editing.UID);
                             }}
                             initial={editing}
                         />

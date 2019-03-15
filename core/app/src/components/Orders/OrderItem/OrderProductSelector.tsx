@@ -17,7 +17,7 @@ import { Add, Cached, LibraryAdd } from '@material-ui/icons';
 
 const toSelection = (p: Product): ProductSelection => {
     return {
-        ProductId: p.Id,
+        ProductId: p.UID,
         Products: p.Products ? p.Products.map(toSelection) : [],
         Quantity: p.MinQuantity || 1,
     };
@@ -105,7 +105,7 @@ export class OrderProductSelector extends React.Component<OrderProductSelectorPr
                         warehouseCtx={warehouseCtx}
                         intl={intl}
                         settingsCtx={settingsCtx}
-                        selectedIds={products.map(p => p.Id)}
+                        selectedIds={products.map(p => p.UID)}
                         showFavorite={false}
                         onClick={(p) => {
                             this.setState(() => ({
@@ -115,13 +115,13 @@ export class OrderProductSelector extends React.Component<OrderProductSelectorPr
                             }));
                         }}
                         onSelect={(selected) => {
-                            const remove = !!products.find(p => p.Id === selected.Id);
+                            const remove = !!products.find(p => p.UID === selected.UID);
                             this.setState((prev) => ({
                                 products: remove ?
-                                    prev.products.filter(p => p.Id !== selected.Id) :
+                                    prev.products.filter(p => p.UID !== selected.UID) :
                                     [...prev.products, selected],
                                 selections: remove ?
-                                    prev.selections.filter(p => p.ProductId !== selected.Id) :
+                                    prev.selections.filter(p => p.ProductId !== selected.UID) :
                                     [...prev.selections, toSelection(selected)]
                             }));
                         }}
@@ -147,7 +147,7 @@ export class OrderProductSelector extends React.Component<OrderProductSelectorPr
                                     (arr: ProductSelection[], index: number, value: ProductSelection) =>
                                         arr.map((v, ind) => ind === index ? value : v);
                                 return (
-                                    <div key={`${i}-${p.Id}`}>
+                                    <div key={`${i}-${p.UID}`}>
                                         <OrderProductSelectionEditor
                                             intl={intl}
                                             currency={currency}

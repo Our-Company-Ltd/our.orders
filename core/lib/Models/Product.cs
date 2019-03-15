@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace our.orders.Models
         string Description { get; set; }
 
         string SKU { get; set; }
+
+        string UID { get; set; }
 
         string Src { get; set; }
 
@@ -49,12 +52,13 @@ namespace our.orders.Models
 
 
 
-
     public class Product : Model, IProduct
     {
         public string Title { get; set; }
         public string Description { get; set; }
         public string SKU { get; set; }
+
+        public string UID { get; set; } = Guid.NewGuid().ToString();
 
         public string Src { get; set; }
 

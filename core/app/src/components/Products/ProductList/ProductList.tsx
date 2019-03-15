@@ -193,7 +193,7 @@ export class ProductList extends React.Component<ProductListProps, State> {
             query
         } = this.state;
         const { productCtx: { products } } = this.props;
-        const compare = (a: Product, b: Product) => {
+        const compare = (a: ProductPreview, b: ProductPreview) => {
             if (a.Favorite !== b.Favorite) {
                 return a.Favorite ? -1000 : 1000;
             }

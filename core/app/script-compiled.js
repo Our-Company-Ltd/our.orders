@@ -22268,7 +22268,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var toSelection = function toSelection(p) {
   return {
-    ProductId: p.Id,
+    ProductId: p.UID,
     Products: p.Products ? p.Products.map(toSelection) : [],
     Quantity: p.MinQuantity || 1
   };
@@ -22350,7 +22350,7 @@ function (_React$Component) {
         intl: intl,
         settingsCtx: settingsCtx,
         selectedIds: products.map(function (p) {
-          return p.Id;
+          return p.UID;
         }),
         showFavorite: false,
         onClick: function onClick(p) {
@@ -22364,16 +22364,16 @@ function (_React$Component) {
         },
         onSelect: function onSelect(selected) {
           var remove = !!products.find(function (p) {
-            return p.Id === selected.Id;
+            return p.UID === selected.UID;
           });
 
           _this2.setState(function (prev) {
             return {
               products: remove ? prev.products.filter(function (p) {
-                return p.Id !== selected.Id;
+                return p.UID !== selected.UID;
               }) : [].concat(_toConsumableArray(prev.products), [selected]),
               selections: remove ? prev.selections.filter(function (p) {
-                return p.ProductId !== selected.Id;
+                return p.ProductId !== selected.UID;
               }) : [].concat(_toConsumableArray(prev.selections), [toSelection(selected)])
             };
           });
@@ -22395,7 +22395,7 @@ function (_React$Component) {
         };
 
         return React.createElement("div", {
-          key: "".concat(i, "-").concat(p.Id)
+          key: "".concat(i, "-").concat(p.UID)
         }, React.createElement(_OrderProductSelectionEditor.OrderProductSelectionEditor, {
           intl: intl,
           currency: currency,
@@ -23395,7 +23395,8 @@ function (_React$Component) {
 
       this.setState(function () {
         return {
-          editing: -1
+          editing: -1,
+          creating: undefined
         };
       }, function () {
         return _this11._refresh();
@@ -25317,7 +25318,7 @@ function (_React$Component) {
   _createClass(ProductDetail, null, [{
     key: "getDerivedStateFromProps",
     value: function getDerivedStateFromProps(props, state) {
-      if (props.initial.Id !== state.initial.Id) {
+      if (props.initial.UID !== state.initial.UID) {
         return {
           changes: props.changes || {},
           initial: props.initial
@@ -25490,7 +25491,7 @@ function (_React$Component) {
           value: price.Value
         }))), React.createElement(_ItemPreview.Line, null, hasRights && actionDelete)))), React.createElement(_SideDialog.default, {
           onClose: close,
-          key: sp.Id,
+          key: sp.UID,
           open: !!openSubProduct[i]
         }, React.createElement(_core.DialogContent, null, React.createElement(_ProductFields.default, _extends({
           settingsCtx: settingsCtx,
@@ -25504,7 +25505,7 @@ function (_React$Component) {
           onChange: function onChange(p) {
             _this2._handleItemChange(i, p);
           },
-          key: sp.Id
+          key: sp.UID
         }))), React.createElement(_core.DialogActions, null, hasRights && React.createElement(_core.Button, {
           size: "small",
           color: "secondary",
@@ -26010,7 +26011,7 @@ function (_React$Component) {
       }, React.createElement(_ItemPreview.Thumb, {
         src: preview.Src,
         style: {
-          backgroundColor: colorHash.hex(preview.Id)
+          backgroundColor: colorHash.hex(preview.UID)
         }
       }, React.createElement("label", {
         className: classes.dropZoneLabel
@@ -27261,14 +27262,14 @@ function (_React$Component) {
         productCtx: productCtx,
         authCtx: authCtx
       }, {
-        key: editing.Id,
+        key: editing.UID,
         warehouseCtx: warehouseCtx,
         cancel: closeEditing,
         changed: function changed(p) {
           _this2._editingChanged(p);
         },
         onDelete: function onDelete() {
-          _this2._editingDeleted(editing.Id);
+          _this2._editingDeleted(editing.UID);
         },
         initial: editing
       }))), creating && React.createElement(_core.Dialog, {

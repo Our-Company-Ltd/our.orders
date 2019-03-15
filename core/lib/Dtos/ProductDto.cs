@@ -8,6 +8,8 @@ namespace our.orders.Dtos
     public class ProductPreviewDto
     {
         public string Id { get; set; }
+
+        public string UID { get; set; }
         public string Title { get; set; }
 
         public string Src { get; set; }
@@ -33,6 +35,8 @@ namespace our.orders.Dtos
         public string Description { get; set; }
 
         public string SKU { get; set; }
+
+        public string UID { get; set; }
 
         public string Src { get; set; }
 
