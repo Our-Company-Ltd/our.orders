@@ -9012,210 +9012,232 @@ function (_React$Component) {
       });
     }
   }, {
-    key: "_getTime",
-    value: function _getTime(period) {
+    key: "_today",
+    value: function _today() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today;
+      var interval = 'Hour';
+      var count = now.diff(start, 'hours') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_yesterday",
+    value: function _yesterday() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.subtract(1, 'day');
+      var end = start.clone().add(1, 'day');
+      var interval = 'Hour';
+      var count = end.diff(start, 'hours') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_thisweek",
+    value: function _thisweek() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.startOf('week');
+      var interval = 'Day';
+      var count = now.diff(start, 'days') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_lastweek",
+    value: function _lastweek() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.subtract(1, 'week').startOf('week');
+      var end = start.clone().add(1, 'week');
+      var interval = 'Day';
+      var count = end.diff(start, 'days') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_thisyear",
+    value: function _thisyear() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.clone().dayOfYear(1);
+      var interval = 'Month';
+      var count = today.clone().diff(start, 'months') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_lastyear",
+    value: function _lastyear() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.dayOfYear(1).subtract(1, 'years');
+      var end = start.clone().add(1, 'year');
+      var interval = 'Month';
+      var count = end.diff(start, 'months') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_lastmonth",
+    value: function _lastmonth() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.date(1).subtract(1, 'month');
+      var end = start.clone().add(1, 'month');
+      var interval = 'Day';
+      var count = end.diff(start, 'days') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_thismonth",
+    value: function _thismonth() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.clone().date(1);
+      var interval = 'Day';
+      var count = today.clone().diff(start, 'days') + 1;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_custom",
+    value: function _custom() {
       var _this$state3 = this.state,
           customPeriodFrom = _this$state3.customPeriodFrom,
           customPeriodTo = _this$state3.customPeriodTo;
+      var start = moment.utc(customPeriodFrom);
+      var end = moment.utc(customPeriodTo);
+      var duration = moment.duration(end.diff(start.clone()));
+      var interval = 'Day';
+
+      if (duration.asYears() > 2) {
+        interval = 'Year';
+      } else if (duration.asMonths() > 6) {
+        interval = 'Month';
+      } else if (duration.asWeeks() > 2) {
+        interval = 'Week';
+      } else if (duration.asDays() > 2) {
+        interval = 'Day';
+      } else {
+        interval = 'Hour';
+      }
+
+      var count = end.diff(start, interval.toLowerCase()) + 1;
+      return {
+        start: customPeriodFrom,
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_last7days",
+    value: function _last7days() {
       var now = moment();
       var today = now.clone().startOf('day');
-
+      var start = today.subtract(6, 'day');
+      var interval = 'Day';
+      var count = 7;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_last30days",
+    value: function _last30days() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.subtract(29, 'day');
+      var interval = 'Day';
+      var count = 30;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_last5years",
+    value: function _last5years() {
+      var now = moment();
+      var today = now.clone().startOf('day');
+      var start = today.subtract(4, 'year');
+      var interval = 'Year';
+      var count = 5;
+      return {
+        start: start.toDate(),
+        count: count,
+        interval: interval
+      };
+    }
+  }, {
+    key: "_getTime",
+    value: function _getTime(period) {
       switch (period) {
         case 'today':
-          {
-            var _start = today;
-            var _interval = 'Hour';
-
-            var _count = now.diff(_start, 'hours') + 1;
-
-            return {
-              start: _start.toDate(),
-              count: _count,
-              interval: _interval
-            };
-          }
+          return this._today();
 
         case 'yesterday':
-          {
-            var _start2 = today.subtract(1, 'day');
-
-            var end = _start2.clone().add(1, 'day');
-
-            var _interval2 = 'Hour';
-
-            var _count2 = end.diff(_start2, 'hours') + 1;
-
-            return {
-              start: _start2.toDate(),
-              count: _count2,
-              interval: _interval2
-            };
-          }
+          return this._yesterday();
 
         case 'thisweek':
-          {
-            var _start3 = today.startOf('week');
-
-            var _interval3 = 'Day';
-
-            var _count3 = now.diff(_start3, 'days') + 1;
-
-            return {
-              start: _start3.toDate(),
-              count: _count3,
-              interval: _interval3
-            };
-          }
+          return this._thisweek();
 
         case 'lastweek':
-          {
-            var _start4 = today.subtract(1, 'week').startOf('week');
-
-            var _end = _start4.clone().add(1, 'week');
-
-            var _interval4 = 'Day';
-
-            var _count4 = _end.diff(_start4, 'days') + 1;
-
-            return {
-              start: _start4.toDate(),
-              count: _count4,
-              interval: _interval4
-            };
-          }
+          return this._lastweek();
 
         case 'thisyear':
-          {
-            var _start5 = today.clone().dayOfYear(1);
-
-            var _interval5 = 'Month';
-
-            var _count5 = today.clone().diff(_start5, 'months') + 1;
-
-            return {
-              start: _start5.toDate(),
-              count: _count5,
-              interval: _interval5
-            };
-          }
+          return this._thisyear();
 
         case 'lastyear':
-          {
-            var _start6 = today.dayOfYear(1).subtract(1, 'years');
-
-            var _end2 = _start6.clone().add(1, 'year');
-
-            var _interval6 = 'Month';
-
-            var _count6 = _end2.diff(_start6, 'months') + 1;
-
-            return {
-              start: _start6.toDate(),
-              count: _count6,
-              interval: _interval6
-            };
-          }
+          return this._lastyear();
 
         case 'lastmonth':
-          {
-            var _start7 = today.date(1).subtract(1, 'month');
-
-            var _end3 = _start7.clone().add(1, 'month');
-
-            var _interval7 = 'Day';
-
-            var _count7 = _end3.diff(_start7, 'days') + 1;
-
-            return {
-              start: _start7.toDate(),
-              count: _count7,
-              interval: _interval7
-            };
-          }
+          return this._lastmonth();
 
         case 'thismonth':
-          {
-            var _start8 = today.clone().date(1);
-
-            var _interval8 = 'Day';
-
-            var _count8 = today.clone().diff(_start8, 'days') + 1;
-
-            return {
-              start: _start8.toDate(),
-              count: _count8,
-              interval: _interval8
-            };
-          }
+          return this._thismonth();
 
         case 'custom':
-          {
-            var _start9 = moment.utc(customPeriodFrom);
-
-            var _end4 = moment.utc(customPeriodTo);
-
-            var duration = moment.duration(_end4.diff(_start9.clone()));
-            var _interval9 = 'Day';
-
-            if (duration.asYears() > 2) {
-              _interval9 = 'Year';
-            } else if (duration.asMonths() > 6) {
-              _interval9 = 'Month';
-            } else if (duration.asWeeks() > 2) {
-              _interval9 = 'Week';
-            } else if (duration.asDays() > 2) {
-              _interval9 = 'Day';
-            } else {
-              _interval9 = 'Hour';
-            }
-
-            var _count9 = _end4.diff(_start9, _interval9.toLowerCase()) + 1;
-
-            return {
-              start: customPeriodFrom,
-              count: _count9,
-              interval: _interval9
-            };
-          }
+          return this._custom();
 
         case 'last7days':
-          {
-            var _start10 = today.subtract(6, 'day');
-
-            var _interval10 = 'Day';
-            var _count10 = 7;
-            return {
-              start: _start10.toDate(),
-              count: _count10,
-              interval: _interval10
-            };
-          }
+          return this._last7days();
 
         case 'last30days':
-          {
-            var _start11 = today.subtract(29, 'day');
-
-            var _interval11 = 'Day';
-            var _count11 = 30;
-            return {
-              start: _start11.toDate(),
-              count: _count11,
-              interval: _interval11
-            };
-          }
+          return this._last30days();
 
         case 'last5years':
-          {
-            var _start12 = today.subtract(4, 'year');
-
-            var _interval12 = 'Year';
-            var _count12 = 5;
-            return {
-              start: _start12.toDate(),
-              count: _count12,
-              interval: _interval12
-            };
-          }
+          return this._last5years();
 
         default:
           return void 0;

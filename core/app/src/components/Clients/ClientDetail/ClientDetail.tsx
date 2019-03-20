@@ -16,7 +16,7 @@ import { InjectedCategoryProps } from 'src/_context/Category';
 import { InjectedProductProps } from 'src/_context/Product';
 import { DialogContent, Dialog } from '@material-ui/core';
 import Fabs, { FabBtnProps } from 'src/components/Fabs/Fabs';
-import { Close, Delete, Check, Print, ContactMail } from '@material-ui/icons';
+
 import DetailGridContainer from 'src/components/DetailGridContainer/DetailGridContainer';
 import DetailGridColumn from 'src/components/DetailGridColumn/DetailGridColumn';
 import { InjectedTemplatesProps } from 'src/_context/Templates';
