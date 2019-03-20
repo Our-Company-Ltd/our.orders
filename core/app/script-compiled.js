@@ -1746,6 +1746,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var ReactSettingsContext = React.createContext({
   Settings: {
+    assemblyVersion: '',
+    fileVersion: '',
+    productVersion: '',
     Path: '',
     Currencies: [],
     PaymentProviders: [],
@@ -1777,6 +1780,9 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SettingsProvider).call(this, props));
     _this.state = {
       Settings: {
+        assemblyVersion: '',
+        fileVersion: '',
+        productVersion: '',
         Path: '',
         Currencies: [],
         PaymentProviders: [],
@@ -26889,7 +26895,7 @@ function (_React$Component) {
             update();
           });
         } : undefined,
-        selected: selectedIds && selectedIds.indexOf(p.Id) >= 0
+        selected: selectedIds && selectedIds.indexOf(p.UID) >= 0
       }) : null);
     }
   }, {
@@ -30063,6 +30069,10 @@ function (_React$Component) {
       }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.Settings, null)), React.createElement(_ListItemText.default, {
         primary: "Configuration"
       })), React.createElement(_ListItem.default, {
+        className: classNames(classes.menuItem, classes.menuVersion)
+      }, React.createElement(_core.ListItemIcon, null, React.createElement(_icons.Info, null)), React.createElement(_ListItemText.default, {
+        primary: "\n                                ".concat(settingsCtx.Settings.assemblyVersion, " \n                                ").concat(settingsCtx.Settings.fileVersion, " \n                                ").concat(settingsCtx.Settings.productVersion)
+      })), React.createElement(_ListItem.default, {
         button: true,
         onClick: this._handleLogOut,
         className: classNames(classes.menuItem, classes.menuLogout)
@@ -30193,6 +30203,7 @@ var _default = (0, _core.withStyles)(function (theme) {
       overflow: 'auto',
       height: '100%'
     },
+    menuVersion: {},
     menuLogout: {
       marginTop: 'auto'
     },
