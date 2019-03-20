@@ -18,7 +18,7 @@ import Avatar from '@material-ui/core/Avatar';
 import PowerSettings from '@material-ui/icons/PowerSettingsNew';
 import Account from './Account/Account';
 import { User } from 'src/@types/our-orders';
-import { Bookmarks, FileCopy, People, Store, Settings as SettingsIcon, EuroSymbol } from '@material-ui/icons';
+import { Bookmarks, FileCopy, People, Store, Settings as SettingsIcon, EuroSymbol, Info } from '@material-ui/icons';
 import CategoriesList from './Categories/CategoriesList/CategoriesList';
 import WarehousesList from './Warehouses/WarehousesList/WarehousesList';
 import ShopsList from './Shops/ShopsList/ShopsList';
@@ -47,6 +47,7 @@ type injectedClasses =
     'menuItem' |
     'menuItemActive' |
     'menuLogout' |
+    'menuVersion' |
     'avatar';
 
 export type SettingsProps =
@@ -249,6 +250,24 @@ class Settings extends React.Component<SettingsProps, State> {
                             </ListItem>
                         }
                         <ListItem
+                            className={classNames(
+                                classes.menuItem,
+                                classes.menuVersion
+                            )}
+                        >
+                            <ListItemIcon>
+                                <Info />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={`
+                                ${settingsCtx.Settings.assemblyVersion} 
+                                ${settingsCtx.Settings.fileVersion} 
+                                ${settingsCtx.Settings.productVersion}`
+                                } 
+                            />
+                        </ListItem>
+
+                        <ListItem
                             button={true}
                             onClick={this._handleLogOut}
                             className={classNames(
@@ -368,6 +387,9 @@ export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
             padding: '8px 8px 0 8px',
             overflow: 'auto',
             height: '100%'
+        },
+        menuVersion: {
+
         },
         menuLogout: {
             marginTop: 'auto'

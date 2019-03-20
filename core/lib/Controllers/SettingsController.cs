@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -46,17 +48,21 @@ namespace our.orders.Controllers
             this.newsletterProviders = newsletterProviders;
             this.configuration = configuration;
         }
-
+        private Lazy<Assembly> _Assembly = new Lazy<Assembly>(() => typeof(SettingsController).Assembly);
+        
         [HttpGet]
         public IActionResult Get()
         {
 
             var configurationDto = _mapper.Map<ConfigurationDto>(configuration);
+            var assembly = _Assembly.Value;
 
             configurationDto.PaymentProviders = paymentProviders.Select(p => p.Name);
             configurationDto.NewsletterProviders = newsletterProviders.Select(p => p.Name);
             configurationDto.Path = _appSettings.Path;
-            
+            configurationDto.assemblyVersion = assembly.GetName().Version.ToString();
+            configurationDto.fileVersion = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
+            configurationDto.productVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
             return Ok(ApiModel.AsSuccess(configurationDto));
         }
 

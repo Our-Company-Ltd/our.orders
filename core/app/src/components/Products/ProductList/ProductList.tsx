@@ -247,7 +247,7 @@ export class ProductList extends React.Component<ProductListProps, State> {
                             update();
                         });
                     } : undefined}
-                    selected={selectedIds && selectedIds.indexOf(p.Id) >= 0}
+                    selected={selectedIds && selectedIds.indexOf(p.UID) >= 0}
                 /> : null}
             </div>
         );

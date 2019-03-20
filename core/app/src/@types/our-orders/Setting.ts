@@ -8,6 +8,10 @@ export type Currency = {
 };
 
 export type Setting = {
+    assemblyVersion: string;
+    fileVersion: string;
+    productVersion: string;
+
     ShowWeight: boolean;
 
     ShowTaxRateExcluded: boolean;

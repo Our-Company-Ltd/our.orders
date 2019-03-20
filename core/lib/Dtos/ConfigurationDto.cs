@@ -6,6 +6,10 @@ namespace our.orders.Dtos
 {
     public class ConfigurationDto
     {
+        public string assemblyVersion { get; set; }
+        public string fileVersion { get; set; }
+        public string productVersion { get; set; }
+
         public bool ShowWeight { get; set; }
 
         public bool ShowTaxRateExcluded { get; set; }

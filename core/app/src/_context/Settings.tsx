@@ -14,6 +14,9 @@ export type InjectedSettingsProps = { settingsCtx: SettingsContext };
 
 const ReactSettingsContext = React.createContext<SettingsContext>({
     Settings: {
+        assemblyVersion: '',
+        fileVersion: '',
+        productVersion: '',
         Path: '',
         Currencies: [],
         PaymentProviders: [],
@@ -37,6 +40,9 @@ export class SettingsProvider extends React.Component<SettingsProviderProps, Set
         super(props);
         this.state = {
             Settings: {
+                assemblyVersion: '',
+                fileVersion: '',
+                productVersion: '',
                 Path: '',
                 Currencies: [],
                 PaymentProviders: [],
