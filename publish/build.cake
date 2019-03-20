@@ -256,7 +256,7 @@ Task("Coverage")
             };
 
             OpenCover(
-                x => x.DotNetCoreTest(f.FullPath,settings),
+                x => x.DotNetCoreTest(f.FullPath, settings),
                 resultsFile,
                 new OpenCoverSettings()
                 {
@@ -266,7 +266,8 @@ Task("Coverage")
                         .Append("-hideskipped:Filter;Attribute"),
                     Register = "user",
                     OldStyle = true,
-                    MergeOutput = true
+                    MergeOutput = true,
+                    LogLevel = OpenCoverLogLevel.All
                 }
                     .WithFilter("+[Skeleton*]*")
                     .WithFilter("-[xunit*]*")
