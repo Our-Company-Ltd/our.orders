@@ -22204,7 +22204,7 @@ var OrderProductSelectionEditor = function OrderProductSelectionEditor(props) {
     }(function (e) {
       return onChange(_objectSpread({}, selection, {
         Option: {
-          index: selection.Option && selection.Option.index || -1,
+          index: selection.Option && selection.Option.index !== undefined ? selection.Option.index : -1,
           value: e.target.value
         }
       }));
