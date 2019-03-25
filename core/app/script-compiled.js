@@ -4288,12 +4288,19 @@ function () {
   }, {
     key: "Create",
     value: function Create(entry) {
+      var pathModel = Object.keys(entry).map(function (k) {
+        return {
+          op: 'replace',
+          path: "/".concat(k),
+          value: entry[k]
+        };
+      });
       var requestOptions = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(entry)
+        body: JSON.stringify(pathModel)
       };
       var url = "".concat(_helpers.config.apiUrl, "/").concat(this.type);
       return fetch(url, (0, _helpers.addAuthHeader)(requestOptions)).then(_helpers.handleApiResponse).then(function (response) {
@@ -5543,8 +5550,6 @@ var _core = require("@material-ui/core");
 
 var _Fabs = _interopRequireDefault(require("src/components/Fabs/Fabs"));
 
-var _icons = require("@material-ui/icons");
-
 var _DetailGridContainer = _interopRequireDefault(require("src/components/DetailGridContainer/DetailGridContainer"));
 
 var _DetailGridColumn = _interopRequireDefault(require("src/components/DetailGridColumn/DetailGridColumn"));
@@ -5554,6 +5559,16 @@ var _ClientDocumentsDialog = _interopRequireWildcard(require("./ClientDocumentsD
 var _OrderDocumentsDialogMessages = _interopRequireDefault(require("src/components/Orders/OrderDetail/OrderDocumentsDialogMessages"));
 
 var _roles = require("src/_helpers/roles");
+
+var _Check = _interopRequireDefault(require("@material-ui/icons/Check"));
+
+var _Close = _interopRequireDefault(require("@material-ui/icons/Close"));
+
+var _Delete2 = _interopRequireDefault(require("@material-ui/icons/Delete"));
+
+var _ContactMail = _interopRequireDefault(require("@material-ui/icons/ContactMail"));
+
+var _Print = _interopRequireDefault(require("@material-ui/icons/Print"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5657,7 +5672,7 @@ function (_React$Component) {
       var changed = !!Object.keys(changes).length;
       var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_CLIENTS');
       var saveBtn = {
-        icon: React.createElement(_icons.Check, null),
+        icon: React.createElement(_Check.default, null),
         onClick: function onClick() {
           return _this2._Save();
         },
@@ -5665,7 +5680,7 @@ function (_React$Component) {
         legend: 'save'
       };
       var cancelBtn = {
-        icon: React.createElement(_icons.Close, null),
+        icon: React.createElement(_Close.default, null),
         onClick: function onClick() {
           return _this2.props.onCancel();
         },
@@ -5673,14 +5688,14 @@ function (_React$Component) {
         legend: changed ? 'cancel' : 'close'
       };
       var deleteBtn = {
-        icon: React.createElement(_icons.Delete, null),
+        icon: React.createElement(_Delete2.default, null),
         legend: 'delete',
         themeColor: 'red',
         onClick: this._Delete
       };
       var newsletters = hasRights ? settingsCtx.Settings.NewsletterProviders.map(function (n) {
         return {
-          icon: React.createElement(_icons.ContactMail, null),
+          icon: React.createElement(_ContactMail.default, null),
           legend: "add to ".concat(n),
           themeColor: 'blue',
           onClick: function onClick() {
@@ -5692,7 +5707,7 @@ function (_React$Component) {
         return t.ApplyTo === 'client';
       });
       var templateBtn = templates.length > 0 && {
-        icon: React.createElement(_icons.Print, null),
+        icon: React.createElement(_Print.default, null),
         legend: templates.length > 1 ? 'documents' : templates[0].Title,
         themeColor: 'gray',
         onClick: templates.length > 1 ? function () {
@@ -18646,7 +18661,15 @@ function (_React$Component) {
       var city = client.City || '';
       var hasRights = (0, _roles.IsAdminOrInRole)(user, 'CRUD_CLIENTS');
       var empty = !(firstname || lastname || organizationname);
-      var preview = empty ? React.createElement(_ItemPreview.default, null, React.createElement(_ItemPreview.Thumb, {
+      var preview = empty ? React.createElement(_ItemPreview.default, {
+        onClick: function onClick() {
+          return _this2.setState(function (prev) {
+            return {
+              open: !prev.open
+            };
+          });
+        }
+      }, React.createElement(_ItemPreview.Thumb, {
         loading: true
       }), React.createElement(_ItemPreview.Lines, null, React.createElement(_ItemPreview.Line, {
         loading: true
@@ -18913,17 +18936,24 @@ function (_React$Component) {
     _this._Refresh = _this._Refresh.bind(_assertThisInitialized(_this));
     _this._Save = _this._Save.bind(_assertThisInitialized(_this));
     _this._Delete = _this._Delete.bind(_assertThisInitialized(_this));
+    _this._fetchShippings = (0, _throttleDebounce.debounce)(500, false, _this._fetchShippings.bind(_assertThisInitialized(_this)));
     var id = props.id,
         preview = props.preview;
     _this.state = {
       id: id,
       changes: id ? {} : preview || {},
-      current: preview || {}
+      current: preview || {},
+      shippingTemplates: []
     };
     return _this;
   }
 
   _createClass(OrderDetail, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this._fetchShippings();
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -18941,7 +18971,8 @@ function (_React$Component) {
           usersCtx = _this$props.usersCtx;
       var _this$state = this.state,
           current = _this$state.current,
-          checkoutOpened = _this$state.checkoutOpened;
+          checkoutOpened = _this$state.checkoutOpened,
+          shippingTemplates = _this$state.shippingTemplates;
 
       var close = function close() {
         return _this2.setState(function () {
@@ -18955,6 +18986,7 @@ function (_React$Component) {
         preventEditClient: preventEditClient,
         onChange: this._Update,
         refresh: this._Refresh,
+        shippingTemplates: shippingTemplates,
         authCtx: authCtx,
         productCtx: productCtx,
         categoryCtx: categoryCtx,
@@ -19315,9 +19347,26 @@ function (_React$Component) {
       }, this._UpdateDebounced);
     }
   }, {
+    key: "_fetchShippings",
+    value: function _fetchShippings() {
+      var _this7 = this;
+
+      return _services.Orders.Shippings(this.state.current, 0, 100).then(function (json) {
+        var templates = json.Values;
+
+        _this7.setState(function () {
+          return {
+            shippingTemplates: templates
+          };
+        });
+
+        return templates;
+      });
+    }
+  }, {
     key: "_UpdateDebounced",
     value: function _UpdateDebounced() {
-      var _this7 = this;
+      var _this8 = this;
 
       var refreshTimeStamp = new Date();
       this._lastRefresh = refreshTimeStamp;
@@ -19326,16 +19375,16 @@ function (_React$Component) {
           changes = _this$state6.changes;
 
       _services.Orders.Preview(changes, id).then(function (order) {
-        if (refreshTimeStamp.valueOf() !== _this7._lastRefresh.valueOf()) {
+        if (refreshTimeStamp.valueOf() !== _this8._lastRefresh.valueOf()) {
           return;
         }
 
-        _this7.setState(function () {
+        _this8.setState(function () {
           return {
             current: order,
             loading: false
           };
-        });
+        }, _this8._fetchShippings);
       });
     }
   }, {
@@ -19346,7 +19395,7 @@ function (_React$Component) {
   }, {
     key: "_Save",
     value: function _Save(extrachanges) {
-      var _this8 = this;
+      var _this9 = this;
 
       var _this$state7 = this.state,
           changes = _this$state7.changes,
@@ -19357,20 +19406,20 @@ function (_React$Component) {
       var save = function save(saveChanges) {
         if (id) {
           return _services.Orders.Patch(id, saveChanges).then(function (model) {
-            _this8.setState(function () {
+            _this9.setState(function () {
               return {
                 changes: {},
                 current: model
               };
             });
 
-            if (_this8.props.onChanged) {
-              _this8.props.onChanged(model);
+            if (_this9.props.onChanged) {
+              _this9.props.onChanged(model);
             }
           });
         } else {
           return _services.Orders.Create(saveChanges).then(function (model) {
-            _this8.setState(function () {
+            _this9.setState(function () {
               return {
                 changes: {},
                 current: model,
@@ -19378,8 +19427,8 @@ function (_React$Component) {
               };
             });
 
-            if (_this8.props.onChanged) {
-              _this8.props.onChanged(model);
+            if (_this9.props.onChanged) {
+              _this9.props.onChanged(model);
             }
           });
         }
@@ -19446,7 +19495,7 @@ function (_React$Component) {
   }, {
     key: "_applyDispatch",
     value: function _applyDispatch(items, stocks) {
-      var _this9 = this;
+      var _this10 = this;
 
       return items.map(function (item) {
         var stock = stocks.find(function (s) {
@@ -19470,7 +19519,7 @@ function (_React$Component) {
         }
 
         return _objectSpread({}, item, {
-          Items: Items && _this9._applyDispatch(item.Items, stocks),
+          Items: Items && _this10._applyDispatch(item.Items, stocks),
           DispatchInfos: DispatchInfos
         });
       });
@@ -19478,7 +19527,7 @@ function (_React$Component) {
   }, {
     key: "_applyUpdates",
     value: function _applyUpdates(dispatch, stock) {
-      var _this10 = this;
+      var _this11 = this;
 
       var _this$state$current = this.state.current,
           Dispatches = _this$state$current.Dispatches,
@@ -19510,9 +19559,9 @@ function (_React$Component) {
         Items: this._applyDispatch(Items, stock)
       };
       return _services.StockUnits.Use(uses).then(function () {
-        return _this10._Save(changes);
+        return _this11._Save(changes);
       }).then(function () {
-        return _this10.setState(function () {
+        return _this11.setState(function () {
           return {
             dispatchOpened: false
           };
@@ -20043,8 +20092,6 @@ var _ItemPreview = _interopRequireWildcard(require("../../ItemPreview/ItemPrevie
 
 var _List = _interopRequireDefault(require("../../Forms/Payment/List"));
 
-var _services = require("../../../_services");
-
 var _TextField = _interopRequireDefault(require("@material-ui/core/TextField"));
 
 var _MenuItem = _interopRequireDefault(require("@material-ui/core/MenuItem"));
@@ -20119,20 +20166,11 @@ function (_React$Component) {
     _this._handleClientChange = _this._handleClientChange.bind(_assertThisInitialized(_this));
     _this._handleItemsChange = _this._handleItemsChange.bind(_assertThisInitialized(_this));
     _this._handleShippingPersonChange = _this._handleShippingPersonChange.bind(_assertThisInitialized(_this));
-    _this._fetchShippings = _this._fetchShippings.bind(_assertThisInitialized(_this));
     _this._handleShippingsSelectChange = _this._handleShippingsSelectChange.bind(_assertThisInitialized(_this));
-    _this.state = {
-      shippingTemplates: []
-    };
     return _this;
   }
 
   _createClass(OrderFields, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this._fetchShippings();
-    }
-  }, {
     key: "render",
     value: function render() {
       var props = this.props,
@@ -20501,7 +20539,7 @@ function (_React$Component) {
       var _this$props2 = this.props,
           current = _this$props2.current,
           intl = _this$props2.intl,
-          shippingTemplates = this.state.shippingTemplates;
+          shippingTemplates = _this$props2.shippingTemplates;
       var ShippingTemplateId = current.ShippingTemplateId;
       return React.createElement(_core.FormControl, {
         fullWidth: true
@@ -20531,7 +20569,7 @@ function (_React$Component) {
         return;
       }
 
-      var shipping = this.state.shippingTemplates.find(function (s) {
+      var shipping = this.props.shippingTemplates.find(function (s) {
         return s.Id === value;
       });
 
@@ -20542,23 +20580,6 @@ function (_React$Component) {
       this.props.onChange({
         ShippingTemplateId: shipping.Id,
         ShippingTemplateName: shipping.Title
-      });
-    }
-  }, {
-    key: "_fetchShippings",
-    value: function _fetchShippings() {
-      var _this2 = this;
-
-      return _services.Orders.Shippings(this.props.current, 0, 100).then(function (json) {
-        var templates = json.Values;
-
-        _this2.setState(function () {
-          return {
-            shippingTemplates: templates
-          };
-        });
-
-        return templates;
       });
     }
   }, {
@@ -22940,7 +22961,7 @@ function (_React$Component) {
       }, React.createElement(_core.IconButton, {
         className: classNames(classes.menuItemIcon)
       }, React.createElement(_icons.Check, null)))), React.createElement(_core.ListItem, {
-        className: classNames(classes.menuItem, classes.menuItemLast, (query || fromDate || toDate) && classes.menuItemActive)
+        className: classNames(classes.menuItem, classes.menuItemLast, (query || fromDate || toDate || userQuery || shopQuery) && classes.menuItemActive)
       }, React.createElement(_core.Tooltip, {
         title: intl.formatMessage(_OrderListMesseges.OrderListMessages.sortBtn),
         placement: "right",
@@ -22971,7 +22992,9 @@ function (_React$Component) {
         fullWidth: true,
         value: userQuery || '',
         onChange: userIdChange
-      }, usersCtx.Users.map(function (u) {
+      }, React.createElement(_core.MenuItem, {
+        value: undefined
+      }, intl.formatMessage(_OrderListMesseges.OrderListMessages.noUser)), ")", usersCtx.Users.map(function (u) {
         return React.createElement(_core.MenuItem, {
           key: u.Id,
           value: u.Id
@@ -22979,6 +23002,7 @@ function (_React$Component) {
       }))), React.createElement(_core.Grid, {
         item: true
       }, React.createElement(_ShopsField.default, {
+        nullable: true,
         label: "Shop",
         shopCtx: shopCtx,
         fullWidth: true,
@@ -23610,6 +23634,10 @@ var OrderListMessages = (0, _reactIntl.defineMessages)({
   sort: {
     "id": "src.components.orders.orderList.sort",
     "defaultMessage": "Sort"
+  },
+  noUser: {
+    "id": "src.components.orders.orderList.noUser",
+    "defaultMessage": "none"
   }
 });
 exports.OrderListMessages = OrderListMessages;
@@ -32371,8 +32399,10 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 var ShopsField = function ShopsField(props) {
-  var Shops = props.shopCtx.Shops,
-      textFieldProps = _objectWithoutProperties(props, ["shopCtx"]);
+  var shopCtx = props.shopCtx,
+      Shops = props.shopCtx.Shops,
+      nullable = props.nullable,
+      textFieldProps = _objectWithoutProperties(props, ["shopCtx", "shopCtx", "nullable"]);
 
   if (Shops.length <= 1) {
     return React.createElement(_TextField.default, _extends({}, textFieldProps, {
@@ -32382,7 +32412,9 @@ var ShopsField = function ShopsField(props) {
 
   return React.createElement(_TextField.default, _extends({}, textFieldProps, {
     select: true
-  }), Shops.map(function (c) {
+  }), nullable && React.createElement(_core.MenuItem, {
+    value: undefined
+  }, "none"), Shops.map(function (c) {
     return React.createElement(_core.MenuItem, {
       key: c.Id,
       value: c.Id

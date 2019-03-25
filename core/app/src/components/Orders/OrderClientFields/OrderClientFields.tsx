@@ -98,7 +98,9 @@ class OrderClientFields extends React.Component<OrderClientFieldsProps, State> {
         const empty = !(firstname || lastname || organizationname);
         const preview = empty ?
             (
-                <ItemPreview>
+                <ItemPreview
+                    onClick={() => this.setState((prev) => ({ open: !prev.open }))}
+                >
                     <Thumb loading={true} />
                     <Lines>
                         <Line loading={true} />
