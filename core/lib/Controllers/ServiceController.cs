@@ -67,9 +67,13 @@ namespace our.orders.Controllers
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public virtual async Task<IActionResult> PostAsync([FromBody]TModelDto modelDto, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<IActionResult> PostAsync([FromBody]JsonPatchDocument<TModelDto> patch, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var model = _mapper.Map<TModel>(modelDto);
+            var patched = _mapper.Map<JsonPatchDocument<TModel>>(patch);
+
+            var model = await service.NewAsync(cancellationToken);
+
+            patched.ApplyTo(model);
 
             var result = await service.CreateAsync(model, cancellationToken);
 

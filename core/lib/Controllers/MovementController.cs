@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using our.orders.Dtos;
@@ -120,7 +121,7 @@ namespace our.orders.Controllers
 
         [HttpPost]
         // [ValidateAntiForgeryToken]
-        public override async Task<IActionResult> PostAsync([FromBody]MovementDto modelDto, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task<IActionResult> PostAsync([FromBody]JsonPatchDocument<MovementDto> patch, CancellationToken cancellationToken = default(CancellationToken))
         {
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrEmpty(username)) return Ok(ApiModel.AsError<AccountDto>(null, "no user claims in request, did you forget to set the auth header ?"));
@@ -128,10 +129,9 @@ namespace our.orders.Controllers
             var user = await userManager.FindByNameAsync(username);
 
             if (user == null) return Ok(ApiModel.AsError<AccountDto>(null, $"impossible to find a user with the username '{username}'"));
-
-            modelDto.UserId = user.Id;
-            modelDto.User = user.Preview();
-            return await base.PostAsync(modelDto, cancellationToken);
+            patch.Add(m => m.UserId, user.Id);
+            patch.Add(m => m.User, user.Preview());
+            return await base.PostAsync(patch, cancellationToken);
 
         }
 

@@ -13,8 +13,6 @@ import ItemPreview, { Line, Lines, Thumb } from '../../ItemPreview/ItemPreview';
 import { FormattedNumber } from 'react-intl';
 import PaymentList from '../../Forms/Payment/List';
 
-import { Orders } from '../../../_services';
-
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Select, FormControl, InputLabel, Grid, WithStyles, withStyles } from '@material-ui/core';
@@ -62,13 +60,10 @@ export type OrderFieldsProps =
         onChange: (changes: Partial<Order>) => void;
         refresh: () => void;
         preventEditClient?: boolean;
+        shippingTemplates: ShippingTemplate[];
 
     };
-
-type State = {
-    shippingTemplates: ShippingTemplate[]
-};
-class OrderFields extends React.Component<OrderFieldsProps, State> {
+class OrderFields extends React.Component<OrderFieldsProps> {
 
     constructor(props: OrderFieldsProps) {
         super(props);
@@ -76,16 +71,7 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
         this._handleItemsChange = this._handleItemsChange.bind(this);
 
         this._handleShippingPersonChange = this._handleShippingPersonChange.bind(this);
-        this._fetchShippings = this._fetchShippings.bind(this);
         this._handleShippingsSelectChange = this._handleShippingsSelectChange.bind(this);
-
-        this.state = {
-            shippingTemplates: []
-        };
-    }
-
-    componentDidMount() {
-        this._fetchShippings();
     }
 
     render() {
@@ -388,8 +374,7 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
 
     private _renderShippingsDropdown() {
         const {
-            props: { current, intl },
-            state: { shippingTemplates }
+            props: { current, intl, shippingTemplates }
         } = this;
 
         const { ShippingTemplateId } = current;
@@ -419,21 +404,12 @@ class OrderFields extends React.Component<OrderFieldsProps, State> {
     private _handleShippingsSelectChange(e: React.ChangeEvent<HTMLSelectElement>) {
         const { target: { value } } = e;
         if (!value) { return; }
-        const shipping = this.state.shippingTemplates.find(s => s.Id === value);
+        const shipping = this.props.shippingTemplates.find(s => s.Id === value);
         if (!shipping) { return; }
         this.props.onChange({
             ShippingTemplateId: shipping.Id,
             ShippingTemplateName: shipping.Title
         });
-    }
-
-    private _fetchShippings() {
-        return Orders.Shippings(this.props.current, 0, 100)
-            .then((json) => {
-                const templates = json.Values;
-                this.setState(() => ({ shippingTemplates: templates }));
-                return templates;
-            });
     }
 
     private _renderAmounts() {

@@ -116,10 +116,12 @@ export abstract class ServiceApi<TModel extends ModelBase> {
     }
 
     Create(entry: Partial<TModel>): Promise<TModel> {
+        const pathModel = Object.keys(entry).map(k => ({ op: 'replace', path: `/${k}`, value: entry[k] }));
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(entry)
+            body: JSON.stringify(pathModel)
         };
 
         const url = `${config.apiUrl}/${this.type}`;

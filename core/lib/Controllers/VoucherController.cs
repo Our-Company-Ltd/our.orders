@@ -57,9 +57,9 @@ namespace our.orders.Controllers
         [HttpPost]
         // [ValidateAntiForgeryToken]
         [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_VOUCHERS)]
-        public override Task<IActionResult> PostAsync([FromBody]VoucherDto voucherDto, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IActionResult> PostAsync([FromBody]JsonPatchDocument<VoucherDto> patch, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return base.PostAsync(voucherDto);
+            return base.PostAsync(patch);
         }
 
         [HttpDelete("{id}")]

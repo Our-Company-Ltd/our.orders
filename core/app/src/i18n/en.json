@@ -228,6 +228,7 @@
   "src.components.orders.orderList.firstName": "First Name",
   "src.components.orders.orderList.from": "From",
   "src.components.orders.orderList.lastName": "Last Name",
+  "src.components.orders.orderList.noUser": "none",
   "src.components.orders.orderList.offer": "Offer",
   "src.components.orders.orderList.payments": "Payments",
   "src.components.orders.orderList.productsBtn": "Products",
