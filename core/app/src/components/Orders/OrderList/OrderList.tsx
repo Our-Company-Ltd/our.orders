@@ -467,7 +467,7 @@ class OrderList extends React.Component<OrdersListProps, State> {
                                 classNames(
                                     classes.menuItem,
                                     classes.menuItemLast,
-                                    (query || fromDate || toDate) && classes.menuItemActive
+                                    (query || fromDate || toDate || userQuery || shopQuery) && classes.menuItemActive
                                 )
                             }
                         >
@@ -507,6 +507,7 @@ class OrderList extends React.Component<OrdersListProps, State> {
                                 value={userQuery || ''}
                                 onChange={userIdChange}
                             >
+                                <MenuItem value={undefined}>{intl.formatMessage(OrderListMessages.noUser)}</MenuItem>)
                                 {usersCtx.Users.map(u => (
                                     <MenuItem key={u.Id} value={u.Id}>{u.FirstName} {u.LastName}</MenuItem>)
                                 )}
@@ -514,6 +515,7 @@ class OrderList extends React.Component<OrdersListProps, State> {
                         </Grid>
                         <Grid item={true}>
                             <ShopsField
+                                nullable={true}
                                 label="Shop"
                                 shopCtx={shopCtx}
                                 fullWidth={true}

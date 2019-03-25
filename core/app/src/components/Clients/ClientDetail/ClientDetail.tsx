@@ -23,6 +23,11 @@ import { InjectedTemplatesProps } from 'src/_context/Templates';
 import ClientDocumentsDialog, { PrintClient } from './ClientDocumentsDialog';
 import OrderDocumentsDialogMessages from 'src/components/Orders/OrderDetail/OrderDocumentsDialogMessages';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import Check from '@material-ui/icons/Check';
+import Close from '@material-ui/icons/Close';
+import Delete from '@material-ui/icons/Delete';
+import ContactMail from '@material-ui/icons/ContactMail';
+import Print from '@material-ui/icons/Print';
 
 export type ClientProps =
     InjectedWarehouseProps &

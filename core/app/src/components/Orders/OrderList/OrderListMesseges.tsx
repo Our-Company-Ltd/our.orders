@@ -62,7 +62,12 @@ export const OrderListMessages = defineMessages({
         id: 'src.components.orders.orderList.sort',
         defaultMessage: 'Sort',
         description: 'Legend for Sort filter'
-    }
+    },
+    noUser: {
+        id: 'src.components.orders.orderList.noUser',
+        defaultMessage: 'none',
+        description: 'Legend for No user filter dropdown list'
+    },
 });
 
 export default OrderListMessages;
