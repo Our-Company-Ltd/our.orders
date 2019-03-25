@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using our.orders.Dtos;
 using our.orders.Helpers;
+using our.orders.Identity;
 using our.orders.Models;
 using our.orders.Services;
 
@@ -27,7 +28,9 @@ namespace our.orders.Controllers
     [Route("[controller]")]
     internal class DocumentTemplateController : ServiceController<DocumentTemplate, DocumentTemplateDto>
     {
+        readonly UserManager _userManager;
         public DocumentTemplateController(
+            UserManager userManager,
             IAntiforgery antiForgery,
             IHttpContextAccessor httpContextAccessor,
             IHostingEnvironment env,
@@ -46,6 +49,7 @@ namespace our.orders.Controllers
                 serviceProvider,
                 service)
         {
+            _userManager = userManager;
         }
 
         private class ProductLine
@@ -55,9 +59,18 @@ namespace our.orders.Controllers
             public string PrettyUnitPrice { get; set; }
             public string PrettyTotalPrice { get; set; }
             public string Sku { get; set; }
-
             public string OptionTitle { get; set; }
         };
+
+        // private class PrintFilters
+        // {
+        //     public string Today { get; set; }
+        //     public string Reference { get; set; }
+        //     public int User { get; set; }
+        //     public string Shop { get; set; }
+        //     public string From { get; set; }
+        //     public string To { get; set; }
+        // };
 
 
         private class StocksBinding
@@ -159,6 +172,7 @@ namespace our.orders.Controllers
         public async Task<IActionResult> OrdersProductsAsync(
           [FromServices]IService<DocumentTemplate> templateService,
           [FromServices]IService<IOrder> orderService,
+          [FromServices]IService<Shop> shopService,
           [FromRoute]string templateId,
           [FromBody]Filter filter = null,
           string sort = null,
@@ -232,12 +246,56 @@ namespace our.orders.Controllers
             var template = await templateService.GetByIdAsync(templateId, cancellationToken);
             var compiled = Handlebars.Compile(template.Template);
 
-            var prettyToday = DateTime.UtcNow.ToString("dd.MM.yyyy");
+            var today = DateTime.UtcNow.ToString("dd.MM.yyyy");
+            var printFilters = new List<Tuple<string, string>>();
+
+            if (filter != null && filter.Children.Count() > 0)
+            {
+                foreach (var property in filter.Children)
+                {
+                    switch (property.Property)
+                    {
+                        case "Reference":
+                            printFilters.Add(new Tuple<string, string>("Reference", property.Value.ToString()));
+                            continue;
+
+                        case "UserId":
+                            var user = await _userManager.FindByIdAsync(property.Value.ToString());
+                            if (user == null) continue;
+                            printFilters.Add(new Tuple<string, string>("User", $"{user.Preview()}"));
+                            continue;
+
+                        case "ShopId":
+                            var shop = await shopService.GetByIdAsync(property.Value.ToString());
+                            if (shop == null) continue;
+                            printFilters.Add(new Tuple<string, string>("Shop", shop.Name));
+                            continue;
+
+                        case "Date":
+                            var date = (DateTime)property.Value;
+                            if (date == default(DateTime)) continue;
+
+                            switch (property.Operator)
+                            {
+                                case FilterOperator.gte:
+                                    printFilters.Add(new Tuple<string, string>("From", date.ToString("dd.MM.yyyy")));
+                                    continue;
+
+                                case FilterOperator.lte:
+                                    printFilters.Add(new Tuple<string, string>("To", date.ToString("dd.MM.yyyy")));
+                                    continue;
+                            }
+                            continue;
+
+                    }
+                }
+            }
 
             var html = compiled(new
             {
                 Prodcuts = groupedItems.ToArray(),
-                today = prettyToday,
+                today = today,
+                printFilters = printFilters,
                 tax = taxAmount.ToString("0.00", CultureInfo.InvariantCulture),
                 total = totalAmount.ToString("0.00", CultureInfo.InvariantCulture)
             });
@@ -262,7 +320,7 @@ namespace our.orders.Controllers
             var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
             var result = await stocksService.FindAsync(filter, sorts, null, cancellationToken);
 
-            var values = result.Where(s => s.Units.ContainsKey(id)).Select((i) => 
+            var values = result.Where(s => s.Units.ContainsKey(id)).Select((i) =>
                 new StocksBinding { Title = i.Detail, SKU = i.SKU, Stock = i.Units[id] });
 
             if (max >= 0)
