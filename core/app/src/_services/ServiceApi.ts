@@ -444,7 +444,7 @@ class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
 
         return super._Empty({ ...empty, ...partial });
     }
-    Order(tempalteId: string, orderId: string, changes: Partial<Order>): Promise<{ html: string; styles: string }> {
+    Order(tempalteId: string, changes: Partial<Order>, orderId?: string): Promise<{ html: string; styles: string }> {
         const pathModel = Object.keys(changes).map(k => ({ op: 'replace', path: `/${k}`, value: changes[k] }));
 
         const requestOptions = {
@@ -452,7 +452,7 @@ class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pathModel)
         };
-        const url = `${config.apiUrl}/${this.type}/${tempalteId}/order/${orderId}`;
+        const url = `${config.apiUrl}/${this.type}/${tempalteId}/order${orderId ? `/${orderId}` : ''}`;
 
         return fetch(url, addAuthHeader(requestOptions))
             .then<{ html: string; styles: string }>(handleApiResponse)

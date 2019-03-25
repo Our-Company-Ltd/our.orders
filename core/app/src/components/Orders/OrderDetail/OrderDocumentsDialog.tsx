@@ -10,16 +10,17 @@ import OrderDocumentsDialogMessages from './OrderDocumentsDialogMessages';
 
 export type OrderDocumentsDialogProps = InjectedIntlProps & {
     opened?: boolean;
-    current: Order;
+    changes: Partial<Order>;
+    id?: string;
     onClose: () => void;
     templates: DocumentTemplate[];
 };
 type State = {
     templateId?: string;
 };
-export const PrintOrder = (templateId: string, current: Order) => {
+export const PrintOrder = (templateId: string, changes: Partial<Order>, id?: string) => {
     DocumentTemplates
-        .Order(templateId, current.Id, current)
+        .Order(templateId, changes, id)
         .then((res) => {
             // var pop = window.open();
             // var template = Handlebars.compile(html);
@@ -79,8 +80,8 @@ class OrderDocumentsDialog extends React.Component<OrderDocumentsDialogProps, St
             </Dialog>);
     }
     private _Print(templateId: string) {
-        const { current } = this.props;
-        PrintOrder(templateId, current);
+        const { id, changes } = this.props;
+        PrintOrder(templateId, changes, id);
     }
 }
 export default OrderDocumentsDialog;

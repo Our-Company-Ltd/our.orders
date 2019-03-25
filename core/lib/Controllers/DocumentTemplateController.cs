@@ -67,7 +67,7 @@ namespace our.orders.Controllers
             public int Stock { get; set; }
         };
 
-        [HttpPost("{templateId}/order/{id}")]
+        [HttpPost("{templateId}/order/{id?}")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrderAsync(
           [FromServices]IService<DocumentTemplate> templateService,
@@ -81,7 +81,7 @@ namespace our.orders.Controllers
         {
 
             var patched = _mapper.Map<JsonPatchDocument<IOrder>>(patch);
-            var result = await orderService.GetByIdAsync(id, cancellationToken);
+            var result = string.IsNullOrEmpty(id) ? await orderService.NewAsync(cancellationToken) : await orderService.GetByIdAsync(id, cancellationToken);
 
             patched.ApplyTo(result);
 

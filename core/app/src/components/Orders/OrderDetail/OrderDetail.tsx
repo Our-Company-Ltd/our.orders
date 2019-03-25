@@ -383,7 +383,7 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
             legend: templates.length > 1 ? 'documents' : templates[0].Title,
             themeColor: 'gray',
             onClick: templates.length > 1 ?
-                () => this.setState(() => ({ templatesOpened: true })) : () => PrintOrder(templates[0].Id, current)
+                () => this.setState(() => ({ templatesOpened: true })) : () => PrintOrder(templates[0].Id, changes, id)
         } as FabBtnProps;
 
         if (loading) {
@@ -431,7 +431,8 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
                 {templates.length > 1 ?
                     <OrderDocumentsDialog
                         opened={templatesOpened}
-                        current={current}
+                        changes={changes}
+                        id={id}
                         intl={intl}
                         templates={templates}
                         onClose={() => this.setState(() => ({ templatesOpened: false }))}
