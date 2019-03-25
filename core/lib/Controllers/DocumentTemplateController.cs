@@ -193,7 +193,7 @@ namespace our.orders.Controllers
             foreach (var item in itemsList)
             {
                 taxAmount += item.Price.Tax;
-                totalAmount += item.Price.Final;
+                totalAmount += item.Price.Final * item.Quantity;
             }
 
             var productIdQuery = itemsList.GroupBy(
