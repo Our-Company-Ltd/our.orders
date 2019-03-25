@@ -57,9 +57,9 @@ namespace our.orders.Controllers
         [HttpPost]
         // [ValidateAntiForgeryToken]
         [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_PRODUCTS)]
-        public override Task<IActionResult> PostAsync([FromBody]ProductDto modelDto, CancellationToken cancellationToken = default(CancellationToken))
+        public override Task<IActionResult> PostAsync([FromBody]JsonPatchDocument<ProductDto> patch, CancellationToken cancellationToken = default(CancellationToken))
         {
-            return base.PostAsync(modelDto);
+            return base.PostAsync(patch);
         }
 
 

@@ -14,7 +14,7 @@ import OrderCheckout from '../OrderCheckout/OrderCheckout';
 import {
     LocalShipping, Payment, Check, Close, HowToVote, Delete, Print
 } from '@material-ui/icons';
-import { Order, OrderItem, Dispatch, DispatchStatus, DispatchMethod } from 'src/@types/our-orders';
+import { Order, OrderItem, Dispatch, DispatchStatus, DispatchMethod, ShippingTemplate } from 'src/@types/our-orders';
 import {
     Dialog,
     DialogTitle,
@@ -69,6 +69,8 @@ type State = {
     checkoutOpened?: boolean;
 
     templatesOpened?: boolean;
+
+    shippingTemplates: ShippingTemplate[];
 };
 
 const LOCAL_STORAGE_KEY = 'our.orders.OrderDetail';
@@ -83,14 +85,18 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
         this._Refresh = this._Refresh.bind(this);
         this._Save = this._Save.bind(this);
         this._Delete = this._Delete.bind(this);
-
+        this._fetchShippings = debounce(500, false, this._fetchShippings.bind(this));
         const { id, preview } = props;
 
         this.state = {
             id,
             changes: id ? {} : (preview || {} as Order),
-            current: preview || ({} as Order)
+            current: preview || ({} as Order),
+            shippingTemplates: []
         };
+    }
+    componentDidMount() {
+        this._fetchShippings();
     }
     render() {
         const {
@@ -108,7 +114,8 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
 
         const {
             current,
-            checkoutOpened
+            checkoutOpened,
+            shippingTemplates
         } = this.state;
 
         const close = () => this.setState(() => ({ checkoutOpened: false }));
@@ -120,6 +127,7 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
                         preventEditClient: preventEditClient,
                         onChange: this._Update,
                         refresh: this._Refresh,
+                        shippingTemplates,
                         authCtx,
                         productCtx,
                         categoryCtx,
@@ -448,6 +456,15 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
         );
     }
 
+    private _fetchShippings() {
+        return Orders.Shippings(this.state.current, 0, 100)
+            .then((json) => {
+                const templates = json.Values;
+                this.setState(() => ({ shippingTemplates: templates }));
+                return templates;
+            });
+    }
+
     private _UpdateDebounced() {
         const refreshTimeStamp = new Date();
         this._lastRefresh = refreshTimeStamp;
@@ -456,10 +473,13 @@ export class OrderDetail extends React.Component<OrderDetailProps, State> {
             .then(order => {
                 if (refreshTimeStamp.valueOf() !== this._lastRefresh.valueOf()) { return; }
 
-                this.setState(() => ({
-                    current: order,
-                    loading: false
-                }));
+                this.setState(
+                    () => ({
+                        current: order,
+                        loading: false
+                    }),
+                    this._fetchShippings
+                );
             });
     }
 

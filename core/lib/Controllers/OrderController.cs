@@ -163,9 +163,9 @@ namespace our.orders.Controllers
         [HttpPost]
         // [ValidateAntiForgeryToken]
         [AuthorizeRoles(RoleStore.ADMIN, RoleStore.CRUD_ORDERS, RoleStore.CRUD_ALL_ORDERS, RoleStore.CRUD_OWN_ORDERS)]
-        public override async Task<IActionResult> PostAsync([FromBody]OrderDto modelDto, CancellationToken cancellationToken = default(CancellationToken))
+        public override async Task<IActionResult> PostAsync([FromBody]JsonPatchDocument<OrderDto> patch, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (string.IsNullOrEmpty(modelDto.UserId))
+            if (patch.Operations.Any(o => o.path == "UserId"))
             {
                 var username = HttpContext.User.Identity.Name;
                 if (string.IsNullOrEmpty(username)) return Ok(ApiModel.AsError<AccountDto>(null, "no user claims in request, did you forget to set the auth header ?"));
@@ -173,11 +173,10 @@ namespace our.orders.Controllers
                 var user = await userManager.FindByNameAsync(username);
 
                 if (user == null) return Ok(ApiModel.AsError<AccountDto>(null, $"impossible to find a user with the username '{username}'"));
-
-                modelDto.UserId = user.Id;
+                patch.Add(m => m.UserId, user.Id);
             }
 
-            return await base.PostAsync(modelDto, cancellationToken);
+            return await base.PostAsync(patch, cancellationToken);
         }
 
         public class ReportRequest
