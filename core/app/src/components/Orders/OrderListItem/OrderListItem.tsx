@@ -179,7 +179,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                             {order.Reference}
                         </Line>
                         <Line>
-                            {client && <PersonPreview {...client} />}
+                            {client && <PersonPreview person={client} />}
                             {client && client.City}
                         </Line>
                         <Line>

@@ -1,26 +1,60 @@
 import * as React from 'react';
 import { Person } from 'src/@types/our-orders';
+import { OurTheme } from './ThemeProvider/ThemeProvider';
+import { StyleRules, withStyles } from '@material-ui/core/styles';
+import { WithStyles } from '@material-ui/core';
+export type injectedClasses =
+    'firstName' |
+    'lastname' |
+    'organizationName' |
+    'city';
 
-export const PersonPreview: React.SFC<Person> = (person) => {
+export const PersonPreviewStyles = (theme: OurTheme): StyleRules<injectedClasses> => ({
+    firstName: {
+       display: 'inline-block',
+       marginRight: 5
+    },
+    lastname: {
+        display: 'inline-block',
+        // marginRight: 5
+    },
+    organizationName: {
+        display: 'inline-block',
+        // marginRight: 5
+    },
+    city: {}
+});
+
+export type PersonProps = {
+    person: Person;
+} &
+    WithStyles<injectedClasses>;
+export const PersonPreview: React.SFC<PersonProps> = (props) => {
+    const { person, classes } = props;
     const firstname = person.FirstName || '';
     const lastname = person.LastName || '';
-    const organizationname = person.OrganizationName || '';
+    const organizationname = `, ${person.OrganizationName}` || '';
+    const city = `, ${person.City}` || '';
 
     return (
         <React.Fragment>
             {firstname &&
-                <span className="person-preview__firstname">
+                <span className={classes.firstName}>
                     {firstname}
                 </span>}
             {lastname &&
-                <span className="person-preview__lastname">
+                <span className={classes.lastname}>
                     {lastname}
                 </span>}
             {organizationname &&
-                <span className="person-preview__organization-name">
+                <span className={classes.organizationName}>
                     {organizationname}
+                </span>}
+            {city &&
+                <span className={classes.city}>
+                    {city}
                 </span>}
         </React.Fragment>);
 };
 
-export default PersonPreview;
+export default withStyles(PersonPreviewStyles)(PersonPreview);
