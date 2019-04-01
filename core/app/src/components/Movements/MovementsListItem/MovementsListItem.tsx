@@ -9,8 +9,9 @@ import { StyleRules, WithStyles } from '@material-ui/core/styles';
 import { Movement } from 'src/@types/our-orders';
 import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
 import * as classNames from 'classnames';
+import * as moment from 'moment';
 
-type injectedClasses = 'AmountIn' | 'AmountOut' | 'Archived' | 'container' | 'Icon';
+type injectedClasses = 'AmountIn' | 'AmountOut' | 'Archived' | 'container' | 'Icon' | 'Date';
 export type MovementsListItemProps = InjectedIntlProps & WithStyles<injectedClasses> &
 {
     movement?: Movement;
@@ -35,6 +36,8 @@ const MovementsListItem: React.FunctionComponent<MovementsListItemProps> =
             );
         }
 
+        const date = moment(movement.Date).format('DD/MM/YYYY');
+        const time = moment(movement.Date).format('HH:mm');
         return (
             <div
                 onClick={onClick}
@@ -64,6 +67,14 @@ const MovementsListItem: React.FunctionComponent<MovementsListItemProps> =
                                     currency={movement.Currency}
                                 />
                             </span>
+                        </Line>
+                    </Lines>
+                    <Lines actions={true}>
+                        <Line className={classes.Date}>
+                            {date}
+                        </Line>
+                        <Line>
+                            {time}
                         </Line>
                     </Lines>
                 </ItemPreview>
@@ -96,6 +107,9 @@ export default withStyles((theme: OurTheme): StyleRules<injectedClasses> => {
             color: theme.Colors.blue.primary.contrastText,
         },
         Archived: {
+        },
+        Date: {
+            color: 'black'
         }
     };
 })(MovementsListItem);
