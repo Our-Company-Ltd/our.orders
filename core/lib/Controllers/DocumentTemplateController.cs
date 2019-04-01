@@ -62,16 +62,12 @@ namespace our.orders.Controllers
             public string OptionTitle { get; set; }
         };
 
-        // private class PrintFilters
-        // {
-        //     public string Today { get; set; }
-        //     public string Reference { get; set; }
-        //     public int User { get; set; }
-        //     public string Shop { get; set; }
-        //     public string From { get; set; }
-        //     public string To { get; set; }
-        // };
-
+        private class Categories
+        {
+            public string Id { get; set; }
+            public string Legend { get; set; }
+            public List<ProductLine> Items { get; set; } = new List<ProductLine>();
+        };
 
         private class StocksBinding
         {
@@ -166,13 +162,39 @@ namespace our.orders.Controllers
 
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }
+        private IEnumerable<OrderItem> _ToItemList(IEnumerable<IOrder> orders)
+        {
+            return
+                orders
+                    .SelectMany(o => o.Items.Concat(o.Items?.SelectMany(i => i.Items ?? Enumerable.Empty<OrderItem>()) ?? Enumerable.Empty<OrderItem>()))
+                    .Where(o => !string.IsNullOrEmpty(o.ProductId));
+        }
 
+        private IEnumerable<ProductLine> _ToProductLines(IEnumerable<OrderItem> items)
+        {
+            var groupbyProductAndOptions = items.GroupBy(i => new { product = i.ProductId, option = i.Option?.OptionId ?? "" });
+            foreach (var group in groupbyProductAndOptions)
+            {
+                var sample = group.FirstOrDefault();
+                var quantity = group.Sum(i => i.Quantity);
+                yield return new ProductLine
+                {
+                    Title = sample.Title,
+                    Count = quantity,
+                    PrettyUnitPrice = sample.PrettyUnitPrice,
+                    PrettyTotalPrice = (sample.UnitPrice * quantity).ToString("0.00", CultureInfo.InvariantCulture),
+                    Sku = sample.SKU,
+                    OptionTitle = sample.Option?.Title
+                };
+            }
+        }
         [HttpPost("{templateId}/ordersProducts")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrdersProductsAsync(
           [FromServices]IService<DocumentTemplate> templateService,
           [FromServices]IService<IOrder> orderService,
           [FromServices]IService<Shop> shopService,
+          [FromServices]IService<Category> categoryService,
           [FromRoute]string templateId,
           [FromBody]Filter filter = null,
           string sort = null,
@@ -182,66 +204,27 @@ namespace our.orders.Controllers
             var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
             var orders = await orderService.FindAsync(filter, sorts, null, cancellationToken);
 
-            var itemsList = new List<OrderItem>();
-            var groupedItems = new List<ProductLine>();
-
-            foreach (var order in orders)
+            var itemsList = _ToItemList(orders);
+            var productLines = new
             {
-                foreach (var item in order.Items)
-                {
-                    itemsList.Add(item);
+                title = "all",
+                products = _ToProductLines(itemsList),
+                tax = itemsList.Sum(i => i.Price?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                total = itemsList.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
+            };
 
-                    if (item.Items != null && item.Items.Count() > 0)
-                    {
-                        foreach (var i in item.Items)
-                        {
-                            itemsList.Add(i);
-                        }
-                    }
-                }
-            }
+            var categories = await categoryService.FindAsync(cancellationToken: cancellationToken);
 
-            decimal taxAmount = 0;
-            decimal totalAmount = 0;
+            var ordersPerCategory =
+                categories.ToDictionary(c => c, c => _ToItemList(orders.Where(o => o.Categories.Contains(c.Id))));
 
-            foreach (var item in itemsList)
+            var categoriesProductLines = ordersPerCategory.Where(kvp => kvp.Value.Any()).Select(kvp => new
             {
-                taxAmount += item.Price.Tax;
-                totalAmount += item.Price.Final * item.Quantity;
-            }
-
-            var productIdQuery = itemsList.GroupBy(
-                item => item.ProductId
-            );
-
-            foreach (var resultGroup in productIdQuery)
-            {
-                if (string.IsNullOrEmpty(resultGroup.Key)) { continue; }
-
-                var optionIdQuery = resultGroup.GroupBy(item => item.Option?.OptionId);
-
-                foreach (var optionIdGroup in optionIdQuery)
-                {
-                    var quantity = 0;
-                    foreach (var item in optionIdGroup)
-                    {
-                        quantity += item.Quantity;
-                    }
-
-                    var sample = optionIdGroup.FirstOrDefault();
-                    var productLine = new ProductLine
-                    {
-                        Title = sample.Title,
-                        Count = quantity,
-                        PrettyUnitPrice = sample.PrettyUnitPrice,
-                        PrettyTotalPrice = (sample.UnitPrice * quantity).ToString("0.00", CultureInfo.InvariantCulture),
-                        Sku = sample.SKU,
-                        OptionTitle = sample.Option?.Title
-                    };
-
-                    groupedItems.Add(productLine);
-                }
-            }
+                title = kvp.Key.Title,
+                products = _ToProductLines(kvp.Value),
+                tax = kvp.Value.Sum(i => i.Price?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                total = kvp.Value.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
+            });
 
             var template = await templateService.GetByIdAsync(templateId, cancellationToken);
             var compiled = Handlebars.Compile(template.Template);
@@ -286,18 +269,17 @@ namespace our.orders.Controllers
                                     continue;
                             }
                             continue;
-
                     }
                 }
             }
 
+
             var html = compiled(new
             {
-                Prodcuts = groupedItems.ToArray(),
+                global = productLines,
+                categories = categoriesProductLines.ToArray(),
                 today = today,
-                printFilters = printFilters,
-                tax = taxAmount.ToString("0.00", CultureInfo.InvariantCulture),
-                total = totalAmount.ToString("0.00", CultureInfo.InvariantCulture)
+                printFilters = printFilters
             });
 
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));

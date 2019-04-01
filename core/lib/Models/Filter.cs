@@ -234,7 +234,13 @@ namespace our.orders.Models
             {
                 case FilterOperator.like:
                     // case insensitive ?
-                    return Expression.Lambda<Func<TModel, bool>>(Expression.Call(property, typeof(string).GetMethod("Contains", new[] { typeof(string) }), value), argParam);
+                    return Expression.Lambda<Func<TModel, bool>>(
+                        Expression.GreaterThanOrEqual(
+                            Expression.Call(property, typeof(string).GetMethod("IndexOf", new[] { typeof(string), typeof(StringComparison) }), value, Expression.Constant(StringComparison.OrdinalIgnoreCase)),
+                            Expression.Constant(0)
+                        ),
+                        argParam
+                    );
                 case FilterOperator.eq:
                     return Expression.Lambda<Func<TModel, bool>>(Expression.Equal(property, value), argParam);
                 case FilterOperator.ne:
