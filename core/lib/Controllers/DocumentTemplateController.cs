@@ -213,10 +213,10 @@ namespace our.orders.Controllers
                 total = itemsList.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
             };
 
-            var categories = await categoryService.FindAsync(cancellationToken: cancellationToken);
+            var categories = (await categoryService.FindAsync(cancellationToken: cancellationToken)).ToArray();
 
             var ordersPerCategory =
-                categories.ToDictionary(c => c, c => _ToItemList(orders.Where(o => o.Categories.Contains(c.Id))));
+                categories.ToDictionary(c => c, c => itemsList.Where(o => o.Categories.Contains(c.Id)).ToArray());
 
             var categoriesProductLines = ordersPerCategory.Where(kvp => kvp.Value.Any()).Select(kvp => new
             {
