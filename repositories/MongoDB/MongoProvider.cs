@@ -150,7 +150,7 @@ namespace our.orders.Repositories.mongoDb
                 case FilterOperator.ne:
                     return Builders<TImplementation>.Filter.Ne(memberMap.MemberName, value);
                 case FilterOperator.like:
-                    return Builders<TImplementation>.Filter.Regex(memberMap.MemberName, new BsonRegularExpression($"{Regex.Escape(value.ToString())}"));
+                    return Builders<TImplementation>.Filter.Regex(memberMap.MemberName, new BsonRegularExpression($"{Regex.Escape(value.ToString())}", "i"));
                     // case FilterOperator.regex:
                     //     if (value == null) throw new AppException("a regex filter needs a not null value");
                     //     if (!(value is string stringvalue)) throw new AppException("a regex filter needs a string value");
