@@ -11,8 +11,8 @@ export type injectedClasses =
 
 export const PersonPreviewStyles = (theme: OurTheme): StyleRules<injectedClasses> => ({
     firstName: {
-       display: 'inline-block',
-       marginRight: 5
+        display: 'inline-block',
+        marginRight: 5
     },
     lastname: {
         display: 'inline-block',
@@ -31,10 +31,9 @@ export type PersonProps = {
     WithStyles<injectedClasses>;
 export const PersonPreview: React.SFC<PersonProps> = (props) => {
     const { person, classes } = props;
-    const firstname = person.FirstName || '';
-    const lastname = person.LastName || '';
-    const organizationname = `, ${person.OrganizationName}` || '';
-    const city = `, ${person.City}` || '';
+    const firstname = person.FirstName || undefined;
+    const lastname = person.LastName || undefined;
+    const organizationname = person.OrganizationName || undefined;
 
     return (
         <React.Fragment>
@@ -48,11 +47,7 @@ export const PersonPreview: React.SFC<PersonProps> = (props) => {
                 </span>}
             {organizationname &&
                 <span className={classes.organizationName}>
-                    {organizationname}
-                </span>}
-            {city &&
-                <span className={classes.city}>
-                    {city}
+                    , {organizationname}
                 </span>}
         </React.Fragment>);
 };

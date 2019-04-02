@@ -7,7 +7,7 @@ import { Client } from 'src/@types/our-orders';
 import { WithStyles, withStyles, Avatar } from '@material-ui/core';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
-import * as classNames from 'classnames';
+import PersonPreview from 'src/components/PersonPreview';
 
 type injectedClasses = 'container' | 'bold' | 'spacing';
 export type ClientListItemProps = InjectedIntlProps & WithStyles<injectedClasses> & {
@@ -45,21 +45,7 @@ export const ClientListItem: React.SFC<ClientListItemProps> = (props) => {
                 <div className="clients-list-item__lines">
                     <Lines>
                         <Line>
-                            {client.FirstName &&
-                                <span className={classNames(classes.spacing, classes.bold)}>
-                                    {client.FirstName}
-                                </span>
-                            }
-                            {client.LastName &&
-                                <span className={classNames(classes.spacing, classes.bold)}>
-                                    {client.LastName}
-                                </span>
-                            }
-                            {client.OrganizationName &&
-                                <span>
-                                    {client.OrganizationName}
-                                </span>
-                            }
+                            {client && <PersonPreview person={client} />}
                         </Line>
                         <Line>
                             {client.Address &&

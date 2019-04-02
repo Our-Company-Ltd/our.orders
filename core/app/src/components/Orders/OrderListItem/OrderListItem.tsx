@@ -40,6 +40,9 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
         }
 
         const client = order.Client;
+
+        const city = client!.City || undefined;
+
         const total = order.Total;
 
         const paidDate = order.Payments
@@ -180,7 +183,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                         </Line>
                         <Line>
                             {client && <PersonPreview person={client} />}
-                            {client && client.City}
+                            {city && <span>, {city}</span>}
                         </Line>
                         <Line>
                             {getSubtitle()}
