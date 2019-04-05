@@ -156,6 +156,7 @@ class OrderList extends React.Component<OrdersListProps, State> {
         this._handleItemChanged = this._handleItemChanged.bind(this);
         this._printOrders = this._printOrders.bind(this);
         this._printOrdersProducts = this._printOrdersProducts.bind(this);
+        this._printPaidOrders = this._printPaidOrders.bind(this);
         this._refresh = debounce(100, this._refresh);
         this.state = {
             filter: DefaultFilters(),
@@ -309,6 +310,10 @@ class OrderList extends React.Component<OrdersListProps, State> {
             .templates
             .filter(t => t.ApplyTo === 'OrdersProducts');
 
+        const paidOrdersemplates = templateCtx
+            .templates
+            .filter(t => t.ApplyTo === 'PaidOrders');
+
         const ordersTemplatesBtn = ordersTemplates.length > 0 && {
             icon: <Print />,
             legend: ordersTemplates.length > 1 ? 'documents' : ordersTemplates[0].Title,
@@ -324,6 +329,15 @@ class OrderList extends React.Component<OrdersListProps, State> {
             onClick: ordersProductsTemplates.length > 1 ?
                 () => this.setState(() => ({ templatesOpened: true })) :
                 () => this._printOrdersProducts(ordersProductsTemplates[0].Id)
+        } as FabBtnProps;
+
+        const paidProductsTemplatesBtn = paidOrdersemplates.length > 0 && {
+            icon: <Print />,
+            legend: paidOrdersemplates.length > 1 ? 'documents' : paidOrdersemplates[0].Title,
+            themeColor: 'gray',
+            onClick: paidOrdersemplates.length > 1 ?
+                () => this.setState(() => ({ templatesOpened: true })) :
+                () => this._printPaidOrders(paidOrdersemplates[0].Id)
         } as FabBtnProps;
 
         return (
@@ -637,7 +651,8 @@ class OrderList extends React.Component<OrdersListProps, State> {
                                     themeColor: 'green',
                                 } : null,
                         hasRights && ordersTemplatesBtn,
-                        hasRights && ordersProductsTemplatesBtn
+                        hasRights && ordersProductsTemplatesBtn,
+                        hasRights && paidProductsTemplatesBtn
                     ]}
                 />
                 {editing >= 0 &&
@@ -897,6 +912,27 @@ class OrderList extends React.Component<OrdersListProps, State> {
 
         DocumentTemplates
             .OrdersProducts(
+                filterDef,
+                templateId
+            )
+            .then((res) => {
+                new Printer({
+                    content: () => (
+                        <div
+                            dangerouslySetInnerHTML={{ __html: res.html }}
+                        />
+                    ),
+                    cssClasses: ['body--print-reciept'],
+                    cssStyles: res.styles,
+                    copyStyles: false
+                }).Print();
+            });
+    }
+    private _printPaidOrders(templateId: string) {
+        var filterDef = this._getFilters();
+
+        DocumentTemplates
+            .PaidOrders(
                 filterDef,
                 templateId
             )

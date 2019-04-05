@@ -131,12 +131,9 @@ namespace our.orders.Controllers
 
             var template = await templateService.GetByIdAsync(templateId, cancellationToken);
 
-
             var compiled = Handlebars.Compile(template.Template);
 
-
             var html = compiled(new { client = preview });
-
 
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }
@@ -188,6 +185,7 @@ namespace our.orders.Controllers
                 };
             }
         }
+
         [HttpPost("{templateId}/ordersProducts")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrdersProductsAsync(
@@ -273,11 +271,126 @@ namespace our.orders.Controllers
                 }
             }
 
-
             var html = compiled(new
             {
                 global = productLines,
                 categories = categoriesProductLines.ToArray(),
+                today = today,
+                printFilters = printFilters
+            });
+
+            return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
+        }
+
+        private IEnumerable<Object> _ToPaymentList(IEnumerable<IOrder> orders)
+        {
+            foreach (var order in orders)
+            {
+                yield return new
+                {
+                    Reference = order.Reference,
+                    Payments = string.Join(",", order.Payments.Where(p => p.Status == PaymentStatus.Paid).Select(p => p.Title).ToArray()),
+                    PaidMount = order.PaidAmount.ToString("0.00", CultureInfo.InvariantCulture)
+                };
+            }
+        }
+
+        private string _TotalPerPaymentMethod(IEnumerable<Payment> payments, PaymentMethod method)
+        {
+            return payments
+                    .Where(p => p.Method == method)
+                    .Sum(p => p?.Amount ?? 0)
+                    .ToString("0.00", CultureInfo.InvariantCulture);
+        }
+
+        [HttpPost("{templateId}/paidOrders")]
+        // [ValidateAntiForgeryToken]
+        public async Task<IActionResult> odersPaiedAsync(
+          [FromServices]IService<DocumentTemplate> templateService,
+          [FromServices]IService<IOrder> orderService,
+          [FromServices]IService<Shop> shopService,
+          [FromRoute]string templateId,
+          [FromBody]Filter filter = null,
+          string sort = null,
+          CancellationToken cancellationToken = default(CancellationToken)
+          )
+        {
+            var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
+            var orders = await orderService.FindAsync(filter, sorts, null, cancellationToken);
+
+            //Orders that are paid
+            var paidOrders = orders.Where(o => o.Paid == true);
+
+            // Payments that are finished
+            var finishPayments = paidOrders.SelectMany(o => o.Payments).Where(p => p.Status == PaymentStatus.Paid);
+
+            // Calculate the total amount paid by payment method
+            var electronicTotal = _TotalPerPaymentMethod(finishPayments, PaymentMethod.Electronic);
+            var cashTotal = _TotalPerPaymentMethod(finishPayments, PaymentMethod.Cash);
+            var voucherTotal = _TotalPerPaymentMethod(finishPayments, PaymentMethod.Voucher);
+
+            //calculate the total of tax and total of finished orders
+            var itemsList = _ToItemList(paidOrders);
+            var tax = itemsList.Sum(i => i.Price?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture);
+            var total = itemsList.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture);
+
+            //Print active filters
+            var printFilters = new List<Tuple<string, string>>();
+
+            if (filter != null && filter.Children.Count() > 0)
+            {
+                foreach (var property in filter.Children)
+                {
+                    switch (property.Property)
+                    {
+                        case "Reference":
+                            printFilters.Add(new Tuple<string, string>("Reference", property.Value.ToString()));
+                            continue;
+
+                        case "UserId":
+                            var user = await _userManager.FindByIdAsync(property.Value.ToString());
+                            if (user == null) continue;
+                            printFilters.Add(new Tuple<string, string>("User", $"{user.Preview()}"));
+                            continue;
+
+                        case "ShopId":
+                            var shop = await shopService.GetByIdAsync(property.Value.ToString());
+                            if (shop == null) continue;
+                            printFilters.Add(new Tuple<string, string>("Shop", shop.Name));
+                            continue;
+
+                        case "Date":
+                            var date = (DateTime)property.Value;
+                            if (date == default(DateTime)) continue;
+
+                            switch (property.Operator)
+                            {
+                                case FilterOperator.gte:
+                                    printFilters.Add(new Tuple<string, string>("From", date.ToString("dd.MM.yyyy")));
+                                    continue;
+
+                                case FilterOperator.lte:
+                                    printFilters.Add(new Tuple<string, string>("To", date.ToString("dd.MM.yyyy")));
+                                    continue;
+                            }
+                            continue;
+                    }
+                }
+            }
+
+            var template = await templateService.GetByIdAsync(templateId, cancellationToken);
+            var compiled = Handlebars.Compile(template.Template);
+
+            var today = DateTime.UtcNow.ToString("dd.MM.yyyy");
+
+            var html = compiled(new
+            {
+                global = _ToPaymentList(paidOrders).ToArray(),
+                electronicTotal = electronicTotal,
+                cashTotal = cashTotal,
+                voucherTotal = voucherTotal,
+                tax = tax,
+                total = total,
                 today = today,
                 printFilters = printFilters
             });
