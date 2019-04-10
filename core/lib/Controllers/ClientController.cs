@@ -138,8 +138,8 @@ namespace our.orders.Controllers
                         foreach (var memberName in headers.Keys)
                         {
                             var member = clientType.GetMember(memberName).FirstOrDefault();
-                            if(member == null) continue;
-                            map.Map(typeof(ClientDto),member).Index(headers[memberName]);
+                            if (member == null) continue;
+                            map.Map(typeof(ClientDto), member).Index(headers[memberName]);
                         }
                         csv.Configuration.RegisterClassMap(map);
                         // csv.Configuration.PrepareHeaderForMatch = (string header, int index) => string.IsNullOrWhiteSpace(headers[index]) ? header : headers[index];
@@ -147,6 +147,20 @@ namespace our.orders.Controllers
                     var records = csv.GetRecords<ClientDto>();
                     foreach (var clientDto in records)
                     {
+                        
+                        // try to find existing : 
+                        if (!string.IsNullOrEmpty(clientDto.Email))
+                        {
+                            var existing = (await service.FindAsync(Filter.Eq(nameof(IClient.Email), clientDto.Email), cancellationToken: cancellationToken)).FirstOrDefault();
+                            if (existing != null)
+                            {
+                                var mapped = _mapper.Map(clientDto, existing);
+                                mapped.Id = existing.Id;
+                                await service.UpdateAsync(mapped, cancellationToken);
+                                continue;
+                            }
+                        }
+
                         var record = _mapper.Map<IClient>(clientDto);
                         var newClient = await service.CreateAsync(record, cancellationToken);
                         results.Add(_mapper.Map<ClientDto>(newClient));
