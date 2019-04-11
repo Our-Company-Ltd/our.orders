@@ -282,6 +282,21 @@ namespace our.orders.Controllers
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }
 
+        private string _TranslateMethod(PaymentMethod method)
+        {
+            switch (method)
+            {
+                case PaymentMethod.Cash:
+                    return "Bar";
+                case PaymentMethod.Electronic:
+                    return "Elektronisch";
+                case PaymentMethod.Voucher:
+                    return "Gutschein";
+                default:
+                    return method.ToString();
+            }
+        }
+
         private IEnumerable<Object> _ToPaymentList(IEnumerable<IOrder> orders)
         {
             foreach (var order in orders)
@@ -289,7 +304,7 @@ namespace our.orders.Controllers
                 yield return new
                 {
                     Reference = order.Reference,
-                    Payments = string.Join(",", order.Payments.Where(p => p.Status == PaymentStatus.Paid).Select(p => p.Title).ToArray()),
+                    Payments = string.Join(", ", order.Payments.Where(p => p.Status == PaymentStatus.Paid).Select(p => _TranslateMethod(p.Method)).ToArray()),
                     PaidMount = order.PaidAmount.ToString("0.00", CultureInfo.InvariantCulture)
                 };
             }
@@ -329,10 +344,9 @@ namespace our.orders.Controllers
             var cashTotal = _TotalPerPaymentMethod(finishPayments, PaymentMethod.Cash);
             var voucherTotal = _TotalPerPaymentMethod(finishPayments, PaymentMethod.Voucher);
 
-            //calculate the total of tax and total of finished orders
-            var itemsList = _ToItemList(paidOrders);
-            var tax = itemsList.Sum(i => i.Price?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture);
-            var total = itemsList.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture);
+            //calculate tax and total of finished orders
+            var tax = paidOrders.Sum(o => o?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture);
+            var total = paidOrders.Sum(i => (i?.Price ?? 0)).ToString("0.00", CultureInfo.InvariantCulture);
 
             //Print active filters
             var printFilters = new List<Tuple<string, string>>();
