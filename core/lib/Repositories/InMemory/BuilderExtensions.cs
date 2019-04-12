@@ -23,7 +23,7 @@ namespace our.orders.Repositories.InMemory
                   services.AddSingleton<IRepository<IClient>>((s) => new InMemoryRepository<Client, IClient>(s));
 
                   services.AddSingleton<IRepository<IShippingTemplate>>((s) => new InMemoryRepository<ShippingTemplate, IShippingTemplate>(s));
-                //   services.AddSingleton<IRepository<IStatisticEvent>>((s) => new InMemoryProvider<StatisticEvent, IStatisticEvent>(s));
+                  //   services.AddSingleton<IRepository<IStatisticEvent>>((s) => new InMemoryProvider<StatisticEvent, IStatisticEvent>(s));
                   services.AddSingleton<IRepository<Shop>>((s) => new InMemoryRepository<Shop, Shop>(s));
 
                   services.AddSingleton<IRepository<Movement>>((s) => new InMemoryRepository<Movement, Movement>(s));
@@ -33,10 +33,10 @@ namespace our.orders.Repositories.InMemory
                   services.AddSingleton<IRepository<Warehouse>>((s) => new InMemoryRepository<Warehouse, Warehouse>(s));
                   services.AddSingleton<IRepository<Category>>((s) => new InMemoryRepository<Category, Category>(s));
                   services.AddSingleton<IRepository<DocumentTemplate>>((s) => new InMemoryRepository<DocumentTemplate, DocumentTemplate>(s));
-
+                  services.AddScoped<IRepository<PaymentMessagingTemplate>>((s) => new InMemoryRepository<PaymentMessagingTemplate, PaymentMessagingTemplate>(s));
 
                   services.AddSingleton<IRepository<User>>((s) => new InMemoryRepository<User, User>(s));
-                  
+
                   services.AddSingleton<IUserStore<User>, RepositoryUserStore>();
 
                   var identityBuilder = services

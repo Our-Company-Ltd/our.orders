@@ -159,6 +159,7 @@ namespace our.orders.Services
 
         public async Task UpdateValuesAsync(IOrder order, CancellationToken cancellationToken = default(CancellationToken))
         {
+            var oldStatus = order.Status;
             _UpdateCategories(order);
             _UpdateWeight(order);
             _UpdateUnits(order);
@@ -172,6 +173,11 @@ namespace our.orders.Services
 
                 _UpdatePaid(order);
                 _UpdateStatus(order);
+                
+                if (order.Status != oldStatus)
+                {
+                    appEvents.OnOrderStatusChanged(this, order);
+                }
             });
 
 

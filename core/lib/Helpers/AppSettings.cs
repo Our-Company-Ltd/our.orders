@@ -41,6 +41,8 @@ namespace our.orders.Helpers
             return FormNumber.ToString("X");
         };
 
+        public IConfigurationSection Configuration { get; set; }
+
     };
 
     public interface IAppSettings
@@ -66,6 +68,8 @@ namespace our.orders.Helpers
         Func<IOrder, string> OrderReferenceGenerator { get; set; }
 
         List<Type> ExternalControllers { get; set; }
+
+        IConfigurationSection Configuration { get; set; }
 
     }
 }

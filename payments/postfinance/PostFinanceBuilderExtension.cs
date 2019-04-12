@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using our.orders.Builder;
 using our.orders.Helpers;
@@ -8,6 +9,14 @@ namespace our.orders.Payments.PostFinance
 {
     public static class PostFinanceBuilderExtension
     {
+
+        public static OurOrdersBuilder UsePostFinance(this OurOrdersBuilder builder)
+        {
+            var configuration = new PostFinanceConfiguration();
+            builder.AppSettings.Configuration.Bind("PostFinance", configuration);
+            return UsePostFinance(builder, configuration);
+        }
+
         public static OurOrdersBuilder UsePostFinance(this OurOrdersBuilder builder, string PSPID, string COM, string USERID, string PSWD, string SHASIGN, bool sandbox = false)
         {
 
@@ -37,18 +46,23 @@ namespace our.orders.Payments.PostFinance
             }
 
 
-            var postfinanceConfiguration = new PostFinanceConfiguration(SHASIGN, PSPID, COM, USERID, PSWD, sandbox);
+            var configuration = new PostFinanceConfiguration(SHASIGN, PSPID, COM, USERID, PSWD, sandbox);
 
 
+            return UsePostFinance(builder, configuration);
+        }
+
+        public static OurOrdersBuilder UsePostFinance(this OurOrdersBuilder builder, PostFinanceConfiguration configuration)
+        {
             builder.AppEvents.Configure += (sender, services) =>
-                      {
-                          services.AddTransient<IPaymentProvider, PostFinancePaymentProvider>();
-                          services.AddTransient<PostFinancePaymentProvider>();
-                          services.AddSingleton(postfinanceConfiguration);
-                      };
+                     {
+                         services.AddTransient<IPaymentProvider, PostFinancePaymentProvider>();
+                         services.AddTransient<PostFinancePaymentProvider>();
+                         services.AddSingleton(configuration);
+                     };
 
-            
-            builder.HostServices.AddSingleton(postfinanceConfiguration);
+
+            builder.HostServices.AddSingleton(configuration);
             builder.HostServices.AddTransient<IPaymentProvider, PostFinancePaymentProvider>();
             builder.HostServices.AddTransient<PostFinancePaymentProvider>();
 

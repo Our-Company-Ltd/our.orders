@@ -13,11 +13,21 @@ namespace our.orders
         public event EventHandler<IServiceProvider> ApplicationStarting;
 
         public event EventHandler<IApplicationBuilder> ApplicationConfigure;
-        
+
         public event EventHandler<IServiceProvider> ApplicationStarted;
         public event EventHandler<IServiceProvider> ApplicationStopping;
 
         public event EventHandler<AutoMapper.Profile> TypeMapping;
+
+
+        internal void OnOrderStatusChanged(object sender, IOrder arg)
+        {
+            if (OrderStatusChanged != null)
+            {
+                OrderStatusChanged(sender, arg);
+            }
+        }
+        public event EventHandler<IOrder> OrderStatusChanged;
 
         internal void OnTypeMapping(object sender, AutoMapper.Profile profile)
         {
@@ -70,15 +80,6 @@ namespace our.orders
             }
         }
         public event EventHandler<(IOrder order, Payment payment)> PaymentAdded;
-
-        internal void OnPaymentRemoved(object sender, (IOrder order, Payment payment) arg)
-        {
-            if (PaymentRemoved != null)
-            {
-                PaymentRemoved(sender, arg);
-            }
-        }
-        public event EventHandler<(IOrder order, Payment payment)> PaymentRemoved;
 
         internal void OnPaymentChanged(object sender, (IOrder order, Payment payment) arg)
         {
@@ -146,8 +147,6 @@ namespace our.orders
         event EventHandler<(string id, Type Type)> EntryRemoved;
 
         event EventHandler<(IOrder order, Payment payment)> PaymentAdded;
-
-        event EventHandler<(IOrder order, Payment payment)> PaymentRemoved;
 
         event EventHandler<(IOrder order, Payment payment)> PaymentChanged;
     }

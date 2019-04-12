@@ -8,14 +8,17 @@ using our.orders.Models;
 using System.Linq;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace our.orders.Builder
 {
+
     /// <summary>
     /// Extensions for the host IServiceCollection
     /// </summary>
     public static class IServiceCollectionExtensions
     {
+
         /// <summary>
         /// Adds Our Orders using the provided section (defaults to 'our-orders') of the appsettings.json file.
         /// </summary>
@@ -26,11 +29,9 @@ namespace our.orders.Builder
         public static OurOrdersBuilder AddOurOrders(this IServiceCollection services, IConfiguration configuration, string sectionName = "our-orders")
         {
 
-            var configurationSection = configuration.GetSection(sectionName);
-            if (configurationSection != null)
-                return AddOurOrders(services, (appsettings) => configurationSection.Bind(appsettings));
-            else
-                return AddOurOrders(services);
+            var section = configuration.GetSection(sectionName);
+
+            return _AddOurOrders(services, section, null);
         }
 
         /// <summary>
@@ -41,7 +42,18 @@ namespace our.orders.Builder
         /// <returns></returns>
         public static OurOrdersBuilder AddOurOrders(this IServiceCollection services, Action<IAppSettings> configure = null)
         {
-            var builder = services.AddOurOrdersCore(configure);
+            return services._AddOurOrders(null, configure);
+        }
+
+        /// <summary>
+        /// Adds Our Orders
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configure"></param>
+        /// <returns></returns>
+        private static OurOrdersBuilder _AddOurOrders(this IServiceCollection services, IConfigurationSection configuration, Action<IAppSettings> configure = null)
+        {
+            var builder = services.AddOurOrdersCore(configuration, configure);
             builder.UseDefaultPayments();
             return builder;
         }
@@ -52,18 +64,32 @@ namespace our.orders.Builder
         /// <param name="services"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static OurOrdersBuilder AddOurOrdersCore(this IServiceCollection services, Action<IAppSettings> configure = null)
+        public static OurOrdersBuilder AddOurOrdersCore(this IServiceCollection services, IConfigurationSection configuration = null, Action<IAppSettings> configure = null)
         {
+
+
             // be sure we have an HttpContextAccessor
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.TryAddTransient<OrderService, OrderService>();
+
+            // var configurationSection =
+            //               new ConfigurationBuilder()
+            //                   .AddUserSecrets(assembly, true) // possible user secrets
+            //                   .Build()
+            //                   .GetSection("our-orders");
+
             var appSettings = new AppSettings();
+
+            if (configuration != null)
+            {
+                configuration.Bind(appSettings);
+                appSettings.Configuration = configuration;
+            }
             if (configure != null)
             {
                 configure(appSettings);
             }
-            
+
             services.AddSingleton<Startup>();
 
             services.AddSingleton<IAppSettings>(appSettings);
@@ -76,7 +102,9 @@ namespace our.orders.Builder
             services.AddTransient<ProductService, ProductService>(s => appEvents.Services.GetService<ProductService>());
 
             var builder = new OurOrdersBuilder(appSettings, appEvents, services);
+
             services.AddSingleton<OurOrdersBuilder>(builder);
+
             return builder;
         }
     }
