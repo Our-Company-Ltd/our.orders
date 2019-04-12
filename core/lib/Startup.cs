@@ -134,8 +134,8 @@ namespace our.orders
             services.TryAddTransient<DocumentTemplate>();
             services.AddTransient<IModel, DocumentTemplate>();
 
-            services.TryAddTransient<PaymentMessagingTemplate>();
-            services.AddTransient<IModel, PaymentMessagingTemplate>();
+            services.TryAddTransient<PaymentNotificationTemplate>();
+            services.AddTransient<IModel, PaymentNotificationTemplate>();
 
             services.TryAddTransient<Shop>();
             services.AddTransient<IModel, Shop>();
@@ -168,7 +168,7 @@ namespace our.orders
 
             services.TryAddTransient<IService<IShippingTemplate>, Service<IShippingTemplate>>();
             services.TryAddTransient<IService<DocumentTemplate>, Service<DocumentTemplate>>();
-            services.TryAddTransient<IService<PaymentMessagingTemplate>, Service<PaymentMessagingTemplate>>();
+            services.TryAddTransient<IService<PaymentNotificationTemplate>, Service<PaymentNotificationTemplate>>();
 
             services.TryAddTransient<IService<IClient>, Service<IClient>>();
 
