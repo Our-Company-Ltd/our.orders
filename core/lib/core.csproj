@@ -44,7 +44,8 @@
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="CsvHelper" Version="12.1.2" />
     <PackageReference Include="Handlebars.Net" Version="1.9.5" />
-    <PackageReference Include="Innofactor.EfCoreJsonValueConverter" Version="1.25.0" />  
+    <PackageReference Include="Innofactor.EfCoreJsonValueConverter" Version="1.25.0" />
+    <PackageReference Include="MailKit" Version="2.1.3" />  
   
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.1" />

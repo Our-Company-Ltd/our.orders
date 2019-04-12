@@ -8,13 +8,27 @@ namespace our.orders.Payments.Stripe
 {
     public static class StripeBuilderExtension
     {
+        public static OurOrdersBuilder UseStripe(this OurOrdersBuilder builder)
+        {
+            var configuration = new StripeConfiguration();
+            builder.AppSettings.Configuration.Bind("Stripe", configuration);
+            return UseStripe(builder, configuration);
+        }
+
         public static OurOrdersBuilder UseStripe(this OurOrdersBuilder builder, string secretKey, string publishableKey)
         {
-            var stripeConfiguration = new StripeConfiguration()
+            var configuration = new StripeConfiguration()
             {
                 SecretKey = secretKey,
                 PublishableKey = publishableKey
             };
+
+            return UseStripe(builder, configuration);
+        }
+
+        public static OurOrdersBuilder UseStripe(this OurOrdersBuilder builder, StripeConfiguration configuration)
+        {
+
 
             builder.AppEvents.Configure += (sender, services) =>
            {
@@ -23,10 +37,14 @@ namespace our.orders.Payments.Stripe
 
             builder.AppEvents.Configure += (sender, services) =>
             {
-                services.AddSingleton(stripeConfiguration);
+                services.AddSingleton(configuration);
             };
 
             builder.AppSettings.ExternalControllers.Add(typeof(StripePaymentProvider));
+
+            builder.HostServices.AddSingleton(configuration);
+            builder.HostServices.AddTransient<IPaymentProvider, StripePaymentProvider>();
+            builder.HostServices.AddTransient<StripePaymentProvider>();
 
             return builder;
         }

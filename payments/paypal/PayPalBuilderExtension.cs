@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using our.orders.Builder;
 using our.orders.Helpers;
@@ -22,6 +23,14 @@ namespace our.orders.Payments.Paypal
             return builder.UsePayPal(paypalConfiguration);
         }
 
+
+        public static OurOrdersBuilder UsePayPal(this OurOrdersBuilder builder)
+        {
+            var paypalConfiguration = new PaypalConfiguration();
+            builder.AppSettings.Configuration.Bind("Paypal", paypalConfiguration);
+            return UsePayPal(builder, paypalConfiguration);
+        }
+
         public static OurOrdersBuilder UsePayPal(this OurOrdersBuilder builder, PaypalConfiguration paypalConfiguration)
         {
             builder.AppEvents.Configure += (sender, services) =>
@@ -30,15 +39,16 @@ namespace our.orders.Payments.Paypal
                 services.AddTransient<PayPalPaymentProvider>();
                 services.AddSingleton(paypalConfiguration);
             };
-            
+
             builder.AppSettings.ExternalControllers.Add(typeof(PayPalPaymentController));
 
             builder.HostServices.AddSingleton(paypalConfiguration);
             builder.HostServices.AddTransient<IPaymentProvider, PayPalPaymentProvider>();
             builder.HostServices.AddTransient<PayPalPaymentProvider>();
-            
+
             return builder;
         }
+
 
     }
 }
