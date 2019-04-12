@@ -45,12 +45,10 @@ namespace our.orders.Messaging
                 Filter.Eq(nameof(PaymentNotificationTemplate.Status), payment.Status),
                 Filter.Or(
                     Filter.Eq(nameof(PaymentNotificationTemplate.Provider), payment.Provider),
-                    Filter.Eq(nameof(PaymentNotificationTemplate.Provider), ""),
                     Filter.Eq(nameof(PaymentNotificationTemplate.Provider), null)
                 ),
                 Filter.Or(
                     Filter.Eq(nameof(PaymentNotificationTemplate.Method), payment.Method),
-                    Filter.Eq(nameof(PaymentNotificationTemplate.Method), ""),
                     Filter.Eq(nameof(PaymentNotificationTemplate.Method), null)
                 )
             );
@@ -59,6 +57,7 @@ namespace our.orders.Messaging
 
             foreach (var validTemplate in validTemplates)
             {
+                
                 var bodyCompiled = Handlebars.Compile(validTemplate.Body);
                 var body = bodyCompiled(new
                 {

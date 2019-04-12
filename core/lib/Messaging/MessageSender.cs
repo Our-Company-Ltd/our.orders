@@ -25,9 +25,14 @@ namespace our.orders.Messaging
 
         private MailMessage _GetMailMessage(OurOrdersMessage message)
         {
+
+            var from = string.IsNullOrEmpty(messagingConfiguration.FromName) ?
+                new MailAddress(messagingConfiguration.From) :
+                 new MailAddress(messagingConfiguration.From, messagingConfiguration.FromName);
+
             var mail = new MailMessage
             {
-                From = new MailAddress(messagingConfiguration.From),
+                From = from,
                 Subject = message.Subject,
                 Body = message.Body,
                 IsBodyHtml = true
@@ -35,7 +40,7 @@ namespace our.orders.Messaging
 
             mail.To.Add(message.Destination);
 
-           
+
             var htmview = AlternateView.CreateAlternateViewFromString(message.Body, new ContentType("text/html"));
 
             foreach (var linkedResource in message.LinkedResources)
@@ -66,7 +71,7 @@ namespace our.orders.Messaging
 
             client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-            client.Connect(messagingConfiguration.Host, messagingConfiguration.Port, messagingConfiguration.SSL);
+            client.Connect(messagingConfiguration.Host, messagingConfiguration.Port, SecureSocketOptions.Auto);
 
             client.Authenticate(messagingConfiguration.User, messagingConfiguration.Password);
 
