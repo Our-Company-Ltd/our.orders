@@ -66,7 +66,7 @@ namespace our.orders.Payments.Voucher
             {
                 return NotFound($"Order with id = {orderId} not found");
             }
-
+            order.OrderType = OrderType.Order;
             var voucher = (await voucherService.FindAsync(Filter.Eq("Code", code), cancellationToken: cancellationToken)).FirstOrDefault();
 
             if (voucher == null)
