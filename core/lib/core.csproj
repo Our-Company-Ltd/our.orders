@@ -56,7 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>  
-    <None Exclude="our.orders.config" CopyToOutputDirectory="Always" />
+    <None Remove="our.orders.config" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <ItemGroup>
