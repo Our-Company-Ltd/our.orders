@@ -119,19 +119,44 @@ namespace our.orders
 
 
             services.TryAddTransient<IOrder, Order>();
+            services.AddTransient<IModel, Order>();
+
             services.TryAddTransient<IProduct, Product>();
+            services.AddTransient<IModel, Product>();
+
             services.TryAddTransient<IClient, Client>();
+            services.AddTransient<IModel, Client>();
+
             services.TryAddTransient<ShippingTemplate>();
             services.TryAddTransient<IShippingTemplate, ShippingTemplate>();
+            services.AddTransient<IModel, ShippingTemplate>();
+
             services.TryAddTransient<DocumentTemplate>();
+            services.AddTransient<IModel, DocumentTemplate>();
+
             services.TryAddTransient<PaymentMessagingTemplate>();
+            services.AddTransient<IModel, PaymentMessagingTemplate>();
+
             services.TryAddTransient<Shop>();
+            services.AddTransient<IModel, Shop>();
+
             services.TryAddTransient<Movement>();
+            services.AddTransient<IModel, Movement>();
+
             services.TryAddTransient<Voucher>();
+            services.AddTransient<IModel, Voucher>();
+
             services.TryAddTransient<StockUnit>();
+            services.AddTransient<IModel, StockUnit>();
+
             services.TryAddTransient<Warehouse>();
+            services.AddTransient<IModel, Warehouse>();
+
             services.TryAddTransient<Category>();
+            services.AddTransient<IModel, Category>();
+
             services.TryAddTransient<User>();
+            services.AddTransient<IModel, User>();
 
 
 
