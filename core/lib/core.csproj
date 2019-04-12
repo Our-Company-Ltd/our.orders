@@ -55,6 +55,10 @@
     <EmbeddedResource Include="..\app\build\**\*" />
   </ItemGroup>
 
+  <ItemGroup>  
+    <None Exclude="our.orders.config" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
   </ItemGroup>

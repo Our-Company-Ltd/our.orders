@@ -154,9 +154,11 @@ namespace our.orders.Controllers
                             var existing = (await service.FindAsync(Filter.Eq(nameof(IClient.Email), clientDto.Email), cancellationToken: cancellationToken)).FirstOrDefault();
                             if (existing != null)
                             {
-                                var mapped = _mapper.Map(clientDto, existing);
-                                mapped.Id = existing.Id;
-                                await service.UpdateAsync(mapped, cancellationToken);
+                                var id = existing.Id;
+                                _mapper.Map(clientDto, existing);
+                                existing.Id = id;
+                                await service.UpdateAsync(existing, cancellationToken);
+                                results.Add(_mapper.Map<ClientDto>(existing));         
                                 continue;
                             }
                         }
