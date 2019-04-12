@@ -11,7 +11,7 @@ namespace our.orders.Payments.Stripe
         public static OurOrdersBuilder UseStripe(this OurOrdersBuilder builder)
         {
             var configuration = new StripeConfiguration();
-            builder.AppSettings.Configuration.Bind("Stripe", configuration);
+            builder.AppSettings.Configuration.bind("Stripe", configuration);
             return UseStripe(builder, configuration);
         }
 
