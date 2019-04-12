@@ -188,7 +188,7 @@ export class OrderProductSelector extends React.Component<OrderProductSelectorPr
 
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => this.setState({ orderProductDialogOpen: false })}>
+                            <Button onClick={() => this.setState({ orderProductDialogOpen: false, selections: [] })}>
                                 Cancel
                             </Button>
                             <Button
@@ -196,7 +196,7 @@ export class OrderProductSelector extends React.Component<OrderProductSelectorPr
                                 variant="contained"
                                 onClick={() => {
                                     this.props.onConfirm(selections);
-                                    this.setState({ orderProductDialogOpen: false });
+                                    this.setState({ orderProductDialogOpen: false, selections: [] });
                                 }}
                             >
                                 Add
