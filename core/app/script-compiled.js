@@ -22529,7 +22529,8 @@ function (_React$Component) {
       })), React.createElement(_core.DialogActions, null, React.createElement(_core.Button, {
         onClick: function onClick() {
           return _this2.setState({
-            orderProductDialogOpen: false
+            orderProductDialogOpen: false,
+            selections: []
           });
         }
       }, "Cancel"), React.createElement(_core.Button, {
@@ -22539,7 +22540,8 @@ function (_React$Component) {
           _this2.props.onConfirm(selections);
 
           _this2.setState({
-            orderProductDialogOpen: false
+            orderProductDialogOpen: false,
+            selections: []
           });
         }
       }, "Add"))));
@@ -23765,6 +23767,8 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 var OrderListItem = function OrderListItem(props) {
   var onClick = props.onClick,
       order = props.order,
@@ -23799,6 +23803,13 @@ var OrderListItem = function OrderListItem(props) {
       return null;
     }
 
+    var dateOptions = {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric'
+    };
+
     switch (order.Status) {
       case 'Canceled':
         return React.createElement(React.Fragment, null, React.createElement("span", {
@@ -23813,16 +23824,16 @@ var OrderListItem = function OrderListItem(props) {
         }, React.createElement(_reactIntl.FormattedMessage, {
           id: "src.views.orders.orderListItem.paidDatePrefix",
           defaultMessage: " paid on: "
-        }), React.createElement(_reactIntl.FormattedDate, {
+        }), React.createElement(_reactIntl.FormattedDate, _extends({
           value: new Date(paidDate)
-        })), dispatchDate && React.createElement("span", {
+        }, dateOptions))), dispatchDate && React.createElement("span", {
           className: "order-list-item__dispatch-date"
         }, React.createElement(_reactIntl.FormattedMessage, {
           id: "src.views.orders.orderListItem.dispatchedPrefix",
           defaultMessage: " dispatched on: "
-        }), React.createElement(_reactIntl.FormattedDate, {
+        }), React.createElement(_reactIntl.FormattedDate, _extends({
           value: new Date(dispatchDate)
-        })));
+        }, dateOptions))));
 
       case 'PendingPayment':
         return React.createElement(React.Fragment, null, React.createElement("span", {

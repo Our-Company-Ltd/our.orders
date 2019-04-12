@@ -58,6 +58,14 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
 
         const getSubtitle = () => {
             if (order.Type !== 'order') { return null; }
+
+            const dateOptions = {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            };
+
             switch (order.Status) {
                 case 'Canceled':
                     return (
@@ -80,7 +88,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                                         defaultMessage=" paid on: "
                                         description="Prefix text for date when order paid"
                                     />
-                                    <FormattedDate value={new Date(paidDate)} />
+                                    <FormattedDate value={new Date(paidDate)} {...dateOptions} />
                                 </span>
                             }
                             {dispatchDate &&
@@ -90,7 +98,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                                         defaultMessage=" dispatched on: "
                                         description="Prefix text for dispatched date"
                                     />
-                                    <FormattedDate value={new Date(dispatchDate)} />
+                                    <FormattedDate value={new Date(dispatchDate)} {...dateOptions} />
                                 </span>
                             }
                         </React.Fragment>
@@ -192,21 +200,21 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                     <Lines actions={true}>
                         <Line isTitle={true}>
                             {total && order.Currency &&
-                                    <FormattedNumber
-                                        value={total}
-                                        style="currency"
-                                        currency={order.Currency}
-                                    />
+                                <FormattedNumber
+                                    value={total}
+                                    style="currency"
+                                    currency={order.Currency}
+                                />
                             }
                         </Line>
                         <Line>
                             {order.Date &&
-                                    <FormattedDate
-                                        value={new Date(order.Date)}
-                                        year="2-digit"
-                                        month="numeric"
-                                        day="numeric"
-                                    />
+                                <FormattedDate
+                                    value={new Date(order.Date)}
+                                    year="2-digit"
+                                    month="numeric"
+                                    day="numeric"
+                                />
                             }
                         </Line>
                         <Line />
