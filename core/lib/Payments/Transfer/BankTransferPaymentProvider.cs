@@ -19,9 +19,9 @@ namespace our.orders.Payments.BankTransfer
 
         public override async Task<IOrder> ChargeAsync(BankTransferChargeBindings bindings, CancellationToken cancellationToken = default(CancellationToken))
         {
-            
-            var order = await this.orderService.GetByIdAsync(bindings.OrderID, cancellationToken);
 
+            var order = await this.orderService.GetByIdAsync(bindings.OrderID, cancellationToken);
+            order.OrderType = OrderType.Order;
             var payment = new Payment()
             {
                 Title = "Bank Transfer Payment",

@@ -77,7 +77,7 @@ namespace our.orders.Payments.PostFinance
         }
         
         [HttpPost("feedback")]
-        public async Task<HttpResponseMessage> PostFeedback([FromServices]PostFinancePaymentProvider provider, [FromServices]PostFinanceConfiguration configuration, [FromServices]OrderService orderService, [FromBody]PostFinanceFeedbackBindings bindings, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpResponseMessage> PostFeedback([FromServices]PostFinancePaymentProvider provider, [FromServices]PostFinanceConfiguration configuration, [FromServices]OrderService orderService, [FromForm]PostFinanceFeedbackBindings bindings, CancellationToken cancellationToken = default(CancellationToken))
         {
             var message = new HttpResponseMessage();
             var paymentID = bindings.orderID;
