@@ -204,7 +204,15 @@ namespace our.orders.Payments.PostFinance
             public decimal Amount { get; set; }
 
 
-            public string RedirectUri { get; set; }
+            public string BackUrl { get; set; }
+
+            public string AcceptUrl { get; set; }
+            public string DeclineUrl { get; set; }
+
+            public string CancelUrl { get; set; }
+
+            public string ExceptionUrl { get; set; }
+
 
         }
 
@@ -268,15 +276,17 @@ namespace our.orders.Payments.PostFinance
                     { "PARAMPLUS", "ORDER=" + order.Id }
             };
 
-            // if (PMLIST != null)
-            //     formParams.Add("PMLIST", string.Join(";", PMLIST));
-            // var redirectUri = bindings.RedirectUri;
-            // formParams.Add("backurl", redirectUri + "/Orders/" + member.UserName + "#back");
-            // formParams.Add("accepturl", redirectUri + "/Thanks/" + member.UserName);
-            // formParams.Add("declineurl", redirectUri + "/Pay/" + member.UserName + "#decline");
-            // formParams.Add("cancelurl", redirectUri + "/Pay/" + member.UserName + "#cancel");
-            // formParams.Add("exceptionurl", redirectUri + "/Pay/" + member.UserName + "#exception");
-
+            
+            if (!string.IsNullOrEmpty(bindings.BackUrl))
+                formParams.Add("backurl", bindings.BackUrl);
+            if (!string.IsNullOrEmpty(bindings.AcceptUrl))
+                formParams.Add("accepturl", bindings.AcceptUrl);
+            if (!string.IsNullOrEmpty(bindings.DeclineUrl))
+                formParams.Add("declineurl", bindings.DeclineUrl);
+            if (!string.IsNullOrEmpty(bindings.CancelUrl))
+                formParams.Add("cancelurl", bindings.CancelUrl);
+            if (!string.IsNullOrEmpty(bindings.ExceptionUrl))
+                formParams.Add("exceptionurl", bindings.ExceptionUrl);
 
             ////if (PARAMPLUS != null)
             //    formParams.Add("PARAMPLUS", PARAMPLUS(member));
