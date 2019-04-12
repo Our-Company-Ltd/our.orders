@@ -41,6 +41,7 @@ import { InjectedTemplatesProps, withTemplates } from 'src/_context/Templates';
 import MovementsList from 'src/components/Movements/MovementsList/MovementsList';
 import Dashboard from 'src/components/Dashboard/Dashboard';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import { InjectedPaymentNotificationTemplateProps, withPaymentNotifications } from 'src/_context/PaymentNotification';
 
 export const HomePageMessages = defineMessages({
     dashboard: {
@@ -99,12 +100,13 @@ export type HomePageProps = {} &
     InjectedShopProps &
     InjectedIntlProps &
     InjectedUsersProps &
-    InjectedTemplatesProps;
+    InjectedTemplatesProps &
+    InjectedPaymentNotificationTemplateProps;
 
 export class HomePage extends React.Component<HomePageProps> {
     render() {
         const {
-            intl, templateCtx, usersCtx, authCtx: { user },
+            intl, templateCtx, usersCtx, authCtx: { user }, paymentNotificationsCtx,
             settingsCtx, warehouseCtx, authCtx, shopCtx, categoryCtx, productCtx
         } = this.props;
         var tabs = [
@@ -230,7 +232,8 @@ export class HomePage extends React.Component<HomePageProps> {
                             authCtx,
                             shopCtx,
                             categoryCtx,
-                            templateCtx
+                            templateCtx,
+                            paymentNotificationsCtx
                         }}
                     />)
             }
@@ -249,10 +252,11 @@ export const HomePageStandalone =
                         withWarehouse(
                             withShop(
                                 withTemplates(
-                                    injectIntl(HomePage)
+                                    withPaymentNotifications(
+                                        injectIntl(HomePage)
+                                    )
                                 )
                             )
-
                         )
                     )
                 )

@@ -35,7 +35,7 @@ namespace our.orders.Repositories.mongoDb
                               services.AddSingleton<IRepository<Warehouse>>((s) => CreateRepository<Warehouse>(database));
                               services.AddSingleton<IRepository<Category>>((s) => CreateRepository<Category>(database));
                               services.AddSingleton<IRepository<DocumentTemplate>>((s) => CreateRepository<DocumentTemplate>(database));
-                              services.AddSingleton<IRepository<PaymentMessagingTemplate>>((s) => CreateRepository<PaymentMessagingTemplate>(database));
+                              services.AddSingleton<IRepository<PaymentNotificationTemplate>>((s) => CreateRepository<PaymentNotificationTemplate>(database));
 
                               // be sure the user is registered in the DI before used in the identity builder
                               var userRepository = CreateRepository<User>(database);

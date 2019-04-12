@@ -38,7 +38,7 @@ namespace our.orders.Repositories.EntityFramework
                   services.AddScoped<IRepository<Warehouse>>((s) => s.GetService<EFDbContext>().GetWarehouses());
                   services.AddScoped<IRepository<Category>>((s) => s.GetService<EFDbContext>().GetCategories());
                   services.AddScoped<IRepository<DocumentTemplate>>((s) => s.GetService<EFDbContext>().GetDocumentTemplates());
-                  services.AddScoped<IRepository<PaymentMessagingTemplate>>((s) => s.GetService<EFDbContext>().GetPaymentMessagingTemplate());
+                  services.AddScoped<IRepository<PaymentNotificationTemplate>>((s) => s.GetService<EFDbContext>().GetPaymentNotificationTemplate());
 
                   services.AddScoped<IRepository<User>>((s) => s.GetService<EFDbContext>().GetUsers());
                   services.AddScoped<IUserStore<User>, RepositoryUserStore>();

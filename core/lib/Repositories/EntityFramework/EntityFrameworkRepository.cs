@@ -188,8 +188,8 @@ namespace our.orders.Repositories.EntityFramework
         public IRepository<Category> GetCategories() => new EntityFrameworkRepository<Category, Category>(this, Categories, Categories, services);
 
 
-        public DbSet<PaymentMessagingTemplate> PaymentMessagingTemplate { get; set; }
-        public IRepository<PaymentMessagingTemplate> GetPaymentMessagingTemplate() => new EntityFrameworkRepository<PaymentMessagingTemplate, PaymentMessagingTemplate>(this, PaymentMessagingTemplate, PaymentMessagingTemplate, services);
+        public DbSet<PaymentNotificationTemplate> PaymentNotificationTemplate { get; set; }
+        public IRepository<PaymentNotificationTemplate> GetPaymentNotificationTemplate() => new EntityFrameworkRepository<PaymentNotificationTemplate, PaymentNotificationTemplate>(this, PaymentNotificationTemplate, PaymentNotificationTemplate, services);
         
         public DbSet<DocumentTemplate> DocumentTemplates { get; set; }
         public IRepository<DocumentTemplate> GetDocumentTemplates() => new EntityFrameworkRepository<DocumentTemplate, DocumentTemplate>(this, DocumentTemplates, DocumentTemplates, services);

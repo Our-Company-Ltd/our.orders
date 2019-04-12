@@ -4,7 +4,7 @@ using our.orders.Models;
 
 namespace our.orders.Dtos
 {
-    public class PaymentMessagingTemplateDto : IModel
+    public class PaymentNotificationTemplateDto : IModel
     {
         public string Id { get; set; }
 
@@ -21,7 +21,7 @@ namespace our.orders.Dtos
 
         public string Subject { get; set; }
 
-        public string Styles { get; set; }
+        // public string Styles { get; set; }
 
         public string Provider { get; set; }
 

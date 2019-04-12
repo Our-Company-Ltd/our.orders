@@ -33,7 +33,7 @@ namespace our.orders.Repositories.InMemory
                   services.AddSingleton<IRepository<Warehouse>>((s) => new InMemoryRepository<Warehouse, Warehouse>(s));
                   services.AddSingleton<IRepository<Category>>((s) => new InMemoryRepository<Category, Category>(s));
                   services.AddSingleton<IRepository<DocumentTemplate>>((s) => new InMemoryRepository<DocumentTemplate, DocumentTemplate>(s));
-                  services.AddScoped<IRepository<PaymentMessagingTemplate>>((s) => new InMemoryRepository<PaymentMessagingTemplate, PaymentMessagingTemplate>(s));
+                  services.AddScoped<IRepository<PaymentNotificationTemplate>>((s) => new InMemoryRepository<PaymentNotificationTemplate, PaymentNotificationTemplate>(s));
 
                   services.AddSingleton<IRepository<User>>((s) => new InMemoryRepository<User, User>(s));
 

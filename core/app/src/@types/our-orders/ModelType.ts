@@ -11,5 +11,6 @@ export type ModelType =
     'stockunit' |
     'voucher' |
     'payment' |
-    'documenttemplate'
+    'documenttemplate' |
+    'paymentnotificationtemplate'
 ;

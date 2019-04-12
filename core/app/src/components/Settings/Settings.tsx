@@ -18,7 +18,16 @@ import Avatar from '@material-ui/core/Avatar';
 import PowerSettings from '@material-ui/icons/PowerSettingsNew';
 import Account from './Account/Account';
 import { User } from 'src/@types/our-orders';
-import { Bookmarks, FileCopy, People, Store, Settings as SettingsIcon, EuroSymbol, Info } from '@material-ui/icons';
+import {
+    Bookmarks,
+    FileCopy,
+    People,
+    Store,
+    Settings as SettingsIcon,
+    EuroSymbol,
+    Info,
+    Email
+} from '@material-ui/icons';
 import CategoriesList from './Categories/CategoriesList/CategoriesList';
 import WarehousesList from './Warehouses/WarehousesList/WarehousesList';
 import ShopsList from './Shops/ShopsList/ShopsList';
@@ -34,9 +43,19 @@ import WarehouseIcon from '../Products/ProductDetail/WarehouseIcon';
 import Configuration from './Configuration/Configuration';
 import Payments from './Payments/Payments';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import { InjectedPaymentNotificationTemplateProps } from 'src/_context/PaymentNotification';
+import NotificationsList from './Notifications/NotificationsList/NotificationsList';
 
 type settingSubmenus =
-    'Account' | 'Users' | 'Shops' | 'Warehouses' | 'Payments' | 'Categories' | 'Templates' | 'Configuration';
+    'Account' |
+    'Users' |
+    'Shops' |
+    'Warehouses' |
+    'Payments' |
+    'Categories' |
+    'Templates' |
+    'PaymentNotifications' |
+    'Configuration';
 
 type injectedClasses =
     'containerCls' |
@@ -58,6 +77,7 @@ export type SettingsProps =
     InjectedWarehouseProps &
     InjectedTemplatesProps &
     InjectedCategoryProps &
+    InjectedPaymentNotificationTemplateProps &
     WithStyles<injectedClasses> &
     {
         initSubmenu?: settingSubmenus;
@@ -97,7 +117,15 @@ class Settings extends React.Component<SettingsProps, State> {
     render() {
         const { user, activeSubmenu } = this.state;
         const {
-            classes, shopCtx, warehouseCtx, intl, settingsCtx, authCtx, templateCtx, categoryCtx
+            classes, 
+            shopCtx, 
+            warehouseCtx, 
+            intl, 
+            settingsCtx, 
+            authCtx, 
+            templateCtx, 
+            categoryCtx,
+            paymentNotificationsCtx
         } = this.props;
         const md5Hash = user && user.Email ? md5(user.Email) : '';
 
@@ -215,6 +243,24 @@ class Settings extends React.Component<SettingsProps, State> {
                                 <ListItemText primary="Templates" />
                             </ListItem>
                         }
+
+                        {IsAdminOrInRole(user, 'VIEW_PAYMENTNOTIFICATIONS') &&
+                            <ListItem
+                                button={true}
+                                onClick={e => this._changeSubmenu('PaymentNotifications')}
+                                className={
+                                    classNames(
+                                        classes.menuItem,
+                                        activeSubmenu === 'Templates' && classes.menuItemActive
+                                    )
+                                }
+                            >
+                                <ListItemIcon>
+                                    <Email />
+                                </ListItemIcon>
+                                <ListItemText primary="Payment Notifications" />
+                            </ListItem>
+                        }
                         {IsAdminOrInRole(user, 'VIEW_PAYMENTS') &&
                             <ListItem
                                 button={true}
@@ -263,7 +309,7 @@ class Settings extends React.Component<SettingsProps, State> {
                                 ${settingsCtx.Settings.assemblyVersion} 
                                 ${settingsCtx.Settings.fileVersion} 
                                 ${settingsCtx.Settings.productVersion}`
-                                } 
+                                }
                             />
                         </ListItem>
 
@@ -307,6 +353,8 @@ class Settings extends React.Component<SettingsProps, State> {
                             <CategoriesList {...{ intl, categoryCtx }} />}
                         {this.state.activeSubmenu === 'Templates' &&
                             <DocumentTemplatesList {...{ intl, templateCtx, authCtx }} />}
+                        {this.state.activeSubmenu === 'PaymentNotifications' &&
+                            <NotificationsList {...{ intl, paymentNotificationsCtx, authCtx }} />}
                         {this.state.activeSubmenu === 'Payments' &&
                             <Payments {...{ intl, settingsCtx }} />}
                         {this.state.activeSubmenu === 'Configuration' &&

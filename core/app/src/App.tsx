@@ -21,6 +21,7 @@ import { CategoryProviderStandalone } from './_context/Category';
 import { ProductProviderStandalone } from './_context/Product';
 import { TemplatesProviderStandalone } from './_context/Templates';
 import LocaleProvider from './_context/Locale';
+import { PaymentNotificationsProviderStandalone } from './_context/PaymentNotification';
 
 class App extends React.Component {
 
@@ -34,26 +35,28 @@ class App extends React.Component {
         <ThemeProvider path="/theme/orders.json">
           <MuiPickersUtilsProvider utils={LuxonUtils}>
             <AuthProvider>
-              <SnackbarProvider maxSnack={3}>
-                <ProductProviderStandalone>
-                  <TemplatesProviderStandalone>
-                    <CategoryProviderStandalone>
-                      <UsersProviderStandalone>
-                        <ShopProviderStandalone>
-                          <WarehouseProviderStandalone>
-                            <SettingsProviderStandalone>
-                              <div className="app">
-                                <HashRouter />
-                                <ThemeStylesImporter />
-                              </div>
-                            </SettingsProviderStandalone>
-                          </WarehouseProviderStandalone>
-                        </ShopProviderStandalone>
-                      </UsersProviderStandalone>
-                    </CategoryProviderStandalone>
-                  </TemplatesProviderStandalone>
-                </ProductProviderStandalone>
-              </SnackbarProvider>
+              <PaymentNotificationsProviderStandalone>
+                <SnackbarProvider maxSnack={3}>
+                  <ProductProviderStandalone>
+                    <TemplatesProviderStandalone>
+                      <CategoryProviderStandalone>
+                        <UsersProviderStandalone>
+                          <ShopProviderStandalone>
+                            <WarehouseProviderStandalone>
+                              <SettingsProviderStandalone>
+                                <div className="app">
+                                  <HashRouter />
+                                  <ThemeStylesImporter />
+                                </div>
+                              </SettingsProviderStandalone>
+                            </WarehouseProviderStandalone>
+                          </ShopProviderStandalone>
+                        </UsersProviderStandalone>
+                      </CategoryProviderStandalone>
+                    </TemplatesProviderStandalone>
+                  </ProductProviderStandalone>
+                </SnackbarProvider>
+              </PaymentNotificationsProviderStandalone>
             </AuthProvider>
           </MuiPickersUtilsProvider>
         </ThemeProvider>

@@ -14,10 +14,10 @@ namespace our.orders.Messaging
     {
 
         private readonly AppEvents appEvents;
-        private readonly IService<PaymentMessagingTemplate> templates;
+        private readonly IService<PaymentNotificationTemplate> templates;
         private readonly IMessageSender messageSender;
 
-        public Notifier(AppEvents appEvents, IService<PaymentMessagingTemplate> templates, IMessageSender messageSender)
+        public Notifier(AppEvents appEvents, IService<PaymentNotificationTemplate> templates, IMessageSender messageSender)
         {
             this.appEvents = appEvents;
             this.templates = templates;
@@ -42,16 +42,16 @@ namespace our.orders.Messaging
             }
 
             var filter = Filter.And(
-                Filter.Eq(nameof(PaymentMessagingTemplate.Status), payment.Status),
+                Filter.Eq(nameof(PaymentNotificationTemplate.Status), payment.Status),
                 Filter.Or(
-                    Filter.Eq(nameof(PaymentMessagingTemplate.Provider), payment.Provider),
-                    Filter.Eq(nameof(PaymentMessagingTemplate.Provider), ""),
-                    Filter.Eq(nameof(PaymentMessagingTemplate.Provider), null)
+                    Filter.Eq(nameof(PaymentNotificationTemplate.Provider), payment.Provider),
+                    Filter.Eq(nameof(PaymentNotificationTemplate.Provider), ""),
+                    Filter.Eq(nameof(PaymentNotificationTemplate.Provider), null)
                 ),
                 Filter.Or(
-                    Filter.Eq(nameof(PaymentMessagingTemplate.Method), payment.Method),
-                    Filter.Eq(nameof(PaymentMessagingTemplate.Method), ""),
-                    Filter.Eq(nameof(PaymentMessagingTemplate.Method), null)
+                    Filter.Eq(nameof(PaymentNotificationTemplate.Method), payment.Method),
+                    Filter.Eq(nameof(PaymentNotificationTemplate.Method), ""),
+                    Filter.Eq(nameof(PaymentNotificationTemplate.Method), null)
                 )
             );
 

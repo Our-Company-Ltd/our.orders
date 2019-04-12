@@ -28,6 +28,7 @@ import {
 } from 'src/@types/our-orders';
 import { FilterDefinition } from 'src/_types/FilterDefinition';
 import { Filter } from 'src/_helpers/Filter';
+import { PaymentNotificationTemplate } from 'src/@types/our-orders/PaymentNotificationTemplate';
 
 export abstract class ServiceApi<TModel extends ModelBase> {
     abstract type: ModelType;
@@ -566,6 +567,7 @@ class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
                 return response;
             });
     }
+    
     Client(tempalteId: string, clientId: string, changes: Partial<Client>): Promise<{ html: string; styles: string }> {
         const pathModel = Object.keys(changes).map(k => ({ op: 'replace', path: `/${k}`, value: changes[k] }));
 
@@ -626,6 +628,19 @@ class DocumentTemplateApi extends ServiceApi<DocumentTemplate> {
 }
 
 export const DocumentTemplates = new DocumentTemplateApi();
+
+class PaymentNotificationsApi extends ServiceApi<PaymentNotificationTemplate> {
+    type: ModelType = 'paymentnotificationtemplate';
+
+    Empty(title: string, partial: Partial<PaymentNotificationTemplate>): Promise<PaymentNotificationTemplate> {
+        const empty: Partial<PaymentNotificationTemplate> = {
+            Title: title
+        };
+
+        return super._Empty({ ...empty, ...partial });
+    }
+}
+export const PaymentNotifications = new PaymentNotificationsApi();
 
 class MovementApi extends ServiceApi<Movement> {
     type: ModelType = 'movement';

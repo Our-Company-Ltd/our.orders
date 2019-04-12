@@ -22,14 +22,14 @@ using our.orders.Services;
 namespace our.orders.Controllers
 {
     /// <summary>
-    /// <see cref="ServiceController"/> for the <see cref="DocumentTemplate"/> model using <see cref="DocumentTemplateDto"/> as dto
+    /// <see cref="ServiceController"/> for the <see cref="PaymentNotificationTemplate"/> model using <see cref="PaymentNotificationTemplateDto"/> as dto
     /// </summary>
     [Authorize]
     [Route("[controller]")]
-    internal class PaymentMessagingTemplateController : ServiceController<PaymentMessagingTemplate, PaymentMessagingTemplateDto>
+    internal class PaymentNotificationTemplateController : ServiceController<PaymentNotificationTemplate, PaymentNotificationTemplateDto>
     {
         readonly UserManager _userManager;
-        public PaymentMessagingTemplateController(
+        public PaymentNotificationTemplateController(
             UserManager userManager,
             IAntiforgery antiForgery,
             IHttpContextAccessor httpContextAccessor,
@@ -38,7 +38,7 @@ namespace our.orders.Controllers
             IAppSettings appSettings,
             IServiceProvider serviceProvider,
             ILoggerFactory loggerFactory,
-            IService<PaymentMessagingTemplate> service
+            IService<PaymentNotificationTemplate> service
             ) : base(
                 antiForgery,
                 httpContextAccessor,
