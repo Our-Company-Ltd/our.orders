@@ -15,9 +15,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Select, FormControl, InputLabel, Grid } from '@material-ui/core';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import { Movement, User } from 'src/@types/our-orders';
-import { DateTimePicker } from 'material-ui-pickers';
 import NumberField from 'src/components/NumberField/NumberField';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 export type MovementsFieldsProps =
     InjectedShopProps &
@@ -112,23 +112,16 @@ class MovementsFields extends React.Component<MovementsFieldsProps> {
                     </FormControl>
                 </Grid>
                 <Grid item={true} xs={6}>
-                    <DateTimePicker
-                        label="date"
+                    <DateTimeField
+                        label="Date"
                         fullWidth={true}
-                        keyboard={true}
-                        format="dd/MM/yyyy HH:mm"
-                        mask={(value: string) =>
-                            // tslint:disable-next-line:max-line-length
-                            (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                        value={(
-                            date &&
+                        onDateChange={(value: Date) => onChange({ Date: value })}
+                        date={(date &&
                             new Date(date))
-                            || new Date()
-                        }
-                        onChange={(value: Date) => onChange({ Date: value })}
-                        disableOpenOnEnter={true}
-                        animateYearScrolling={false}
+                            || new Date()}
+                        type="text"
                     />
+                    
                 </Grid>
                 <Grid item={true} xs={6}>
                     <FormControlLabel

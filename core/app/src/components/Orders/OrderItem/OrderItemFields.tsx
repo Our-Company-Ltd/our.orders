@@ -29,7 +29,6 @@ import {
 
 import TextField from '@material-ui/core/TextField';
 import { OrderItemFieldsMessages } from './OrderItemFieldsMessages';
-import { DateTimePicker } from 'material-ui-pickers';
 import { OrderItem, OrderOption, Amount } from 'src/@types/our-orders';
 import {
     LocalShipping, HowToVote, Close, ArrowDropUp, SubdirectoryArrowRight, ArrowDropDown
@@ -537,20 +536,10 @@ class OrderItemFields extends React.Component<OrderItemFieldsProps, State> {
                                         </FormControl>
                                     </Grid>
                                     <Grid item={true} xs={3}>
-                                        <DateTimePicker
+                                        <DateTimeField
                                             label="Dispatch date"
                                             fullWidth={true}
-                                            keyboard={true}
-                                            format="dd/MM/yyyy HH:mm"
-                                            mask={(value: string) =>
-                                                // tslint:disable-next-line:max-line-length
-                                                (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                            value={(
-                                                DispatchInfos.Date &&
-                                                new Date(DispatchInfos.Date))
-                                                || new Date()
-                                            }
-                                            onChange={(value: Date) => {
+                                            onDateChange={(value: Date) => {
                                                 this.props.onChange(
                                                     {
                                                         ...changes,
@@ -561,9 +550,13 @@ class OrderItemFields extends React.Component<OrderItemFieldsProps, State> {
                                                     }
                                                 );
                                             }}
+                                            date={(
+                                                DispatchInfos.Date &&
+                                                new Date(DispatchInfos.Date))
+                                                || new Date()
+                                            }
+                                            type="text"
                                             disabled={!hasRights}
-                                            disableOpenOnEnter={true}
-                                            animateYearScrolling={false}
                                         />
 
                                     </Grid>

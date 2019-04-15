@@ -54,7 +54,6 @@ import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
 import { Filter } from 'src/_helpers/Filter';
 import { debounce } from 'throttle-debounce';
-import { DateTimePicker } from 'material-ui-pickers';
 import { InjectedTemplatesProps } from 'src/_context/Templates';
 import { OrderListMessages } from './OrderListMesseges';
 import { InjectedIntlProps } from 'react-intl';
@@ -62,6 +61,7 @@ import { Printer } from 'src/_helpers/print';
 import { FilterDefinition } from 'src/_types/FilterDefinition';
 import ShopsField from 'src/components/ShopsField/ShopsField';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 export type injectedClasses =
     'drawerSpacer' |
@@ -538,38 +538,28 @@ class OrderList extends React.Component<OrdersListProps, State> {
                             />
                         </Grid>
                         <Grid item={true}>
-                            <DateTimePicker
+                            <DateTimeField
                                 className={classes.MuiPickerDTHeader}
                                 label={intl.formatMessage(OrderListMessages.from)}
                                 fullWidth={true}
-                                keyboard={true}
-                                clearable={true}
-                                format="dd/MM/yyyy HH:mm"
-                                mask={(value: string) =>
-                                    // tslint:disable-next-line:max-line-length
-                                    (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                value={fromDate}
-                                onChange={fromDateChange}
-                                disableOpenOnEnter={true}
-                                animateYearScrolling={false}
+                                onDateChange={fromDateChange}
+                                date={fromDate}
+                                type="text"
+                                disabled={!hasRights}
                             />
+
                         </Grid>
                         <Grid item={true}>
-                            <DateTimePicker
+                            <DateTimeField
                                 className={classes.MuiPickerDTHeader}
                                 label={intl.formatMessage(OrderListMessages.to)}
                                 fullWidth={true}
-                                keyboard={true}
-                                format="dd/MM/yyyy HH:mm"
-                                clearable={true}
-                                mask={(value: string) =>
-                                    // tslint:disable-next-line:max-line-length
-                                    (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                value={toDate}
-                                onChange={toDateChange}
-                                disableOpenOnEnter={true}
-                                animateYearScrolling={false}
+                                onDateChange={toDateChange}
+                                date={toDate}
+                                type="text"
+                                disabled={!hasRights}
                             />
+
                         </Grid>
                         <Grid item={true} className={classes.sort}>
                             <IconButton

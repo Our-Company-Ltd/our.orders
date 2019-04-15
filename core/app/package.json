@@ -21,7 +21,6 @@
     "loadjs": "^3.5.4",
     "luxon": "^1.8.1",
     "material-design-icons": "^3.0.1",
-    "material-ui-pickers": "^2.0.4",
     "md5": "^2.2.1",
     "moment": "^2.22.2",
     "notistack": "^0.4.1",

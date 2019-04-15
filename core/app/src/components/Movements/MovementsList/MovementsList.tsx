@@ -22,7 +22,6 @@ import * as classNames from 'classnames';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
 import { debounce } from 'throttle-debounce';
-import { DateTimePicker } from 'material-ui-pickers';
 import {
     InjectedSettingsProps,
     InjectedWarehouseProps,
@@ -39,6 +38,7 @@ import ShopsList from './ShopsList';
 import StockList from './StockList';
 import NumberField from 'src/components/NumberField/NumberField';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 export type injectedClasses =
     'drawerSpacer' |
@@ -170,7 +170,7 @@ class MovementsList extends React.Component<MovementsListProps, State> {
             settingsCtx,
             templateCtx,
             usersCtx,
-            authCtx: {user},
+            authCtx: { user },
             warehouseCtx,
             authCtx, shopCtx,
             categoryCtx,
@@ -201,50 +201,50 @@ class MovementsList extends React.Component<MovementsListProps, State> {
                     <MaterialList
                         className={classNames(classes.menu)}
                     >
-                        {IsAdminOrInRole(user, 'VIEW_SHOPS_MOVEMENTS') && 
+                        {IsAdminOrInRole(user, 'VIEW_SHOPS_MOVEMENTS') &&
                             shopCtx.Shops.map((s) => {
 
-                            const active = activeLabel === s.Id;
-                            return (
-                                <ListItem
-                                    key={`shop-${s.Id}`}
-                                    button={true}
-                                    onClick={() => this._toggleActive(s.Id)}
-                                    className={
-                                        classNames(
-                                            classes.menuItem,
-                                            classes.menuItemCashbox,
-                                            active && classes.menuItemActive
-                                        )
-                                    }
-                                >
-                                    <ListItemIcon><Store /></ListItemIcon>
-                                    <ListItemText> {s.Name}
-                                        {cashbox && cashbox[s.Id] &&
-                                            <div className={classes.cashboxes}>
-                                                {Object.keys(cashbox[s.Id]).map(currency => (
-                                                    cashbox[s.Id][currency] ?
-                                                        <span
-                                                            key={`${s.Id}-${currency}`}
-                                                            className={
-                                                                classNames(
-                                                                    classes.categoryCount,
-                                                                    active && classes.categoryCountActive
-                                                                )
-                                                            }
-                                                        >
-                                                            <FormattedNumber
-                                                                currency={currency}
-                                                                style="currency"
-                                                                value={cashbox[s.Id][currency]}
-                                                            />
-                                                        </span> : null)
-                                                )}
-                                            </div>}
-                                    </ListItemText>
-                                </ListItem>
-                            );
-                        })}
+                                const active = activeLabel === s.Id;
+                                return (
+                                    <ListItem
+                                        key={`shop-${s.Id}`}
+                                        button={true}
+                                        onClick={() => this._toggleActive(s.Id)}
+                                        className={
+                                            classNames(
+                                                classes.menuItem,
+                                                classes.menuItemCashbox,
+                                                active && classes.menuItemActive
+                                            )
+                                        }
+                                    >
+                                        <ListItemIcon><Store /></ListItemIcon>
+                                        <ListItemText> {s.Name}
+                                            {cashbox && cashbox[s.Id] &&
+                                                <div className={classes.cashboxes}>
+                                                    {Object.keys(cashbox[s.Id]).map(currency => (
+                                                        cashbox[s.Id][currency] ?
+                                                            <span
+                                                                key={`${s.Id}-${currency}`}
+                                                                className={
+                                                                    classNames(
+                                                                        classes.categoryCount,
+                                                                        active && classes.categoryCountActive
+                                                                    )
+                                                                }
+                                                            >
+                                                                <FormattedNumber
+                                                                    currency={currency}
+                                                                    style="currency"
+                                                                    value={cashbox[s.Id][currency]}
+                                                                />
+                                                            </span> : null)
+                                                    )}
+                                                </div>}
+                                        </ListItemText>
+                                    </ListItem>
+                                );
+                            })}
                         <Divider />
                         {warehouseCtx.Warehouses.map((w) => {
                             const active = activeLabel === w.Id;
@@ -307,35 +307,21 @@ class MovementsList extends React.Component<MovementsListProps, State> {
                         {isShops ?
                             <React.Fragment>
                                 <Grid item={true}>
-                                    <DateTimePicker
+                                    <DateTimeField
                                         label="From"
                                         fullWidth={true}
-                                        keyboard={true}
-                                        clearable={true}
-                                        format="dd/MM/yyyy HH:mm"
-                                        mask={(value: string) =>
-                                            // tslint:disable-next-line:max-line-length
-                                            (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                        value={from || null}
-                                        onChange={fromDateChange}
-                                        disableOpenOnEnter={true}
-                                        animateYearScrolling={false}
+                                        onDateChange={fromDateChange}
+                                        date={from}
+                                        type="text"
                                     />
                                 </Grid>
                                 <Grid item={true}>
-                                    <DateTimePicker
+                                    <DateTimeField
                                         label="To"
                                         fullWidth={true}
-                                        keyboard={true}
-                                        format="dd/MM/yyyy HH:mm"
-                                        clearable={true}
-                                        mask={(value: string) =>
-                                            // tslint:disable-next-line:max-line-length
-                                            (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                        value={to || null}
-                                        onChange={toDateChange}
-                                        disableOpenOnEnter={true}
-                                        animateYearScrolling={false}
+                                        onDateChange={toDateChange}
+                                        date={to}
+                                        type="text"
                                     />
                                 </Grid>
                                 <Grid item={true} style={{ marginTop: 'auto', display: 'flex' }}>

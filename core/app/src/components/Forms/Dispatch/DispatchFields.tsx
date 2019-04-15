@@ -24,7 +24,6 @@ import ItemPreview, { Lines, Line, Thumb } from '../../ItemPreview/ItemPreview';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
 
 import DispatchFieldsMessages from './DispatchFieldsMessages';
-import { DateTimePicker } from 'material-ui-pickers';
 import { Dispatch, DispatchMethod, DispatchStatus } from 'src/@types/our-orders';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import {
@@ -40,6 +39,7 @@ import {
 import * as classNames from 'classnames';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 type injectedClasses =
     'svgIcon' |
@@ -215,22 +215,16 @@ export class DispatchFields extends React.Component<DispatchFieldsProps, State> 
                                 </FormControl>
                             </Grid>
                             <Grid item={true} xs={4}>
-                                <DateTimePicker
+                                <DateTimeField
+                                    label="Date"
                                     fullWidth={true}
-                                    keyboard={true}
-                                    format="dd/MM/yyyy HH:mm"
-                                    mask={(value: string) =>
-                                        // tslint:disable-next-line:max-line-length
-                                        (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                    value={current.Date ? new Date(current.Date) : new Date()}
-                                    onChange={(value: Date) =>
+                                    onDateChange={(value: Date) =>
                                         this.props.onChange({
                                             ...changes,
                                             Date: value
                                         })}
-                                    disableOpenOnEnter={true}
-                                    animateYearScrolling={false}
-                                    label="Date"
+                                    date={current.Date ? new Date(current.Date) : new Date()}
+                                    type="text"
                                     disabled={!hasRights}
                                 />
                             </Grid>

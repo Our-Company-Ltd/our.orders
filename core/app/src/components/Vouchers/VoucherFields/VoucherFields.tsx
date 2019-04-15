@@ -13,11 +13,11 @@ import TextField from '@material-ui/core/TextField';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Grid } from '@material-ui/core';
-import { DatePicker } from 'material-ui-pickers';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 import { Voucher } from 'src/@types/our-orders';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 export type VoucherFieldsProps =
     InjectedSettingsProps &
@@ -74,7 +74,7 @@ export class VoucherFields extends React.Component<VoucherFieldsProps> {
                             const val = (e.target as HTMLInputElement).value;
                             const parsedVal = val === '' ? 0 : parseFloat(val);
                             onChange({ InitialValue: parsedVal });
-                        }} 
+                        }}
                         disabled={!hasRights}
                     />
                 </Grid>
@@ -91,24 +91,17 @@ export class VoucherFields extends React.Component<VoucherFieldsProps> {
                     />
                 </Grid>
                 <Grid item={true} xs={12}>
-                    <DatePicker
+                    <DateTimeField
                         label={formatMessage(VoucherFieldsMessages.expiration)}
                         fullWidth={true}
-                        keyboard={true}
-                        clearable={true}
-                        format="dd/MM/yyyy"
-                        disabled={!hasRights}
-                        mask={(value: string) =>
-                            // tslint:disable-next-line:max-line-length
-                            (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [])}
-                        value={(
+                        onDateChange={(value: Date ) => onChange({ Expiration: value })}
+                        date={(
                             Expiration &&
                             new Date(Expiration)
-                        ) || null
+                        ) || undefined
                         }
-                        onChange={(value: Date | null) => onChange({ Expiration: value })}
-                        disableOpenOnEnter={true}
-                        animateYearScrolling={false}
+                        type="text"
+                        disabled={!hasRights}
                     />
                 </Grid>
                 <Grid item={true} xs={6}>

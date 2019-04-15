@@ -5,7 +5,6 @@ import ItemPreview, { Lines, Line, Thumb } from '../../ItemPreview/ItemPreview';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
 import { GetPaymentStatusLegend } from '../../../_helpers/PaymentStatusHelpers';
 import Grid from '@material-ui/core/Grid';
-import { DateTimePicker } from 'material-ui-pickers';
 import TextField from '@material-ui/core/TextField';
 import PaymentListMessages from './PaymentListMessages';
 import {
@@ -32,6 +31,7 @@ import { StyleRules } from '@material-ui/core/styles';
 import * as classNames from 'classnames';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
 import { InjectedSettingsProps } from 'src/_context';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 type injectedClasses =
     'svgIcon' |
@@ -212,19 +212,13 @@ class PaymentFields extends React.Component<PaymentFieldsProps & InjectedIntlPro
                                 />
                             </Grid>
                             <Grid item={true} xs={6}>
-                                <DateTimePicker
-                                    fullWidth={true}
-                                    keyboard={true}
-                                    format="dd/MM/yyyy HH:mm"
-                                    mask={(value: string) =>
-                                        // tslint:disable-next-line:max-line-length
-                                        (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                    value={current.Date ? new Date(current.Date) : new Date()}
-                                    onChange={(value: Date) =>
-                                        this.props.onChange({ ...changes, Date: value ? value.toString() : undefined })}
-                                    disableOpenOnEnter={true}
-                                    animateYearScrolling={false}
+                                <DateTimeField
                                     label="Date"
+                                    fullWidth={true}
+                                    onDateChange={(value: Date) =>
+                                        this.props.onChange({ ...changes, Date: value ? value.toString() : undefined })}
+                                    date={current.Date ? new Date(current.Date) : new Date()}
+                                    type="text"
                                     disabled={!hasRights}
                                 />
                             </Grid>

@@ -45,11 +45,11 @@ import { AutoSizer } from 'react-virtualized';
 import { LineChart, Line, Tooltip as ChartTooltip, PieChart, Pie, TooltipProps } from 'recharts';
 import * as moment from 'moment';
 import { DashboardMessages } from './DashboardMessages';
-import { DateTimePicker } from 'material-ui-pickers';
 import { InjectedProductProps } from 'src/_context/Product';
 import ProductList from '../Products/ProductList/ProductList';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import Fabs from '../Fabs/Fabs';
+import DateTimeField from '../DateTimeField/DateTimeField';
 export type periods =
     'today' |
     'yesterday' |
@@ -658,36 +658,23 @@ class Dashboard extends React.Component<dashboardProps, State> {
                                                     {formatMessage(DashboardMessages.customTimePeriodTitle)}
                                                 </DialogTitle>
                                                 <DialogContent>
-                                                    <DateTimePicker
+                                                    <DateTimeField
+                                                        label={formatMessage(DashboardMessages.customTimePeriodFrom)}
                                                         fullWidth={true}
-                                                        keyboard={true}
-                                                        format="dd/MM/yyyy HH:mm"
-                                                        mask={(value: string) =>
-                                                            // tslint:disable-next-line:max-line-length
-                                                            (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                                        value={customPeriodFrom}
-                                                        onChange={(value: Date) =>
+                                                        onDateChange={(value: Date) =>
                                                             this.setState(() => ({ customPeriodFrom: value }))
                                                         }
-                                                        disableOpenOnEnter={true}
-                                                        animateYearScrolling={false}
-                                                        label={formatMessage(DashboardMessages.customTimePeriodTo)}
+                                                        date={customPeriodFrom}
+                                                        type="text"
                                                     />
-                                                    <DateTimePicker
+                                                    <DateTimeField
+                                                        label={formatMessage(DashboardMessages.customTimePeriodTo)}
                                                         fullWidth={true}
-                                                        keyboard={true}
-                                                        minDate={customPeriodFrom}
-                                                        format="dd/MM/yyyy HH:mm"
-                                                        mask={(value: string) =>
-                                                            // tslint:disable-next-line:max-line-length
-                                                            (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                                        value={customPeriodTo}
-                                                        onChange={(value: Date) =>
+                                                        onDateChange={(value: Date) =>
                                                             this.setState(() => ({ customPeriodTo: value }))
                                                         }
-                                                        disableOpenOnEnter={true}
-                                                        animateYearScrolling={false}
-                                                        label={formatMessage(DashboardMessages.customTimePeriodFrom)}
+                                                        date={customPeriodTo}
+                                                        type="text"
                                                     />
                                                 </DialogContent>
                                                 <DialogActions>

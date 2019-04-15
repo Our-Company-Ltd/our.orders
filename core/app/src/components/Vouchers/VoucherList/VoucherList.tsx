@@ -35,7 +35,6 @@ import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
 import { debounce } from 'throttle-debounce';
 import VoucherDetail from '../VoucherDetail/VoucherDetail';
-import { DateTimePicker } from 'material-ui-pickers';
 import {
     InjectedSettingsProps,
     InjectedWarehouseProps,

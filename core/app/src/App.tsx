@@ -11,9 +11,6 @@ import './App.css';
 
 import ThemeProvider from './components/ThemeProvider/ThemeProvider';
 
-import LuxonUtils from '@date-io/luxon';
-import { MuiPickersUtilsProvider } from 'material-ui-pickers';
-
 import ThemeStylesImporter from './_helpers/ThemeStylesImporter';
 
 import HashRouter from './components/HashRouter/HashRouter';
@@ -33,7 +30,6 @@ class App extends React.Component {
 
       <LocaleProvider default="en">
         <ThemeProvider path="/theme/orders.json">
-          <MuiPickersUtilsProvider utils={LuxonUtils}>
             <AuthProvider>
               <PaymentNotificationsProviderStandalone>
                 <SnackbarProvider maxSnack={3}>
@@ -58,7 +54,6 @@ class App extends React.Component {
                 </SnackbarProvider>
               </PaymentNotificationsProviderStandalone>
             </AuthProvider>
-          </MuiPickersUtilsProvider>
         </ThemeProvider>
       </LocaleProvider>
 
