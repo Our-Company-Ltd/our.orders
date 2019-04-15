@@ -104,8 +104,8 @@ type OrderFilter = {
     reference: string;
     shopId: string;
     userId: string;
-    fromDate: Date | null;
-    toDate: Date | null;
+    fromDate: Date | undefined;
+    toDate: Date | undefined;
     sortAttribute: keyof Order;
     sortDirection: 'ascending' | 'descending';
 };
@@ -133,8 +133,8 @@ const DefaultFilters = (): OrderFilter => ({
     reference: '',
     shopId: '',
     userId: '',
-    fromDate: null,
-    toDate: null,
+    fromDate: undefined,
+    toDate: undefined,
     sortAttribute: localStorage.getItem(`${LOCAL_STORAGE_KEY}.sortAttribute`) as keyof Order
         || 'Date',
     sortDirection: localStorage.getItem(`${LOCAL_STORAGE_KEY}.sortDirection`) as 'ascending' | 'descending'
