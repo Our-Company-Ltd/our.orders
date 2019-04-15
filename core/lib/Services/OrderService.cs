@@ -215,12 +215,11 @@ namespace our.orders.Services
 
         private void _UpdatePrice(IOrder order)
         {
-            var items = order.Items ?? Enumerable.Empty<OrderItem>();
+            var items = (order.Items ?? Enumerable.Empty<OrderItem>()).ToList();
             foreach (var item in items)
             {
                 item.UpdatePrice(appSettings);
             }
-
 
             order.Price = items.Sum(i => i.FinalPrice);
 

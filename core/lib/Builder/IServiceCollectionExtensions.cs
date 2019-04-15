@@ -100,7 +100,8 @@ namespace our.orders.Builder
             // add order and product services to the host services
             services.AddTransient<OrderService, OrderService>(s => appEvents.Services.GetService<OrderService>());
             services.AddTransient<ProductService, ProductService>(s => appEvents.Services.GetService<ProductService>());
-
+            services.AddTransient<IService<IClient>>(s => appEvents.Services.GetService<IService<IClient>>());
+            
             var builder = new OurOrdersBuilder(appSettings, appEvents, services);
 
             services.AddSingleton<OurOrdersBuilder>(builder);
