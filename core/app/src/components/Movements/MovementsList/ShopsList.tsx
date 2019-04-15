@@ -334,6 +334,7 @@ class ShopsList extends React.Component<ShopsListProps, State> {
                             }}
                             onChanged={() => {
                                 this._refresh();
+                                this.props.refreshCashbox();
                             }}
                             onDelete={() => {
                                 this._handleOrderDeleted();
@@ -461,7 +462,9 @@ class ShopsList extends React.Component<ShopsListProps, State> {
         if (this._list) {
             this._list.forceUpdateGrid();
         }
-        this._refreshCashbox();
+        // this._refreshCashbox();
+        this._refresh();
+        this.props.refreshCashbox();
         this.setState(() => ({
             editing: index,
             lastUpdate: new Date().getTime()
@@ -474,7 +477,7 @@ class ShopsList extends React.Component<ShopsListProps, State> {
             () => ({
                 editing: -1
             }),
-            () => this._refresh());
+            () => (this._refresh(), this.props.refreshCashbox()));
     }
 
     private _isRowLoaded(ind: Index) {
