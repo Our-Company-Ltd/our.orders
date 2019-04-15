@@ -38,6 +38,7 @@ import SideDialog from 'src/components/SideDialog/SideDialog';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
 import * as classNames from 'classnames';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 type injectedClasses =
     'title' |
