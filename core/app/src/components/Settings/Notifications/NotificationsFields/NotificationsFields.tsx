@@ -59,7 +59,7 @@ class NotificationsFields extends React.Component<NotificationsFieldsProps> {
                         label={intl.formatMessage(NotificationsMessages.description)}
                     />
                 </Grid>
-                <Grid item={true} xs={6}>
+                <Grid item={true} xs={12}>
                     <Dropzone
                         accept="text/html"
                         style={{}}
