@@ -13,12 +13,12 @@ import ItemPreview, { Line, Lines, Thumb } from '../../ItemPreview/ItemPreview';
 import { FormattedNumber } from 'react-intl';
 import PaymentList from '../../Forms/Payment/List';
 
-import TextField from '@material-ui/core/TextField';
+import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Select, FormControl, InputLabel, Grid, WithStyles, withStyles } from '@material-ui/core';
 import DispatchList from '../../Forms/Dispatch/DispatchList';
 import { ShippingTemplate, Order, OrderType, Person, Client, OrderItem } from 'src/@types/our-orders';
-import { DateTimePicker } from 'material-ui-pickers';
+import MaskedInput from 'react-text-mask';
 import { GridContainer } from 'src/components/GridContainer/GridContainer';
 
 import OrderClientFields from '../OrderClientFields/OrderClientFields';
@@ -32,6 +32,8 @@ import { StyleRules } from '@material-ui/core/styles';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
 import ShopsField from 'src/components/ShopsField/ShopsField';
 
+import * as moment from 'moment';
+
 import {
     InjectedAuthProps,
     InjectedSettingsProps,
@@ -42,6 +44,8 @@ import {
     InjectedCategoryProps
 } from 'src/_context';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import { InputBaseComponentProps } from '@material-ui/core/InputBase';
+// import { InputBaseComponentProps } from '@material-ui/core/InputBase';
 
 export type injectedClasses = 'cancelled' | 'cancelledIcon' | 'cancelledWrapper' | 'detailGridColumn';
 
@@ -63,6 +67,99 @@ export type OrderFieldsProps =
         shippingTemplates: ShippingTemplate[];
 
     };
+
+const DateTimeLocalTextFieldMask: React.FunctionComponent<InputBaseComponentProps> = (props) => {
+    const { inputRef, value, defaultValue, ...other } = props;
+    return (
+        <MaskedInput
+            {...other}
+
+            ref={ref => {
+                (inputRef as ((instance: HTMLElement | null) => void))(ref ? ref.inputElement : null);
+            }}
+            value={value as string}
+            defaultValue={defaultValue as string}
+// tslint:disable-next-line: max-line-length
+            mask={[/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/]}
+            placeholder=""
+            showMask={!!value}
+        />
+    );
+};
+type TextFieldState = {
+    value: string;
+    valid: boolean;
+};
+
+type DateTimeLocalTextFieldProps = TextFieldProps & {
+    onDateChange: (d: Date | undefined) => void;
+    date: string | Date | undefined;
+};
+class DateTimeLocalTextField extends React.Component<DateTimeLocalTextFieldProps, TextFieldState> {
+    constructor(props: DateTimeLocalTextFieldProps) {
+        super(props);
+        const d = this.props.date && moment.utc(this.props.date);
+        const valid = d && d.isValid() || false;
+        this.state = {
+            value: valid && d && this._formatDate(d) || '',
+            valid: valid
+        };
+    }
+    componentDidUpdate(prevProps: DateTimeLocalTextFieldProps) {
+        if (prevProps.date !== this.props.date) {
+            const d = this.props.date && moment.utc(this.props.date);
+            const valid = d && d.isValid() || false;
+            this.setState(() => ({
+                value: valid && d && this._formatDate(d) || '',
+                valid: valid
+            }));
+        }
+    }
+    render() {
+        const { onDateChange, date, onChange, InputProps, ...props } = this.props;
+        const { value, valid } = this.state;
+        return (
+            <TextField
+                {...props}
+                onChange={(e) => {
+                    const v = e.target.value;
+                    const d = moment(v, 'DD/MM/YYYY HH:mm', true);
+                    const inputValid = d.isValid();
+                    this.setState(
+                        () => ({ value: v, valid: inputValid }),
+                        () => {
+                            if (!v) {
+                                onDateChange(undefined);
+                                return;
+                            }
+                            
+                            if (!inputValid) { 
+                                return;
+                             }
+                            onDateChange(d.utc().toDate());
+                        });
+                }
+                }
+                onBlur={() => {
+                    if (!this.state.valid) {
+                        this.setState(
+                            () => ({ value: '', valid: true })
+                        );   
+                    }
+                }}
+                value={value}
+                InputProps={{
+                    inputComponent: DateTimeLocalTextFieldMask,
+                }}
+                error={!valid}
+            />
+        );
+
+    }
+    private _formatDate(d: moment.Moment) {
+        return d.local().format('DD/MM/YYYY HH:mm');
+    }
+}
 class OrderFields extends React.Component<OrderFieldsProps> {
 
     constructor(props: OrderFieldsProps) {
@@ -171,23 +268,18 @@ class OrderFields extends React.Component<OrderFieldsProps> {
                             />
                         </Grid>
                         <Grid item={true} xs={4}>
-                            <DateTimePicker
+                            <DateTimeLocalTextField
                                 label="date"
                                 fullWidth={true}
-                                keyboard={true}
-                                format="dd/MM/yyyy HH:mm"
-                                mask={(value: string) =>
-                                    // tslint:disable-next-line:max-line-length
-                                    (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                value={(
-                                    date &&
-                                    new Date(date))
-                                }
-                                onChange={(value: Date) => onChange({ Date: value })}
-                                disableOpenOnEnter={true}
-                                animateYearScrolling={false}
+                                className="forms-fields__title-reference-field"
+                                onDateChange={(d) => onChange({
+                                    Date: d
+                                })}
+                                date={date}
                                 disabled={!hasRights}
+                                type="text"
                             />
+
                         </Grid>
                         <Grid item={true} xs={3}>
                             <CurrenciesField

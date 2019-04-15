@@ -809,7 +809,7 @@ class Dashboard extends React.Component<dashboardProps, State> {
     private _getData(report: StatisticReport, labels: string[], period: periods) {
         const t = this._getTime(period);
         const formatDate = (date: string) => {
-            const d = moment(date);
+            const d = moment.utc(date).local();
             switch (t.interval) {
                 case 'Day':
                     return d.format('ddd ll');
@@ -999,7 +999,7 @@ class Dashboard extends React.Component<dashboardProps, State> {
 
     private _last5years() {
         const now = moment();
-        const today = now.clone().startOf('day');
+        const today = now.clone().startOf('year');
         const start = today.subtract(4, 'year');
         const interval: TimeInterval = 'Year';
         const count = 5;
