@@ -50,6 +50,7 @@ import { InjectedTemplatesProps } from 'src/_context/Templates';
 import VoucherListMesseges from './VoucherListMesseges';
 import { Filter } from 'src/_helpers/Filter';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
+import DateTimeField from 'src/components/DateTimeField/DateTimeField';
 
 export type injectedClasses =
     'drawerSpacer' |
@@ -88,8 +89,8 @@ type VoucherFilter = {
     used: boolean;
     expired: boolean;
     code: string;
-    from: Date | null;
-    to: Date | null;
+    from: Date | undefined;
+    to: Date | undefined;
     sortAttribute: keyof Voucher;
     sortDirection: 'ascending' | 'descending';
 };
@@ -116,8 +117,8 @@ const DefaultFilters = (): VoucherFilter => ({
     expired: false,
     used: false,
     code: '',
-    from: null,
-    to: null,
+    from: undefined,
+    to: undefined,
     sortAttribute: localStorage.getItem(`${LOCAL_STORAGE_KEY}.sortAttribute`) as keyof Voucher
         || 'Creation',
     sortDirection: localStorage.getItem(`${LOCAL_STORAGE_KEY}.sortDirection`) as 'ascending' | 'descending'
@@ -343,36 +344,23 @@ class VoucherList extends React.Component<VoucherListProps, State> {
                             />
                         </Grid>
                         <Grid item={true}>
-                            <DateTimePicker
+                            <DateTimeField
                                 label={intl.formatMessage(VoucherListMesseges.from)}
                                 fullWidth={true}
-                                keyboard={true}
-                                clearable={true}
-                                format="dd/MM/yyyy HH:mm"
-                                mask={(value: string) =>
-                                    // tslint:disable-next-line:max-line-length
-                                    (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                value={fromDate}
-                                onChange={fromDateChange}
-                                disableOpenOnEnter={true}
-                                animateYearScrolling={false}
+                                onDateChange={fromDateChange}
+                                date={fromDate}
+                                type="text"
                             />
                         </Grid>
                         <Grid item={true}>
-                            <DateTimePicker
+                            <DateTimeField
                                 label={intl.formatMessage(VoucherListMesseges.to)}
                                 fullWidth={true}
-                                keyboard={true}
-                                format="dd/MM/yyyy HH:mm"
-                                clearable={true}
-                                mask={(value: string) =>
-                                    // tslint:disable-next-line:max-line-length
-                                    (value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [])}
-                                value={toDate}
-                                onChange={toDateChange}
-                                disableOpenOnEnter={true}
-                                animateYearScrolling={false}
+                                onDateChange={toDateChange}
+                                date={toDate}
+                                type="text"
                             />
+
                         </Grid>
                         <Grid item={true} style={{ marginTop: 'auto', display: 'flex' }}>
                             <IconButton
