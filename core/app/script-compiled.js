@@ -704,10 +704,6 @@ require("./App.css");
 
 var _ThemeProvider = _interopRequireDefault(require("./components/ThemeProvider/ThemeProvider"));
 
-var _luxon = _interopRequireDefault(require("@date-io/luxon"));
-
-var _materialUiPickers = require("material-ui-pickers");
-
 var _ThemeStylesImporter = _interopRequireDefault(require("./_helpers/ThemeStylesImporter"));
 
 var _HashRouter = _interopRequireDefault(require("./components/HashRouter/HashRouter"));
@@ -767,13 +763,11 @@ function (_React$Component) {
         default: "en"
       }, React.createElement(_ThemeProvider.default, {
         path: "/theme/orders.json"
-      }, React.createElement(_materialUiPickers.MuiPickersUtilsProvider, {
-        utils: _luxon.default
       }, React.createElement(_context.AuthProvider, null, React.createElement(_PaymentNotification.PaymentNotificationsProviderStandalone, null, React.createElement(_notistack.SnackbarProvider, {
         maxSnack: 3
       }, React.createElement(_Product.ProductProviderStandalone, null, React.createElement(_Templates.TemplatesProviderStandalone, null, React.createElement(_Category.CategoryProviderStandalone, null, React.createElement(_context.UsersProviderStandalone, null, React.createElement(_context.ShopProviderStandalone, null, React.createElement(_context.WarehouseProviderStandalone, null, React.createElement(_context.SettingsProviderStandalone, null, React.createElement("div", {
         className: "app"
-      }, React.createElement(_HashRouter.default, null), React.createElement(_ThemeStylesImporter.default, null)))))))))))))));
+      }, React.createElement(_HashRouter.default, null), React.createElement(_ThemeStylesImporter.default, null))))))))))))));
     } // <ThemeSwitchContainer />
     // <LangSwitchContainer />
     // <Notifier />
@@ -8633,11 +8627,11 @@ var moment = _interopRequireWildcard(require("moment"));
 
 var _DashboardMessages = require("./DashboardMessages");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _ProductList = _interopRequireDefault(require("../Products/ProductList/ProductList"));
 
 var _Fabs = _interopRequireDefault(require("../Fabs/Fabs"));
+
+var _DateTimeField = _interopRequireDefault(require("../DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9075,45 +9069,30 @@ function (_React$Component) {
             };
           });
         }
-      }, React.createElement(_core.DialogTitle, null, formatMessage(_DashboardMessages.DashboardMessages.customTimePeriodTitle)), React.createElement(_core.DialogContent, null, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_core.DialogTitle, null, formatMessage(_DashboardMessages.DashboardMessages.customTimePeriodTitle)), React.createElement(_core.DialogContent, null, React.createElement(_DateTimeField.default, {
+        label: formatMessage(_DashboardMessages.DashboardMessages.customTimePeriodFrom),
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: customPeriodFrom,
-        onChange: function onChange(value) {
+        onDateChange: function onDateChange(value) {
           return _this3.setState(function () {
             return {
               customPeriodFrom: value
             };
           });
         },
-        disableOpenOnEnter: true,
-        animateYearScrolling: false,
-        label: formatMessage(_DashboardMessages.DashboardMessages.customTimePeriodTo)
-      }), React.createElement(_materialUiPickers.DateTimePicker, {
+        date: customPeriodFrom,
+        type: "text"
+      }), React.createElement(_DateTimeField.default, {
+        label: formatMessage(_DashboardMessages.DashboardMessages.customTimePeriodTo),
         fullWidth: true,
-        keyboard: true,
-        minDate: customPeriodFrom,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: customPeriodTo,
-        onChange: function onChange(value) {
+        onDateChange: function onDateChange(value) {
           return _this3.setState(function () {
             return {
               customPeriodTo: value
             };
           });
         },
-        disableOpenOnEnter: true,
-        animateYearScrolling: false,
-        label: formatMessage(_DashboardMessages.DashboardMessages.customTimePeriodFrom)
+        date: customPeriodTo,
+        type: "text"
       })), React.createElement(_core.DialogActions, null, React.createElement(_core.Button, {
         onClick: function onClick() {
           return _this3.setState(function () {
@@ -9209,7 +9188,7 @@ function (_React$Component) {
       var t = this._getTime(period);
 
       var formatDate = function formatDate(date) {
-        var d = moment(date);
+        var d = moment.utc(date).local();
 
         switch (t.interval) {
           case 'Day':
@@ -9488,7 +9467,7 @@ function (_React$Component) {
     key: "_last5years",
     value: function _last5years() {
       var now = moment();
-      var today = now.clone().startOf('day');
+      var today = now.clone().startOf('year');
       var start = today.subtract(4, 'year');
       var interval = 'Year';
       var count = 5;
@@ -9816,6 +9795,174 @@ var DashboardMessages = (0, _reactIntl.defineMessages)({
 });
 exports.DashboardMessages = DashboardMessages;
 var _default = DashboardMessages;
+exports.default = _default;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _TextField = _interopRequireDefault(require("@material-ui/core/TextField"));
+
+var _reactTextMask = _interopRequireDefault(require("react-text-mask"));
+
+var moment = _interopRequireWildcard(require("moment"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+var DateTimeLocalTextFieldMask = function DateTimeLocalTextFieldMask(props) {
+  var inputRef = props.inputRef,
+      value = props.value,
+      defaultValue = props.defaultValue,
+      other = _objectWithoutProperties(props, ["inputRef", "value", "defaultValue"]);
+
+  return React.createElement(_reactTextMask.default, _extends({}, other, {
+    ref: function ref(_ref) {
+      inputRef(_ref ? _ref.inputElement : null);
+    },
+    value: value,
+    defaultValue: defaultValue // tslint:disable-next-line: max-line-length
+    ,
+    mask: [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, ' ', /\d/, /\d/, ':', /\d/, /\d/],
+    placeholder: "",
+    showMask: !!value
+  }));
+};
+
+var DateTimeField =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(DateTimeField, _React$Component);
+
+  function DateTimeField(props) {
+    var _this;
+
+    _classCallCheck(this, DateTimeField);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(DateTimeField).call(this, props));
+    var d = _this.props.date && moment.utc(_this.props.date);
+    var valid = d && d.isValid() || false;
+    _this.state = {
+      value: valid && d && _this._formatDate(d) || '',
+      valid: valid
+    };
+    return _this;
+  }
+
+  _createClass(DateTimeField, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      var _this2 = this;
+
+      if (prevProps.date !== this.props.date) {
+        var d = this.props.date && moment.utc(this.props.date);
+
+        var _valid = d && d.isValid() || false;
+
+        this.setState(function () {
+          return {
+            value: _valid && d && _this2._formatDate(d) || '',
+            valid: _valid
+          };
+        });
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$props = this.props,
+          onDateChange = _this$props.onDateChange,
+          date = _this$props.date,
+          onChange = _this$props.onChange,
+          InputProps = _this$props.InputProps,
+          props = _objectWithoutProperties(_this$props, ["onDateChange", "date", "onChange", "InputProps"]);
+
+      var _this$state = this.state,
+          value = _this$state.value,
+          valid = _this$state.valid;
+      return React.createElement(_TextField.default, _extends({}, props, {
+        onChange: function onChange(e) {
+          var v = e.target.value;
+          var d = moment(v, 'DD/MM/YYYY HH:mm', true);
+          var inputValid = d.isValid();
+
+          _this3.setState(function () {
+            return {
+              value: v,
+              valid: inputValid
+            };
+          }, function () {
+            if (!v) {
+              onDateChange(undefined);
+              return;
+            }
+
+            if (!inputValid) {
+              return;
+            }
+
+            onDateChange(d.utc().toDate());
+          });
+        },
+        onBlur: function onBlur() {
+          if (!_this3.state.valid) {
+            _this3.setState(function () {
+              return {
+                value: '',
+                valid: true
+              };
+            });
+          }
+        },
+        value: value,
+        InputProps: {
+          inputComponent: DateTimeLocalTextFieldMask
+        },
+        error: !valid
+      }));
+    }
+  }, {
+    key: "_formatDate",
+    value: function _formatDate(d) {
+      return d.local().format('DD/MM/YYYY HH:mm');
+    }
+  }]);
+
+  return DateTimeField;
+}(React.Component);
+
+var _default = DateTimeField;
 exports.default = _default;
 "use strict";
 
@@ -10191,13 +10338,13 @@ var _reactIntl = require("react-intl");
 
 var _DispatchFieldsMessages = _interopRequireDefault(require("./DispatchFieldsMessages"));
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _GridContainer = require("src/components/GridContainer/GridContainer");
 
 var _icons = require("@material-ui/icons");
 
 var classNames = _interopRequireWildcard(require("classnames"));
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10385,23 +10532,16 @@ function (_React$Component) {
       })))), React.createElement(_core.Grid, {
         item: true,
         xs: 4
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
+        label: "Date",
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: current.Date ? new Date(current.Date) : new Date(),
-        onChange: function onChange(value) {
+        onDateChange: function onDateChange(value) {
           return _this2.props.onChange(_objectSpread({}, changes, {
             Date: value
           }));
         },
-        disableOpenOnEnter: true,
-        animateYearScrolling: false,
-        label: "Date",
+        date: current.Date ? new Date(current.Date) : new Date(),
+        type: "text",
         disabled: !hasRights
       })), React.createElement(_core.Grid, {
         item: true,
@@ -10808,8 +10948,6 @@ var _PaymentStatusHelpers = require("../../../_helpers/PaymentStatusHelpers");
 
 var _Grid = _interopRequireDefault(require("@material-ui/core/Grid"));
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _TextField = _interopRequireDefault(require("@material-ui/core/TextField"));
 
 var _PaymentListMessages = _interopRequireDefault(require("./PaymentListMessages"));
@@ -10825,6 +10963,8 @@ var _icons = require("@material-ui/icons");
 var classNames = _interopRequireWildcard(require("classnames"));
 
 var _CurrenciesField = _interopRequireDefault(require("src/components/CurrenciesField/CurrenciesField"));
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10984,23 +11124,16 @@ function (_React$Component) {
       })), React.createElement(_Grid.default, {
         item: true,
         xs: 6
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
+        label: "Date",
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: current.Date ? new Date(current.Date) : new Date(),
-        onChange: function onChange(value) {
+        onDateChange: function onDateChange(value) {
           return _this2.props.onChange(_objectSpread({}, changes, {
             Date: value ? value.toString() : undefined
           }));
         },
-        disableOpenOnEnter: true,
-        animateYearScrolling: false,
-        label: "Date",
+        date: current.Date ? new Date(current.Date) : new Date(),
+        type: "text",
         disabled: !hasRights
       })), React.createElement(_Grid.default, {
         item: true,
@@ -12739,11 +12872,11 @@ var _core = require("@material-ui/core");
 
 var _GridContainer = require("src/components/GridContainer/GridContainer");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _NumberField = _interopRequireDefault(require("src/components/NumberField/NumberField"));
 
 var _CurrenciesField = _interopRequireDefault(require("src/components/CurrenciesField/CurrenciesField"));
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -12898,46 +13031,29 @@ function (_React$Component) {
       })))), React.createElement(_core.Grid, {
         item: true,
         xs: 6
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
-        label: "date",
+      }, React.createElement(_DateTimeField.default, {
+        label: "Date",
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: date && new Date(date) || new Date(),
-        onChange: function (_onChange4) {
-          function onChange(_x4) {
-            return _onChange4.apply(this, arguments);
-          }
-
-          onChange.toString = function () {
-            return _onChange4.toString();
-          };
-
-          return onChange;
-        }(function (value) {
+        onDateChange: function onDateChange(value) {
           return onChange({
             Date: value
           });
-        }),
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        },
+        date: date && new Date(date) || new Date(),
+        type: "text"
       })), React.createElement(_core.Grid, {
         item: true,
         xs: 6
       }, React.createElement(_FormControlLabel.default, {
         control: React.createElement(_Switch.default, {
           checked: !!Archived,
-          onChange: function (_onChange5) {
-            function onChange(_x5) {
-              return _onChange5.apply(this, arguments);
+          onChange: function (_onChange4) {
+            function onChange(_x4) {
+              return _onChange4.apply(this, arguments);
             }
 
             onChange.toString = function () {
-              return _onChange5.toString();
+              return _onChange4.toString();
             };
 
             return onChange;
@@ -12957,13 +13073,13 @@ function (_React$Component) {
         multiline: true,
         label: formatMessage(_MovementsFieldsMessages.default.note),
         value: Note || '',
-        onChange: function (_onChange6) {
-          function onChange(_x6) {
-            return _onChange6.apply(this, arguments);
+        onChange: function (_onChange5) {
+          function onChange(_x5) {
+            return _onChange5.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange6.toString();
+            return _onChange5.toString();
           };
 
           return onChange;
@@ -13047,8 +13163,6 @@ var classNames = _interopRequireWildcard(require("classnames"));
 
 var _throttleDebounce = require("throttle-debounce");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _WarehouseIcon = _interopRequireDefault(require("src/components/Products/ProductDetail/WarehouseIcon"));
 
 var _ShopsList = _interopRequireDefault(require("./ShopsList"));
@@ -13058,6 +13172,8 @@ var _StockList = _interopRequireDefault(require("./StockList"));
 var _NumberField = _interopRequireDefault(require("src/components/NumberField/NumberField"));
 
 var _roles = require("src/_helpers/roles");
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -13262,36 +13378,20 @@ function (_React$Component) {
         direction: "column"
       }, isShops ? React.createElement(React.Fragment, null, React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: "From",
         fullWidth: true,
-        keyboard: true,
-        clearable: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: from || null,
-        onChange: fromDateChange,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        onDateChange: fromDateChange,
+        date: from,
+        type: "text"
       })), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: "To",
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        clearable: true,
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: to || null,
-        onChange: toDateChange,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        onDateChange: toDateChange,
+        date: to,
+        type: "text"
       })), React.createElement(_core.Grid, {
         item: true,
         style: {
@@ -13899,6 +13999,8 @@ function (_React$Component) {
         },
         onChanged: function onChanged() {
           _this3._refresh();
+
+          _this3.props.refreshCashbox();
         },
         onDelete: function onDelete() {
           _this3._handleOrderDeleted();
@@ -14047,10 +14149,12 @@ function (_React$Component) {
 
       if (this._list) {
         this._list.forceUpdateGrid();
-      }
+      } // this._refreshCashbox();
 
-      this._refreshCashbox();
 
+      this._refresh();
+
+      this.props.refreshCashbox();
       this.setState(function () {
         return {
           editing: index,
@@ -14068,7 +14172,7 @@ function (_React$Component) {
           editing: -1
         };
       }, function () {
-        return _this8._refresh();
+        return _this8._refresh(), _this8.props.refreshCashbox();
       });
     }
   }, {
@@ -20400,8 +20504,6 @@ var _DispatchList = _interopRequireDefault(require("../../Forms/Dispatch/Dispatc
 
 var _ourOrders = require("src/@types/our-orders");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _GridContainer = require("src/components/GridContainer/GridContainer");
 
 var _OrderClientFields = _interopRequireDefault(require("../OrderClientFields/OrderClientFields"));
@@ -20421,6 +20523,8 @@ var _CurrenciesField = _interopRequireDefault(require("src/components/Currencies
 var _ShopsField = _interopRequireDefault(require("src/components/ShopsField/ShopsField"));
 
 var _roles = require("src/_helpers/roles");
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20580,34 +20684,18 @@ function (_React$Component) {
       })), React.createElement(_core.Grid, {
         item: true,
         xs: 4
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: "date",
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: date && new Date(date),
-        onChange: function (_onChange3) {
-          function onChange(_x3) {
-            return _onChange3.apply(this, arguments);
-          }
-
-          onChange.toString = function () {
-            return _onChange3.toString();
-          };
-
-          return onChange;
-        }(function (value) {
+        className: "forms-fields__title-reference-field",
+        onDateChange: function onDateChange(d) {
           return onChange({
-            Date: value
+            Date: d
           });
-        }),
-        disableOpenOnEnter: true,
-        animateYearScrolling: false,
-        disabled: !hasRights
+        },
+        date: date,
+        disabled: !hasRights,
+        type: "text"
       })), React.createElement(_core.Grid, {
         item: true,
         xs: 3
@@ -20616,13 +20704,13 @@ function (_React$Component) {
         label: formatMessage(_OrderFieldsMessages.default.currency),
         fullWidth: true,
         value: current.Currency,
-        onChange: function (_onChange4) {
-          function onChange(_x4) {
-            return _onChange4.apply(this, arguments);
+        onChange: function (_onChange3) {
+          function onChange(_x3) {
+            return _onChange3.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange4.toString();
+            return _onChange3.toString();
           };
 
           return onChange;
@@ -20640,13 +20728,13 @@ function (_React$Component) {
         label: formatMessage(_OrderFieldsMessages.default.shop),
         fullWidth: true,
         value: current.ShopId || '',
-        onChange: function (_onChange5) {
-          function onChange(_x5) {
-            return _onChange5.apply(this, arguments);
+        onChange: function (_onChange4) {
+          function onChange(_x4) {
+            return _onChange4.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange5.toString();
+            return _onChange4.toString();
           };
 
           return onChange;
@@ -20665,13 +20753,13 @@ function (_React$Component) {
         fullWidth: true,
         value: UserId || '',
         disabled: !hasRights,
-        onChange: function (_onChange6) {
-          function onChange(_x6) {
-            return _onChange6.apply(this, arguments);
+        onChange: function (_onChange5) {
+          function onChange(_x5) {
+            return _onChange5.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange6.toString();
+            return _onChange5.toString();
           };
 
           return onChange;
@@ -20689,13 +20777,13 @@ function (_React$Component) {
         item: true,
         xs: 12
       }, React.createElement(_ClientSelect.default, {
-        onChange: function (_onChange7) {
-          function onChange(_x7) {
-            return _onChange7.apply(this, arguments);
+        onChange: function (_onChange6) {
+          function onChange(_x6) {
+            return _onChange6.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange7.toString();
+            return _onChange6.toString();
           };
 
           return onChange;
@@ -20769,13 +20857,13 @@ function (_React$Component) {
         Total: current.Total,
         list: current.Payments,
         preview: current.Payments,
-        onChange: function (_onChange8) {
-          function onChange(_x8) {
-            return _onChange8.apply(this, arguments);
+        onChange: function (_onChange7) {
+          function onChange(_x7) {
+            return _onChange7.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange8.toString();
+            return _onChange7.toString();
           };
 
           return onChange;
@@ -20796,13 +20884,13 @@ function (_React$Component) {
         order: current,
         list: current.Dispatches || [],
         preview: current.Dispatches || [],
-        onChange: function (_onChange9) {
-          function onChange(_x9) {
-            return _onChange9.apply(this, arguments);
+        onChange: function (_onChange8) {
+          function onChange(_x8) {
+            return _onChange8.apply(this, arguments);
           }
 
           onChange.toString = function () {
-            return _onChange9.toString();
+            return _onChange8.toString();
           };
 
           return onChange;
@@ -21275,8 +21363,6 @@ var _TextField = _interopRequireDefault(require("@material-ui/core/TextField"));
 
 var _OrderItemFieldsMessages = require("./OrderItemFieldsMessages");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _icons = require("@material-ui/icons");
 
 var _GridContainer = require("src/components/GridContainer/GridContainer");
@@ -21284,6 +21370,8 @@ var _GridContainer = require("src/components/GridContainer/GridContainer");
 var _SideDialog = _interopRequireDefault(require("src/components/SideDialog/SideDialog"));
 
 var classNames = _interopRequireWildcard(require("classnames"));
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21744,26 +21832,19 @@ function (_React$Component) {
       })))), React.createElement(_core.Grid, {
         item: true,
         xs: 3
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: "Dispatch date",
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: DispatchInfos.Date && new Date(DispatchInfos.Date) || new Date(),
-        onChange: function onChange(value) {
+        onDateChange: function onDateChange(value) {
           _this2.props.onChange(_objectSpread({}, changes, {
             DispatchInfos: _objectSpread({}, DispatchInfos, {
               Date: value
             })
           }));
         },
-        disabled: !hasRights,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        date: DispatchInfos.Date && new Date(DispatchInfos.Date) || new Date(),
+        type: "text",
+        disabled: !hasRights
       })), React.createElement(_core.Grid, {
         item: true,
         xs: 3
@@ -22777,7 +22858,8 @@ function (_React$Component) {
         onClick: function onClick() {
           return _this2.setState({
             orderProductDialogOpen: false,
-            selections: []
+            selections: [],
+            products: []
           });
         }
       }, "Cancel"), React.createElement(_core.Button, {
@@ -22788,7 +22870,8 @@ function (_React$Component) {
 
           _this2.setState({
             orderProductDialogOpen: false,
-            selections: []
+            selections: [],
+            products: []
           });
         }
       }, "Add"))));
@@ -22832,8 +22915,6 @@ var _Filter = require("src/_helpers/Filter");
 
 var _throttleDebounce = require("throttle-debounce");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _OrderListMesseges = require("./OrderListMesseges");
 
 var _print = require("src/_helpers/print");
@@ -22841,6 +22922,8 @@ var _print = require("src/_helpers/print");
 var _ShopsField = _interopRequireDefault(require("src/components/ShopsField/ShopsField"));
 
 var _roles = require("src/_helpers/roles");
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22887,8 +22970,8 @@ var DefaultFilters = function DefaultFilters() {
     reference: '',
     shopId: '',
     userId: '',
-    fromDate: null,
-    toDate: null,
+    fromDate: undefined,
+    toDate: undefined,
     sortAttribute: localStorage.getItem("".concat(LOCAL_STORAGE_KEY, ".sortAttribute")) || 'Date',
     sortDirection: localStorage.getItem("".concat(LOCAL_STORAGE_KEY, ".sortDirection")) || 'descending'
   };
@@ -23328,38 +23411,24 @@ function (_React$Component) {
         onChange: shopIdChange
       })), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         className: classes.MuiPickerDTHeader,
         label: intl.formatMessage(_OrderListMesseges.OrderListMessages.from),
         fullWidth: true,
-        keyboard: true,
-        clearable: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: fromDate,
-        onChange: fromDateChange,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        onDateChange: fromDateChange,
+        date: fromDate,
+        type: "text",
+        disabled: !hasRights
       })), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         className: classes.MuiPickerDTHeader,
         label: intl.formatMessage(_OrderListMesseges.OrderListMessages.to),
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        clearable: true,
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: toDate,
-        onChange: toDateChange,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        onDateChange: toDateChange,
+        date: toDate,
+        type: "text",
+        disabled: !hasRights
       })), React.createElement(_core.Grid, {
         item: true,
         className: classes.sort
@@ -30314,7 +30383,7 @@ function (_React$Component) {
         label: intl.formatMessage(_NotificationsMessages.default.description)
       })), React.createElement(_core.Grid, {
         item: true,
-        xs: 6
+        xs: 12
       }, React.createElement(_reactDropzone.default, {
         accept: "text/html",
         style: {},
@@ -34804,13 +34873,13 @@ var _FormControlLabel = _interopRequireDefault(require("@material-ui/core/FormCo
 
 var _core = require("@material-ui/core");
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var _GridContainer = require("src/components/GridContainer/GridContainer");
 
 var _CurrenciesField = _interopRequireDefault(require("src/components/CurrenciesField/CurrenciesField"));
 
 var _roles = require("src/_helpers/roles");
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34945,48 +35014,30 @@ function (_React$Component) {
       })), React.createElement(_core.Grid, {
         item: true,
         xs: 12
-      }, React.createElement(_materialUiPickers.DatePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: formatMessage(_VoucherFieldsMessages.default.expiration),
         fullWidth: true,
-        keyboard: true,
-        clearable: true,
-        format: "dd/MM/yyyy",
-        disabled: !hasRights,
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/] : [];
-        },
-        value: Expiration && new Date(Expiration) || null,
-        onChange: function (_onChange4) {
-          function onChange(_x4) {
-            return _onChange4.apply(this, arguments);
-          }
-
-          onChange.toString = function () {
-            return _onChange4.toString();
-          };
-
-          return onChange;
-        }(function (value) {
+        onDateChange: function onDateChange(value) {
           return onChange({
             Expiration: value
           });
-        }),
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        },
+        date: Expiration && new Date(Expiration) || undefined,
+        type: "text",
+        disabled: !hasRights
       })), React.createElement(_core.Grid, {
         item: true,
         xs: 6
       }, React.createElement(_FormControlLabel.default, {
         control: React.createElement(_Switch.default, {
           checked: !!MultipleUse,
-          onChange: function (_onChange5) {
-            function onChange(_x5) {
-              return _onChange5.apply(this, arguments);
+          onChange: function (_onChange4) {
+            function onChange(_x4) {
+              return _onChange4.apply(this, arguments);
             }
 
             onChange.toString = function () {
-              return _onChange5.toString();
+              return _onChange4.toString();
             };
 
             return onChange;
@@ -35005,13 +35056,13 @@ function (_React$Component) {
       }, React.createElement(_FormControlLabel.default, {
         control: React.createElement(_Switch.default, {
           checked: !!Used,
-          onChange: function (_onChange6) {
-            function onChange(_x6) {
-              return _onChange6.apply(this, arguments);
+          onChange: function (_onChange5) {
+            function onChange(_x5) {
+              return _onChange5.apply(this, arguments);
             }
 
             onChange.toString = function () {
-              return _onChange6.toString();
+              return _onChange5.toString();
             };
 
             return onChange;
@@ -35140,8 +35191,6 @@ var _throttleDebounce = require("throttle-debounce");
 
 var _VoucherDetail = _interopRequireDefault(require("../VoucherDetail/VoucherDetail"));
 
-var _materialUiPickers = require("material-ui-pickers");
-
 var shortid = _interopRequireWildcard(require("shortid"));
 
 var _VoucherCode = require("src/components/VoucherCode/VoucherCode");
@@ -35151,6 +35200,8 @@ var _VoucherListMesseges = _interopRequireDefault(require("./VoucherListMesseges
 var _Filter = require("src/_helpers/Filter");
 
 var _roles = require("src/_helpers/roles");
+
+var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -35188,8 +35239,8 @@ var DefaultFilters = function DefaultFilters() {
     expired: false,
     used: false,
     code: '',
-    from: null,
-    to: null,
+    from: undefined,
+    to: undefined,
     sortAttribute: localStorage.getItem("".concat(LOCAL_STORAGE_KEY, ".sortAttribute")) || 'Creation',
     sortDirection: localStorage.getItem("".concat(LOCAL_STORAGE_KEY, ".sortDirection")) || 'descending'
   };
@@ -35451,36 +35502,20 @@ function (_React$Component) {
         onChange: codeChange
       })), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: intl.formatMessage(_VoucherListMesseges.default.from),
         fullWidth: true,
-        keyboard: true,
-        clearable: true,
-        format: "dd/MM/yyyy HH:mm",
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: fromDate,
-        onChange: fromDateChange,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        onDateChange: fromDateChange,
+        date: fromDate,
+        type: "text"
       })), React.createElement(_core.Grid, {
         item: true
-      }, React.createElement(_materialUiPickers.DateTimePicker, {
+      }, React.createElement(_DateTimeField.default, {
         label: intl.formatMessage(_VoucherListMesseges.default.to),
         fullWidth: true,
-        keyboard: true,
-        format: "dd/MM/yyyy HH:mm",
-        clearable: true,
-        mask: function mask(value // tslint:disable-next-line:max-line-length
-        ) {
-          return value ? [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/, / /, /\d/, /\d/, /\:/, /\d/, /\d/] : [];
-        },
-        value: toDate,
-        onChange: toDateChange,
-        disableOpenOnEnter: true,
-        animateYearScrolling: false
+        onDateChange: toDateChange,
+        date: toDate,
+        type: "text"
       })), React.createElement(_core.Grid, {
         item: true,
         style: {
