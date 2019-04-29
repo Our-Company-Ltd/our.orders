@@ -101,6 +101,7 @@ namespace our.orders.Builder
             services.AddTransient<OrderService, OrderService>(s => appEvents.Services.GetService<OrderService>());
             services.AddTransient<ProductService, ProductService>(s => appEvents.Services.GetService<ProductService>());
             services.AddTransient<IService<IClient>>(s => appEvents.Services.GetService<IService<IClient>>());
+            services.AddTransient<IService<Shop>>(s => appEvents.Services.GetService<IService<Shop>>());
             
             var builder = new OurOrdersBuilder(appSettings, appEvents, services);
 
