@@ -3757,6 +3757,19 @@ exports.config = config;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.formatedDateOptions = void 0;
+var formatedDateOptions = {
+  weekday: 'short',
+  year: '2-digit',
+  month: '2-digit',
+  day: '2-digit'
+};
+exports.formatedDateOptions = formatedDateOptions;
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _authHeader = require("./auth-header");
 
@@ -8633,11 +8646,15 @@ var _Fabs = _interopRequireDefault(require("../Fabs/Fabs"));
 
 var _DateTimeField = _interopRequireDefault(require("../DateTimeField/DateTimeField"));
 
+var _formatedDates = require("src/_helpers/formatedDates");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -9056,11 +9073,11 @@ function (_React$Component) {
       }), React.createElement(_core.MenuItem, {
         key: "custom",
         value: "custom"
-      }, React.createElement(_reactIntl.FormattedDate, {
+      }, React.createElement(_reactIntl.FormattedDate, _extends({
         value: customPeriodFrom
-      }), React.createElement("br", null), React.createElement(_reactIntl.FormattedDate, {
+      }, _formatedDates.formatedDateOptions)), React.createElement(_reactIntl.FormattedDate, _extends({
         value: customPeriodTo
-      })))), period === 'custom' && React.createElement(React.Fragment, null, React.createElement(_core.Dialog, {
+      }, _formatedDates.formatedDateOptions))))), period === 'custom' && React.createElement(React.Fragment, null, React.createElement(_core.Dialog, {
         open: !!customPeriodOpened,
         onClose: function onClose() {
           return _this3.setState(function () {
@@ -9369,7 +9386,7 @@ function (_React$Component) {
       var start = today.dayOfYear(1).subtract(1, 'years');
       var end = start.clone().add(1, 'year');
       var interval = 'Month';
-      var count = end.diff(start, 'months') + 1;
+      var count = end.diff(start, 'months');
       return {
         start: start.toDate(),
         count: count,
@@ -10966,11 +10983,15 @@ var _CurrenciesField = _interopRequireDefault(require("src/components/Currencies
 
 var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
+var _formatedDates = require("src/_helpers/formatedDates");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -11029,12 +11050,6 @@ function (_React$Component) {
           settingsCtx = _this$props.settingsCtx,
           intl = _this$props.intl,
           hasRights = _this$props.hasRights;
-      var dateOptions = {
-        weekday: 'short',
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric'
-      };
       var paymentStatus = [{
         preview: (0, _PaymentStatusHelpers.GetPaymentStatusLegend)(intl, 'Pending'),
         value: 'Pending'
@@ -11058,7 +11073,6 @@ function (_React$Component) {
         preview: (0, _PaymentMethodHelpers.GetPaymentMethodLegend)(intl, 'Voucher'),
         value: 'Voucher'
       }];
-      var date = current.Date ? intl.formatDate(new Date(current.Date), dateOptions) : '';
       var leftToPay = Math.ceil((Total - PaidAmount) * 100) / 100;
       var empty = Object.keys(changes).length === 0;
       var actionDelete = hasRights ? React.createElement(_core.IconButton, {
@@ -11081,7 +11095,9 @@ function (_React$Component) {
         onClick: this._open
       }, React.createElement(_core.Avatar, null, current.Status && this._getPaymentStatusIcon(current.Status)), React.createElement(_ItemPreview.Lines, null, React.createElement(_ItemPreview.Line, null, React.createElement("span", {
         className: classNames(classes.bold, classes.marginRight)
-      }, current.Method), date && React.createElement("span", null, date)), React.createElement(_ItemPreview.Line, null, current.Reference && React.createElement("span", {
+      }, current.Method), current.Date && React.createElement("span", null, React.createElement(_reactIntl.FormattedDate, _extends({
+        value: " ".concat(new Date(current.Date))
+      }, _formatedDates.formatedDateOptions)))), React.createElement(_ItemPreview.Line, null, current.Reference && React.createElement("span", {
         className: classes.marginRight
       }, current.Reference), current.Method && React.createElement("span", null, current.Method))), React.createElement(_ItemPreview.Lines, {
         actions: true
@@ -14844,7 +14860,11 @@ var classNames = _interopRequireWildcard(require("classnames"));
 
 var moment = _interopRequireWildcard(require("moment"));
 
+var _formatedDates = require("src/_helpers/formatedDates");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 var MovementsListItem = function MovementsListItem(props) {
   var onClick = props.onClick,
@@ -14863,7 +14883,6 @@ var MovementsListItem = function MovementsListItem(props) {
     }))));
   }
 
-  var date = moment(movement.Date).format('DD/MM/YYYY');
   var time = moment(movement.Date).format('HH:mm');
   return React.createElement("div", {
     onClick: onClick,
@@ -14880,7 +14899,9 @@ var MovementsListItem = function MovementsListItem(props) {
     actions: true
   }, React.createElement(_ItemPreview.Line, {
     className: classes.Date
-  }, date), React.createElement(_ItemPreview.Line, null, time))));
+  }, movement.Date && React.createElement(_reactIntl.FormattedDate, _extends({
+    value: " ".concat(new Date(movement.Date))
+  }, _formatedDates.formatedDateOptions))), React.createElement(_ItemPreview.Line, null, time))));
 };
 
 var width = '3rem';
@@ -24075,6 +24096,8 @@ var _core = require("@material-ui/core");
 
 var _OrderIcons = require("../OrderIcons");
 
+var _formatedDates = require("src/_helpers/formatedDates");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -24119,13 +24142,6 @@ var OrderListItem = function OrderListItem(props) {
       return null;
     }
 
-    var dateOptions = {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'numeric',
-      day: 'numeric'
-    };
-
     switch (order.Status) {
       case 'Canceled':
         return React.createElement(React.Fragment, null, React.createElement("span", {
@@ -24142,14 +24158,14 @@ var OrderListItem = function OrderListItem(props) {
           defaultMessage: " paid on: "
         }), React.createElement(_reactIntl.FormattedDate, _extends({
           value: new Date(paidDate)
-        }, dateOptions))), dispatchDate && React.createElement("span", {
+        }, _formatedDates.formatedDateOptions))), dispatchDate && React.createElement("span", {
           className: "order-list-item__dispatch-date"
         }, React.createElement(_reactIntl.FormattedMessage, {
           id: "src.views.orders.orderListItem.dispatchedPrefix",
           defaultMessage: " dispatched on: "
         }), React.createElement(_reactIntl.FormattedDate, _extends({
           value: new Date(dispatchDate)
-        }, dateOptions))));
+        }, _formatedDates.formatedDateOptions))));
 
       case 'PendingPayment':
         return React.createElement(React.Fragment, null, React.createElement("span", {
@@ -24161,9 +24177,9 @@ var OrderListItem = function OrderListItem(props) {
           className: "order-list-item__status"
         }, (0, _OrderStatus.GetOrderStatusLegend)(props.intl, order.Status)), paidDate && React.createElement("span", {
           className: "order-list-item__paid-date"
-        }, "paid on: ", React.createElement(_reactIntl.FormattedDate, {
+        }, "paid on: ", React.createElement(_reactIntl.FormattedDate, _extends({
           value: new Date(paidDate)
-        })));
+        }, _formatedDates.formatedDateOptions))));
 
       case 'Empty':
         return React.createElement(React.Fragment, null, React.createElement("span", {
@@ -24206,12 +24222,9 @@ var OrderListItem = function OrderListItem(props) {
     value: total,
     style: "currency",
     currency: order.Currency
-  })), React.createElement(_ItemPreview.Line, null, order.Date && React.createElement(_reactIntl.FormattedDate, {
-    value: new Date(order.Date),
-    year: "2-digit",
-    month: "numeric",
-    day: "numeric"
-  })), React.createElement(_ItemPreview.Line, null))));
+  })), React.createElement(_ItemPreview.Line, null, order.Date && React.createElement(_reactIntl.FormattedDate, _extends({
+    value: new Date(order.Date)
+  }, _formatedDates.formatedDateOptions))), React.createElement(_ItemPreview.Line, null))));
 };
 
 exports.OrderListItem = OrderListItem;
@@ -36057,11 +36070,15 @@ var _icons = require("@material-ui/icons");
 
 var classNames = _interopRequireWildcard(require("classnames"));
 
+var _formatedDates = require("src/_helpers/formatedDates");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -36108,12 +36125,9 @@ var VoucherListItem = function VoucherListItem(props) {
     currency: voucher.Currency
   })), "/", React.createElement("span", null, React.createElement(_reactIntl.FormattedNumber, {
     value: voucher.InitialValue
-  }))), React.createElement(_ItemPreview.Line, null, voucher.Expiration && React.createElement(React.Fragment, null, React.createElement("span", null, "Expiration date: "), React.createElement(_reactIntl.FormattedDate, {
-    value: " ".concat(new Date(voucher.Expiration)),
-    year: "2-digit",
-    month: "numeric",
-    day: "numeric"
-  }))))));
+  }))), React.createElement(_ItemPreview.Line, null, voucher.Expiration && React.createElement(React.Fragment, null, React.createElement("span", null, "Expiration date: "), React.createElement(_reactIntl.FormattedDate, _extends({
+    value: " ".concat(new Date(voucher.Expiration))
+  }, _formatedDates.formatedDateOptions)))))));
 };
 
 exports.VoucherListItem = VoucherListItem;

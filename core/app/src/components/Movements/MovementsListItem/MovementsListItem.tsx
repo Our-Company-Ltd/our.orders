@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InjectedIntlProps, FormattedNumber } from 'react-intl';
+import { InjectedIntlProps, FormattedNumber, FormattedDate } from 'react-intl';
 
 import ItemPreview, { Line, Lines, Thumb } from '../../ItemPreview/ItemPreview';
 
@@ -10,6 +10,7 @@ import { Movement } from 'src/@types/our-orders';
 import { ArrowUpward, ArrowDownward } from '@material-ui/icons';
 import * as classNames from 'classnames';
 import * as moment from 'moment';
+import { formatedDateOptions } from 'src/_helpers/formatedDates';
 
 type injectedClasses = 'AmountIn' | 'AmountOut' | 'Archived' | 'container' | 'Icon' | 'Date';
 export type MovementsListItemProps = InjectedIntlProps & WithStyles<injectedClasses> &
@@ -36,7 +37,6 @@ const MovementsListItem: React.FunctionComponent<MovementsListItemProps> =
             );
         }
 
-        const date = moment(movement.Date).format('DD/MM/YYYY');
         const time = moment(movement.Date).format('HH:mm');
         return (
             <div
@@ -71,7 +71,11 @@ const MovementsListItem: React.FunctionComponent<MovementsListItemProps> =
                     </Lines>
                     <Lines actions={true}>
                         <Line className={classes.Date}>
-                            {date}
+                            {movement.Date &&
+                                <FormattedDate
+                                    value={` ${new Date(movement.Date)}`}
+                                    {...formatedDateOptions}
+                                />}
                         </Line>
                         <Line>
                             {time}

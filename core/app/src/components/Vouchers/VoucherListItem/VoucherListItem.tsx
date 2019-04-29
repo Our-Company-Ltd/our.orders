@@ -9,6 +9,7 @@ import { StyleRules, WithStyles } from '@material-ui/core/styles';
 import { Voucher } from 'src/@types/our-orders';
 import { Timelapse, CheckCircle, Block } from '@material-ui/icons';
 import * as classNames from 'classnames';
+import { formatedDateOptions } from 'src/_helpers/formatedDates';
 
 type injectedClasses = VoucherIconClasses | 'container';
 export type VoucherListItemProps = InjectedIntlProps & WithStyles<injectedClasses> &
@@ -86,9 +87,7 @@ export const VoucherListItem: React.FunctionComponent<VoucherListItemProps> =
                                     <span>Expiration date: </span>
                                     <FormattedDate
                                         value={` ${new Date(voucher.Expiration)}`}
-                                        year="2-digit"
-                                        month="numeric"
-                                        day="numeric"
+                                        {...formatedDateOptions}
                                     />
                                 </React.Fragment>}
 

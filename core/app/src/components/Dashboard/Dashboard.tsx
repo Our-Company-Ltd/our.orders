@@ -50,6 +50,7 @@ import ProductList from '../Products/ProductList/ProductList';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import Fabs from '../Fabs/Fabs';
 import DateTimeField from '../DateTimeField/DateTimeField';
+import { formatedDateOptions } from 'src/_helpers/formatedDates';
 export type periods =
     'today' |
     'yesterday' |
@@ -639,9 +640,8 @@ class Dashboard extends React.Component<dashboardProps, State> {
                                                 {formatMessage(DashboardMessages[v])}
                                             </MenuItem>)}
                                             <MenuItem key="custom" value="custom">
-                                                <FormattedDate value={customPeriodFrom} />
-                                                <br />
-                                                <FormattedDate value={customPeriodTo} />
+                                                <FormattedDate value={customPeriodFrom} {...formatedDateOptions} /> 
+                                                <FormattedDate value={customPeriodTo} {...formatedDateOptions} />
                                             </MenuItem>
                                         </Select>
 
@@ -923,7 +923,7 @@ class Dashboard extends React.Component<dashboardProps, State> {
         const start = today.dayOfYear(1).subtract(1, 'years');
         const end = start.clone().add(1, 'year');
         const interval: TimeInterval = 'Month';
-        const count = end.diff(start, 'months') + 1;
+        const count = end.diff(start, 'months');
         return { start: start.toDate(), count, interval };
     }
     private _lastmonth() {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedNumber } from 'react-intl';
+import { FormattedNumber, FormattedDate } from 'react-intl';
 
 import ItemPreview, { Lines, Line, Thumb } from '../../ItemPreview/ItemPreview';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
@@ -32,6 +32,7 @@ import * as classNames from 'classnames';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
 import { InjectedSettingsProps } from 'src/_context';
 import DateTimeField from 'src/components/DateTimeField/DateTimeField';
+import { formatedDateOptions } from 'src/_helpers/formatedDates';
 
 type injectedClasses =
     'svgIcon' |
@@ -76,13 +77,6 @@ class PaymentFields extends React.Component<PaymentFieldsProps & InjectedIntlPro
 
         const { PaidAmount, Total, classes, settingsCtx, intl, hasRights } = this.props;
 
-        const dateOptions = {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric'
-        };
-
         const paymentStatus =
             [
                 {
@@ -118,8 +112,6 @@ class PaymentFields extends React.Component<PaymentFieldsProps & InjectedIntlPro
             }
         ];
 
-        const date = current.Date ? intl.formatDate(new Date(current.Date), dateOptions) : '';
-
         const leftToPay = Math.ceil((Total - PaidAmount) * 100) / 100;
 
         const empty = Object.keys(changes).length === 0;
@@ -153,7 +145,12 @@ class PaymentFields extends React.Component<PaymentFieldsProps & InjectedIntlPro
                     <Lines>
                         <Line>
                             <span className={classNames(classes.bold, classes.marginRight)}>{current.Method}</span>
-                            {date && <span>{date}</span>}
+                            {current.Date && <span>
+                                <FormattedDate
+                                    value={` ${new Date(current.Date)}`}
+                                    {...formatedDateOptions}
+                                />
+                            </span>}
                         </Line>
                         <Line>
                             {current.Reference &&
