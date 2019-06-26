@@ -67,7 +67,7 @@ namespace our.orders.Controllers
                     await file.CopyToAsync(stream);
                 }
                 
-                result.Add(file.Name, $"{Request.Scheme}{Uri.SchemeDelimiter}{Request.Host.Host}:{Request.Host.Port ?? 80}/{filepath.Replace(Path.DirectorySeparatorChar, '/')}");
+                result.Add(file.Name, $"{Request.Scheme}{Uri.SchemeDelimiter}{Request.Host.Host}/{filepath.Replace(Path.DirectorySeparatorChar, '/')}");
             }
 
             // process uploaded files
