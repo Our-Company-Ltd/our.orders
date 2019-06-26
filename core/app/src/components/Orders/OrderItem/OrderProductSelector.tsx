@@ -78,7 +78,7 @@ export class OrderProductSelector extends React.Component<OrderProductSelectorPr
         };
         const selectEmptyBtn: FabBtnProps = {
             icon: <Add />,
-            legend: 'emptyproduct',
+            legend: 'empty item',
             themeColor: 'green',
             onClick: onSelectEmpty ? () => {
                 onSelectEmpty();
