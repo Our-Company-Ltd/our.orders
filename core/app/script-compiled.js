@@ -3757,14 +3757,36 @@ exports.config = config;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.formatedDateOptions = void 0;
-var formatedDateOptions = {
-  weekday: 'short',
-  year: '2-digit',
-  month: '2-digit',
-  day: '2-digit'
+exports.PrettyDate = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _reactIntl = require("react-intl");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+var PrettyDate = function PrettyDate(_ref) {
+  var value = _ref.value;
+  var weekday = React.createElement(_reactIntl.FormattedDate, {
+    value: value,
+    weekday: "short"
+  });
+  var month = React.createElement(_reactIntl.FormattedDate, {
+    value: value,
+    month: "2-digit"
+  });
+  var day = React.createElement(_reactIntl.FormattedDate, {
+    value: value,
+    day: "2-digit"
+  });
+  var year = React.createElement(_reactIntl.FormattedDate, {
+    value: value,
+    year: "2-digit"
+  });
+  return React.createElement(React.Fragment, null, weekday, ", ", day, "/", month, "/", year);
 };
-exports.formatedDateOptions = formatedDateOptions;
+
+exports.PrettyDate = PrettyDate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8654,8 +8676,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -9073,11 +9093,11 @@ function (_React$Component) {
       }), React.createElement(_core.MenuItem, {
         key: "custom",
         value: "custom"
-      }, React.createElement(_reactIntl.FormattedDate, _extends({
+      }, React.createElement(_formatedDates.PrettyDate, {
         value: customPeriodFrom
-      }, _formatedDates.formatedDateOptions)), React.createElement(_reactIntl.FormattedDate, _extends({
+      }), React.createElement(_formatedDates.PrettyDate, {
         value: customPeriodTo
-      }, _formatedDates.formatedDateOptions))))), period === 'custom' && React.createElement(React.Fragment, null, React.createElement(_core.Dialog, {
+      })))), period === 'custom' && React.createElement(React.Fragment, null, React.createElement(_core.Dialog, {
         open: !!customPeriodOpened,
         onClose: function onClose() {
           return _this3.setState(function () {
@@ -22776,7 +22796,7 @@ function (_React$Component) {
       };
       var selectEmptyBtn = {
         icon: React.createElement(_icons.Add, null),
-        legend: 'emptyproduct',
+        legend: 'empty item',
         themeColor: 'green',
         onClick: onSelectEmpty ? function () {
           onSelectEmpty();
@@ -24106,8 +24126,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 var OrderListItem = function OrderListItem(props) {
   var onClick = props.onClick,
       order = props.order,
@@ -24156,16 +24174,16 @@ var OrderListItem = function OrderListItem(props) {
         }, React.createElement(_reactIntl.FormattedMessage, {
           id: "src.views.orders.orderListItem.paidDatePrefix",
           defaultMessage: " paid on: "
-        }), React.createElement(_reactIntl.FormattedDate, _extends({
+        }), React.createElement(_formatedDates.PrettyDate, {
           value: new Date(paidDate)
-        }, _formatedDates.formatedDateOptions))), dispatchDate && React.createElement("span", {
+        })), dispatchDate && React.createElement("span", {
           className: "order-list-item__dispatch-date"
         }, React.createElement(_reactIntl.FormattedMessage, {
           id: "src.views.orders.orderListItem.dispatchedPrefix",
           defaultMessage: " dispatched on: "
-        }), React.createElement(_reactIntl.FormattedDate, _extends({
+        }), React.createElement(_formatedDates.PrettyDate, {
           value: new Date(dispatchDate)
-        }, _formatedDates.formatedDateOptions))));
+        })));
 
       case 'PendingPayment':
         return React.createElement(React.Fragment, null, React.createElement("span", {
@@ -24177,9 +24195,9 @@ var OrderListItem = function OrderListItem(props) {
           className: "order-list-item__status"
         }, (0, _OrderStatus.GetOrderStatusLegend)(props.intl, order.Status)), paidDate && React.createElement("span", {
           className: "order-list-item__paid-date"
-        }, "paid on: ", React.createElement(_reactIntl.FormattedDate, _extends({
+        }, "paid on: ", React.createElement(_formatedDates.PrettyDate, {
           value: new Date(paidDate)
-        }, _formatedDates.formatedDateOptions))));
+        })));
 
       case 'Empty':
         return React.createElement(React.Fragment, null, React.createElement("span", {
@@ -24222,9 +24240,9 @@ var OrderListItem = function OrderListItem(props) {
     value: total,
     style: "currency",
     currency: order.Currency
-  })), React.createElement(_ItemPreview.Line, null, order.Date && React.createElement(_reactIntl.FormattedDate, _extends({
+  })), React.createElement(_ItemPreview.Line, null, order.Date && React.createElement(_formatedDates.PrettyDate, {
     value: new Date(order.Date)
-  }, _formatedDates.formatedDateOptions))), React.createElement(_ItemPreview.Line, null))));
+  })), React.createElement(_ItemPreview.Line, null))));
 };
 
 exports.OrderListItem = OrderListItem;

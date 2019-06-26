@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { InjectedIntlProps, FormattedNumber, FormattedMessage, FormattedDate } from 'react-intl';
+import { InjectedIntlProps, FormattedNumber, FormattedMessage } from 'react-intl';
 // import { Users } from '../../_services';
 import {
     InjectedShopProps,
@@ -50,7 +50,7 @@ import ProductList from '../Products/ProductList/ProductList';
 import { InjectedCategoryProps } from 'src/_context/Category';
 import Fabs from '../Fabs/Fabs';
 import DateTimeField from '../DateTimeField/DateTimeField';
-import { formatedDateOptions } from 'src/_helpers/formatedDates';
+import { PrettyDate } from 'src/_helpers/formatedDates';
 export type periods =
     'today' |
     'yesterday' |
@@ -640,8 +640,8 @@ class Dashboard extends React.Component<dashboardProps, State> {
                                                 {formatMessage(DashboardMessages[v])}
                                             </MenuItem>)}
                                             <MenuItem key="custom" value="custom">
-                                                <FormattedDate value={customPeriodFrom} {...formatedDateOptions} /> 
-                                                <FormattedDate value={customPeriodTo} {...formatedDateOptions} />
+                                                <PrettyDate value={customPeriodFrom} /> 
+                                                <PrettyDate value={customPeriodTo} />
                                             </MenuItem>
                                         </Select>
 

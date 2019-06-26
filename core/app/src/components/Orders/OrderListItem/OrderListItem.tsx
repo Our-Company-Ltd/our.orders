@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedNumber, FormattedDate, InjectedIntlProps, FormattedMessage } from 'react-intl';
+import { FormattedNumber, InjectedIntlProps, FormattedMessage } from 'react-intl';
 
 import ItemPreview, { Line, Lines, Thumb } from '../../ItemPreview/ItemPreview';
 import PersonPreview from '../../PersonPreview';
@@ -12,7 +12,7 @@ import { OrderIconStyles, OrderIconClasses } from '../OrderIcons';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules, WithStyles } from '@material-ui/core/styles';
 import { Order } from 'src/@types/our-orders';
-import { formatedDateOptions } from 'src/_helpers/formatedDates';
+import { PrettyDate } from 'src/_helpers/formatedDates';
 
 type injectedClasses = OrderIconClasses | 'container';
 export type OrderListItemProps = InjectedIntlProps & WithStyles<injectedClasses> &
@@ -82,7 +82,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                                         defaultMessage=" paid on: "
                                         description="Prefix text for date when order paid"
                                     />
-                                    <FormattedDate value={new Date(paidDate)} {...formatedDateOptions} />
+                                    <PrettyDate value={new Date(paidDate)} />
                                 </span>
                             }
                             {dispatchDate &&
@@ -92,7 +92,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                                         defaultMessage=" dispatched on: "
                                         description="Prefix text for dispatched date"
                                     />
-                                    <FormattedDate value={new Date(dispatchDate)} {...formatedDateOptions} />
+                                    <PrettyDate value={new Date(dispatchDate)} />
                                 </span>
                             }
                         </React.Fragment>
@@ -115,7 +115,7 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                             </span>
                             {paidDate &&
                                 <span className="order-list-item__paid-date">
-                                    paid on: <FormattedDate value={new Date(paidDate)} {...formatedDateOptions} />
+                                    paid on: <PrettyDate value={new Date(paidDate)} />
                                 </span>
                             }
                         </React.Fragment>
@@ -203,9 +203,8 @@ export const OrderListItem: React.FunctionComponent<OrderListItemProps> =
                         </Line>
                         <Line>
                             {order.Date &&
-                                <FormattedDate
+                                <PrettyDate
                                     value={new Date(order.Date)}
-                                    {...formatedDateOptions}
                                 />
                             }
                         </Line>

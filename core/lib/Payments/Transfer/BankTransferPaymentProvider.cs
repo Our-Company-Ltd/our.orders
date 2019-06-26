@@ -26,7 +26,7 @@ namespace our.orders.Payments.BankTransfer
             {
                 Title = "Bank Transfer Payment",
                 Provider = Name,
-                Reference = $"transfer {DateTime.UtcNow.ToLongDateString()}  {DateTime.UtcNow.ToLongTimeString()}",
+                Reference = $"transfer {DateTime.UtcNow.ToString("dd/MM/yyyy")}  {DateTime.UtcNow.ToString("HH:mm")}",
                 Status = PaymentStatus.Pending,
                 Date = DateTime.UtcNow,
                 Method = PaymentMethod.Electronic,
