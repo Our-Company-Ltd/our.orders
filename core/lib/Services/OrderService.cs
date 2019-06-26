@@ -406,6 +406,7 @@ namespace our.orders.Services
                 Global = new StatisticMetric { },
                 Report = new List<StatisticsPeriodReport>()
             };
+            var currentDay = start.Day;
             while (results.Report.Count() < count)
             {
                 var currentEnd = start;
@@ -415,7 +416,10 @@ namespace our.orders.Services
                         currentEnd = current.AddYears(1);
                         break;
                     case TimeInterval.Month:
-                        currentEnd = current.AddMonths(1);
+                        if(!DateTime.TryParse(string.Format("{0}-{1}-{2}", current.Year, current.Month + 1, currentDay), out DateTime nextDate)) {
+                            nextDate = current.AddMonths(1);
+                        }
+                        currentEnd =  nextDate;
                         break;
                     case TimeInterval.Day:
                         currentEnd = current.AddDays(1);
