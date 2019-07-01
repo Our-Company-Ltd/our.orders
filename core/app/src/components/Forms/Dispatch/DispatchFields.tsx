@@ -40,6 +40,7 @@ import * as classNames from 'classnames';
 import { OurTheme } from 'src/components/ThemeProvider/ThemeProvider';
 import { StyleRules } from '@material-ui/core/styles';
 import DateTimeField from 'src/components/DateTimeField/DateTimeField';
+import { PrettyDate } from 'src/_helpers/formatedDates';
 
 type injectedClasses =
     'svgIcon' |
@@ -125,7 +126,13 @@ export class DispatchFields extends React.Component<DispatchFieldsProps, State> 
                     <Lines>
                         <Line>
                             <span className={classes.title}>{current.Method}</span>
-                            {date && <span className={classes.date}>{date}</span>}
+                            {date &&
+                                <span className={classes.date}>
+                                    <PrettyDate
+                                        value={` ${new Date(date)}`}
+                                    />
+                                </span>
+                            }
                         </Line>
                         <Line />
                     </Lines>

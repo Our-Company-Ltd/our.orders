@@ -5,6 +5,7 @@ export interface User extends ModelBase {
     UserName: string;
     ShopId: string;
     WarehouseId: string;
+    ShippingTemplateId: string;
     Token: string;
     FirstName: string;
     LastName: string;

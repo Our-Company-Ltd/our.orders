@@ -15,7 +15,6 @@ namespace our.orders.Models
     }
     public class StockUnit : Model
     {
-
         public string SKU { get; set; }
 
         public string Detail { get; set; }

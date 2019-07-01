@@ -99,6 +99,8 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
         const sku = preview.SKU || '';
         const title = preview.Title || '';
         const basePrice = preview.BasePrice || [];
+        const purchasePrice = preview.PurchasePrice || [];
+        const supplier = preview.Supplier || '';
         const weight = preview.Weight;
         const minQuantity = preview.MinQuantity;
         const maxQuantity = preview.MaxQuantity;
@@ -158,6 +160,7 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
 
                 </Grid>
                 <PricesField
+                    label={intl.formatMessage(ProductFieldsMessages.basePrice)}
                     gridProps={{ xs: Math.max(4, 12 / currencies.length) as 12 | 6 | 4 }}
                     intl={this.props.intl}
                     onChange={(value) => this._OnChange({ BasePrice: value })}
@@ -235,6 +238,26 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
                     </Grid>
                 }
                 <Grid item={true} xs={4}>
+                    <PricesField
+                        label={intl.formatMessage(ProductFieldsMessages.purchasePrice)}
+                        gridProps={{ xs: Math.max(4, 12 / currencies.length) as 12 | 6 | 4 }}
+                        intl={this.props.intl}
+                        onChange={(value) => this._OnChange({ PurchasePrice: value })}
+                        value={purchasePrice}
+                        currencies={currencies}
+                        fieldProps={{ disabled: !hasRights }}
+                    />
+                </Grid>
+                <Grid item={true} xs={4}>
+                    <TextField
+                        onChange={this._handleChange('Supplier')}
+                        value={supplier}
+                        fullWidth={true}
+                        label={intl.formatMessage(ProductFieldsMessages.supplier)}
+                        disabled={!hasRights}
+                    />
+                </Grid>
+                <Grid item={true} xs={4}>
                     <FormControlLabel
                         control={
                             <Switch
@@ -247,7 +270,8 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
                         label={intl.formatMessage(ProductFieldsMessages.needsDispatch)}
                     />
                 </Grid>
-                {!subProduct &&
+                {
+                    !subProduct &&
                     <Grid item={true} xs={12}>
                         <FormControl fullWidth={true}>
                             <InputLabel htmlFor="select-categories">
@@ -313,27 +337,30 @@ class ProductFields extends React.Component<ProductFieldsProps, State> {
                     />
                 </Grid>
 
-                {options && options.length > 0 &&
+                {
+                    options && options.length > 0 &&
                     <Grid item={true} xs={12}>
                         {options && options.map((option, i) =>
                             this._renderOption(options, option, i)
                         )}
-                    </Grid>}
+                    </Grid>
+                }
 
-                {hasRights && <Grid item={true} xs={12} >
-                    <GridContainer justify="center">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            onClick={() => this._addOption(options || [])}
-                        >
-                            <FormattedMessage {...ProductFieldsMessages.addOption} />
-                            <PlaylistAddIcon style={{ paddingLeft: '7px' }} />
-                        </Button>
-                    </GridContainer>
-                </Grid>}
-            </GridContainer>
+                {
+                    hasRights && <Grid item={true} xs={12} >
+                        <GridContainer justify="center">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                onClick={() => this._addOption(options || [])}
+                            >
+                                <FormattedMessage {...ProductFieldsMessages.addOption} />
+                                <PlaylistAddIcon style={{ paddingLeft: '7px' }} />
+                            </Button>
+                        </GridContainer>
+                    </Grid>}
+            </GridContainer >
 
         );
     }

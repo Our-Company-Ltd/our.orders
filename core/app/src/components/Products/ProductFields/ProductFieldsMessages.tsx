@@ -121,5 +121,20 @@ export default defineMessages({
         id: 'src.view.productsView.fields.needsDispatch',
         defaultMessage: 'Needs Dispatch',
         description: 'name for Needs Dispatch'
+    },
+    supplier: {
+        id: 'src.view.productsView.fields.supplier',
+        defaultMessage: 'Supplier',
+        description: 'name for supplier'
+    },
+    purchasePrice: {
+        id: 'src.view.productsView.fields.purchasePrice',
+        defaultMessage: 'Purchase Price',
+        description: 'Purchase Price of the product'
+    },
+    basePrice: {
+        id: 'src.view.productsView.fields.basePrice',
+        defaultMessage: 'Base Price',
+        description: 'Base Price of the product'
     }
 });

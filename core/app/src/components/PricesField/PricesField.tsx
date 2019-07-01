@@ -29,6 +29,7 @@ const NumberFormatCustom: React.SFC<any> = (props) => {
 };
 
 export type PricesFieldProps = InjectedIntlProps & {
+    label?: string;
     gridProps?: GridProps;
     fieldProps?: TextFieldProps;
     value: Price[];
@@ -37,14 +38,19 @@ export type PricesFieldProps = InjectedIntlProps & {
 };
 
 export type PriceFieldProps = InjectedIntlProps & {
-    fieldProps?: TextFieldProps; currency: Currency; value: Price | null; onChange?: (value: Price | null) => void;
+    label?: string;
+    fieldProps?: TextFieldProps;
+    currency: Currency;
+    value: Price | null;
+    onChange?: (value: Price | null) => void;
 };
 export const PriceField: React.SFC<PriceFieldProps> = (props) => {
-    const { value, currency, fieldProps } = props;
+    const { value, currency, fieldProps, label } = props;
     return (
         <TextField
             value={value === null ? '' : value.Value}
             fullWidth={true}
+            label={label}
             title={currency.Name}
             onChange={props.onChange ? (e) => {
                 var val = (e.target as HTMLInputElement).value;
@@ -69,7 +75,7 @@ export const PriceField: React.SFC<PriceFieldProps> = (props) => {
 };
 
 export const PricesField: React.SFC<PricesFieldProps> = (props) => {
-    const { currencies, gridProps, fieldProps, intl } = props;
+    const { currencies, gridProps, fieldProps, intl, label } = props;
 
     return (
         <React.Fragment>
@@ -79,6 +85,7 @@ export const PricesField: React.SFC<PricesFieldProps> = (props) => {
                 return (
                     <Grid key={currency.Code} item={true} xs={true} {...gridProps}>
                         <PriceField
+                            label={label}
                             intl={intl}
                             onChange={props.onChange ? (e) => {
 

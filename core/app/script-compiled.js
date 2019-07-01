@@ -10383,6 +10383,8 @@ var classNames = _interopRequireWildcard(require("classnames"));
 
 var _DateTimeField = _interopRequireDefault(require("src/components/DateTimeField/DateTimeField"));
 
+var _formatedDates = require("src/_helpers/formatedDates");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
@@ -10477,7 +10479,9 @@ function (_React$Component) {
         className: classes.title
       }, current.Method), date && React.createElement("span", {
         className: classes.date
-      }, date)), React.createElement(_ItemPreview.Line, null)), React.createElement(_ItemPreview.Lines, {
+      }, React.createElement(_formatedDates.PrettyDate, {
+        value: " ".concat(new Date(date))
+      }))), React.createElement(_ItemPreview.Line, null)), React.createElement(_ItemPreview.Lines, {
         actions: true
       }, React.createElement(_ItemPreview.Line, null), React.createElement(_ItemPreview.Line, null, actionDelete)));
       return React.createElement(React.Fragment, null, previewLine, React.createElement(_core.Dialog, _extends({
@@ -11011,8 +11015,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -11115,9 +11117,9 @@ function (_React$Component) {
         onClick: this._open
       }, React.createElement(_core.Avatar, null, current.Status && this._getPaymentStatusIcon(current.Status)), React.createElement(_ItemPreview.Lines, null, React.createElement(_ItemPreview.Line, null, React.createElement("span", {
         className: classNames(classes.bold, classes.marginRight)
-      }, current.Method), current.Date && React.createElement("span", null, React.createElement(_reactIntl.FormattedDate, _extends({
+      }, current.Method), current.Date && React.createElement("span", null, React.createElement(_formatedDates.PrettyDate, {
         value: " ".concat(new Date(current.Date))
-      }, _formatedDates.formatedDateOptions)))), React.createElement(_ItemPreview.Line, null, current.Reference && React.createElement("span", {
+      }))), React.createElement(_ItemPreview.Line, null, current.Reference && React.createElement("span", {
         className: classes.marginRight
       }, current.Reference), current.Method && React.createElement("span", null, current.Method))), React.createElement(_ItemPreview.Lines, {
         actions: true
@@ -14884,8 +14886,6 @@ var _formatedDates = require("src/_helpers/formatedDates");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 var MovementsListItem = function MovementsListItem(props) {
   var onClick = props.onClick,
       movement = props.movement,
@@ -14919,9 +14919,9 @@ var MovementsListItem = function MovementsListItem(props) {
     actions: true
   }, React.createElement(_ItemPreview.Line, {
     className: classes.Date
-  }, movement.Date && React.createElement(_reactIntl.FormattedDate, _extends({
+  }, movement.Date && React.createElement(_formatedDates.PrettyDate, {
     value: " ".concat(new Date(movement.Date))
-  }, _formatedDates.formatedDateOptions))), React.createElement(_ItemPreview.Line, null, time))));
+  })), React.createElement(_ItemPreview.Line, null, time))));
 };
 
 var width = '3rem';
@@ -25608,10 +25608,12 @@ var NumberFormatCustom = function NumberFormatCustom(props) {
 var PriceField = function PriceField(props) {
   var value = props.value,
       currency = props.currency,
-      fieldProps = props.fieldProps;
+      fieldProps = props.fieldProps,
+      label = props.label;
   return React.createElement(_TextField.default, _extends({
     value: value === null ? '' : value.Value,
     fullWidth: true,
+    label: label,
     title: currency.Name,
     onChange: props.onChange ? function (e) {
       var val = e.target.value;
@@ -25643,7 +25645,8 @@ var PricesField = function PricesField(props) {
   var currencies = props.currencies,
       gridProps = props.gridProps,
       fieldProps = props.fieldProps,
-      intl = props.intl;
+      intl = props.intl,
+      label = props.label;
   return React.createElement(React.Fragment, null, currencies.map(function (currency) {
     var price = props.value.find(function (p) {
       return p.Currency === currency.Code;
@@ -25653,6 +25656,7 @@ var PricesField = function PricesField(props) {
       item: true,
       xs: true
     }, gridProps), React.createElement(PriceField, {
+      label: label,
       intl: intl,
       onChange: props.onChange ? function (e) {
         var newprices = _toConsumableArray(props.value).filter(function (p) {
@@ -26520,6 +26524,8 @@ function (_React$Component) {
       var sku = preview.SKU || '';
       var title = preview.Title || '';
       var basePrice = preview.BasePrice || [];
+      var purchasePrice = preview.PurchasePrice || [];
+      var supplier = preview.Supplier || '';
       var weight = preview.Weight;
       var minQuantity = preview.MinQuantity;
       var maxQuantity = preview.MaxQuantity;
@@ -26568,6 +26574,7 @@ function (_React$Component) {
         label: intl.formatMessage(_ProductFieldsMessages.default.sku),
         disabled: !hasRights
       }))))))), React.createElement(_PricesField.default, {
+        label: intl.formatMessage(_ProductFieldsMessages.default.basePrice),
         gridProps: {
           xs: Math.max(4, 12 / currencies.length)
         },
@@ -26657,6 +26664,34 @@ function (_React$Component) {
             TaxRateExcluded: w
           });
         },
+        disabled: !hasRights
+      })), React.createElement(_Grid.default, {
+        item: true,
+        xs: 4
+      }, React.createElement(_PricesField.default, {
+        label: intl.formatMessage(_ProductFieldsMessages.default.purchasePrice),
+        gridProps: {
+          xs: Math.max(4, 12 / currencies.length)
+        },
+        intl: this.props.intl,
+        onChange: function onChange(value) {
+          return _this2._OnChange({
+            PurchasePrice: value
+          });
+        },
+        value: purchasePrice,
+        currencies: currencies,
+        fieldProps: {
+          disabled: !hasRights
+        }
+      })), React.createElement(_Grid.default, {
+        item: true,
+        xs: 4
+      }, React.createElement(_TextField.default, {
+        onChange: this._handleChange('Supplier'),
+        value: supplier,
+        fullWidth: true,
+        label: intl.formatMessage(_ProductFieldsMessages.default.supplier),
         disabled: !hasRights
       })), React.createElement(_Grid.default, {
         item: true,
@@ -27012,6 +27047,18 @@ var _default = (0, _reactIntl.defineMessages)({
   needsDispatch: {
     "id": "src.view.productsView.fields.needsDispatch",
     "defaultMessage": "Needs Dispatch"
+  },
+  supplier: {
+    "id": "src.view.productsView.fields.supplier",
+    "defaultMessage": "Supplier"
+  },
+  purchasePrice: {
+    "id": "src.view.productsView.fields.purchasePrice",
+    "defaultMessage": "Purchase Price"
+  },
+  basePrice: {
+    "id": "src.view.productsView.fields.basePrice",
+    "defaultMessage": "Base Price"
   }
 });
 
@@ -36096,8 +36143,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -36143,9 +36188,9 @@ var VoucherListItem = function VoucherListItem(props) {
     currency: voucher.Currency
   })), "/", React.createElement("span", null, React.createElement(_reactIntl.FormattedNumber, {
     value: voucher.InitialValue
-  }))), React.createElement(_ItemPreview.Line, null, voucher.Expiration && React.createElement(React.Fragment, null, React.createElement("span", null, "Expiration date: "), React.createElement(_reactIntl.FormattedDate, _extends({
+  }))), React.createElement(_ItemPreview.Line, null, voucher.Expiration && React.createElement(React.Fragment, null, React.createElement("span", null, "Expiration date: "), React.createElement(_formatedDates.PrettyDate, {
     value: " ".concat(new Date(voucher.Expiration))
-  }, _formatedDates.formatedDateOptions)))))));
+  }))))));
 };
 
 exports.VoucherListItem = VoucherListItem;

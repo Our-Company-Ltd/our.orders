@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormattedNumber, FormattedDate } from 'react-intl';
+import { FormattedNumber } from 'react-intl';
 
 import ItemPreview, { Lines, Line, Thumb } from '../../ItemPreview/ItemPreview';
 import { InjectedIntlProps, injectIntl } from 'react-intl';
@@ -32,7 +32,7 @@ import * as classNames from 'classnames';
 import CurrenciesField from 'src/components/CurrenciesField/CurrenciesField';
 import { InjectedSettingsProps } from 'src/_context';
 import DateTimeField from 'src/components/DateTimeField/DateTimeField';
-import { formatedDateOptions } from 'src/_helpers/formatedDates';
+import { PrettyDate } from 'src/_helpers/formatedDates';
 
 type injectedClasses =
     'svgIcon' |
@@ -146,9 +146,8 @@ class PaymentFields extends React.Component<PaymentFieldsProps & InjectedIntlPro
                         <Line>
                             <span className={classNames(classes.bold, classes.marginRight)}>{current.Method}</span>
                             {current.Date && <span>
-                                <FormattedDate
+                                <PrettyDate
                                     value={` ${new Date(current.Date)}`}
-                                    {...formatedDateOptions}
                                 />
                             </span>}
                         </Line>

@@ -69,13 +69,6 @@ namespace our.orders.Controllers
             public List<ProductLine> Items { get; set; } = new List<ProductLine>();
         };
 
-        private class StocksBinding
-        {
-            public string Title { get; set; }
-            public string SKU { get; set; }
-            public int Stock { get; set; }
-        };
-
         [HttpPost("{templateId}/order/{id?}")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> OrderAsync(
@@ -163,8 +156,9 @@ namespace our.orders.Controllers
         {
             return
                 orders
-                    .SelectMany(o => o.Items.Concat(o.Items?.SelectMany(i => i.Items ?? Enumerable.Empty<OrderItem>()) ?? Enumerable.Empty<OrderItem>()))
-                    .Where(o => !string.IsNullOrEmpty(o.ProductId));
+                    .SelectMany(o => o.Items.Concat(o.Items?.SelectMany(i => i.Items ?? Enumerable.Empty<OrderItem>()) ?? Enumerable.Empty<OrderItem>()));
+            // .Where(o => !string.IsNullOrEmpty(o.ProductId));
+            // .Where(o => string.IsNullOrEmpty(o.ProductId));
         }
 
         private IEnumerable<ProductLine> _ToProductLines(IEnumerable<OrderItem> items)
@@ -181,7 +175,22 @@ namespace our.orders.Controllers
                     PrettyUnitPrice = sample.PrettyUnitPrice,
                     PrettyTotalPrice = (sample.UnitPrice * quantity).ToString("0.00", CultureInfo.InvariantCulture),
                     Sku = sample.SKU,
-                    OptionTitle = sample.Option?.Title
+                    OptionTitle = sample.Option?.Value ?? sample.Option?.Title
+                };
+            }
+        }
+        private IEnumerable<ProductLine> _ToProductLinesNotGrouped(IEnumerable<OrderItem> items)
+        {
+            foreach (var item in items)
+            {
+                yield return new ProductLine
+                {
+                    Title = item.Title,
+                    Count = item.Quantity,
+                    PrettyUnitPrice = item.PrettyUnitPrice,
+                    PrettyTotalPrice = (item.UnitPrice * item.Quantity).ToString("0.00", CultureInfo.InvariantCulture),
+                    Sku = item.SKU,
+                    OptionTitle = item.Option?.Value ?? item.Option?.Title
                 };
             }
         }
@@ -200,7 +209,7 @@ namespace our.orders.Controllers
           )
         {
             var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
-            var orders = await orderService.FindAsync(filter, sorts, null, cancellationToken);
+            var orders = await orderService.FindAsync(filter, sorts, null);
 
             var itemsList = _ToItemList(orders);
             var productLines = new
@@ -214,12 +223,29 @@ namespace our.orders.Controllers
             var categories = (await categoryService.FindAsync(cancellationToken: cancellationToken)).ToArray();
 
             var ordersPerCategory =
-                categories.ToDictionary(c => c, c => itemsList.Where(o => o.Categories.Contains(c.Id)).ToArray());
+                categories.ToDictionary(
+                    c => c,
+                    c => itemsList.Where(
+                        o => o.Categories != null && o.Categories.Contains(c.Id))
+                    .ToArray());
 
             var categoriesProductLines = ordersPerCategory.Where(kvp => kvp.Value.Any()).Select(kvp => new
             {
                 title = kvp.Key.Title,
                 products = _ToProductLines(kvp.Value),
+                tax = kvp.Value.Sum(i => i.Price?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                total = kvp.Value.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
+            });
+
+            // var itemsWithNoCategory = itemsList.Where(i => i.Categories == null);
+
+            var itemsWithNoCategory = new Dictionary<string, OrderItem[]>();
+            itemsWithNoCategory.Add("No category", itemsList.Where(i => i.Categories == null || i.Categories.Count() == 0).ToArray());
+
+            var productLinesWithNoCategory = itemsWithNoCategory.Where(kvp => kvp.Value.Any()).Select(kvp => new
+            {
+                title = kvp.Key,
+                products = _ToProductLinesNotGrouped(kvp.Value),
                 tax = kvp.Value.Sum(i => i.Price?.Tax ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
                 total = kvp.Value.Sum(i => (i.Price?.Final ?? 0) * i.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
             });
@@ -271,10 +297,12 @@ namespace our.orders.Controllers
                 }
             }
 
+            var categoriesList = categoriesProductLines.ToArray().Concat(productLinesWithNoCategory.ToArray());
+
             var html = compiled(new
             {
                 global = productLines,
-                categories = categoriesProductLines.ToArray(),
+                categories = categoriesList,
                 today = today,
                 printFilters = printFilters
             });
@@ -412,11 +440,52 @@ namespace our.orders.Controllers
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }
 
+        private class StocksBinding
+        {
+            public string SKU { get; set; }
+            public string Title { get; set; }
+            public string Supplier { get; set; }
+            public int Stock { get; set; }
+            public string SellingPrice { get; set; }
+            public string PurchasePrice { get; set; }
+            public decimal Total { get; set; }
+            public string PrettyTotal { get; set; }
+        };
+
+        private IEnumerable<StocksBinding> _StockToExport(IEnumerable<StockUnit> stockUnits, IEnumerable<IProduct> products, string warehouseId)
+        {
+
+            foreach (var stockUnit in stockUnits)
+            {
+                var sku = stockUnit.SKU;
+                var productMatchingStockUnit = products.Where(p => p.SKU == sku).FirstOrDefault();
+
+                if (productMatchingStockUnit != null)
+                {
+                    var sellingPrice = productMatchingStockUnit?.BasePrice.Where(p => p.Currency == "CHF").FirstOrDefault() ?? new Price { };
+                    var purchasePrice = productMatchingStockUnit?.PurchasePrice.Where(p => p.Currency == "CHF").FirstOrDefault() ?? new Price { };
+
+                    yield return new StocksBinding
+                    {
+                        Title = productMatchingStockUnit.Title ?? "",
+                        SKU = sku,
+                        Stock = stockUnit.Units[warehouseId],
+                        Supplier = productMatchingStockUnit.Supplier ?? "No supplier was added",
+                        SellingPrice = (sellingPrice?.Value ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                        PurchasePrice = (purchasePrice?.Value ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                        Total = (purchasePrice?.Value ?? 0) * stockUnit.Units[warehouseId],
+                        PrettyTotal = (purchasePrice?.Value ?? 0 * stockUnit.Units[warehouseId]).ToString("0.00", CultureInfo.InvariantCulture)
+                    };
+                }
+            }
+        }
+
         [HttpPost("{templateId}/stocks/{id}/{min}/{max}")]
         // [ValidateAntiForgeryToken]
         public async Task<IActionResult> StocksAsync(
           [FromServices]IService<DocumentTemplate> templateService,
           [FromServices]IService<StockUnit> stocksService,
+          [FromServices]IService<IProduct> productService,
           [FromRoute]string templateId,
           [FromRoute]string id,
           [FromRoute]int min,
@@ -427,25 +496,37 @@ namespace our.orders.Controllers
           )
         {
             var sorts = sort?.Split(',').Where(s => !string.IsNullOrEmpty(s));
+
+            // all stockUnits
             var result = await stocksService.FindAsync(filter, sorts, null, cancellationToken);
 
-            var values = result.Where(s => s.Units.ContainsKey(id)).Select((i) =>
-                new StocksBinding { Title = i.Detail, SKU = i.SKU, Stock = i.Units[id] });
+            // stickUnit from selected warehouse
+            var stockUnits = result.Where(s => s.Units.ContainsKey(id));
 
             if (max >= 0)
             {
-                values = values.Where(v => v.Stock <= max);
+                stockUnits = stockUnits.Where(v => v.Units[id] <= max);
             }
             if (min >= 0)
             {
-                values = values.Where(v => v.Stock >= min);
+                stockUnits = stockUnits.Where(v => v.Units[id] >= min);
             }
-            values = values.OrderBy(s => s.Stock);
+
+            var stockUnitsOrdered = stockUnits.OrderByDescending(s => s.Units[id]);
+
+            // all product
+            var allProducts = await productService.FindAsync(cancellationToken: cancellationToken);
+
+            var stockToExport = _StockToExport(stockUnitsOrdered, allProducts, id);
+
+            var bigTotal = stockToExport.Sum(s => s.Total).ToString("0.00", CultureInfo.InvariantCulture);
 
             var template = await templateService.GetByIdAsync(templateId, cancellationToken);
             var compiled = Handlebars.Compile(template.Template);
 
-            var html = compiled(new { stocks = values.ToArray() });
+            var today = DateTime.UtcNow.ToString("dd.MM.yyyy");
+
+            var html = compiled(new { currentDate = today, stocks = stockToExport.ToArray(), Total = bigTotal});
 
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }

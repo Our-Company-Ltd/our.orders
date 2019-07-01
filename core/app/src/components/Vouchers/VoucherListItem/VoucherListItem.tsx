@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InjectedIntlProps, FormattedNumber, FormattedDate } from 'react-intl';
+import { InjectedIntlProps, FormattedNumber } from 'react-intl';
 import ItemPreview, { Line, Lines, Thumb } from '../../ItemPreview/ItemPreview';
 
 import { withStyles, Avatar } from '@material-ui/core';
@@ -9,7 +9,7 @@ import { StyleRules, WithStyles } from '@material-ui/core/styles';
 import { Voucher } from 'src/@types/our-orders';
 import { Timelapse, CheckCircle, Block } from '@material-ui/icons';
 import * as classNames from 'classnames';
-import { formatedDateOptions } from 'src/_helpers/formatedDates';
+import { PrettyDate } from 'src/_helpers/formatedDates';
 
 type injectedClasses = VoucherIconClasses | 'container';
 export type VoucherListItemProps = InjectedIntlProps & WithStyles<injectedClasses> &
@@ -85,9 +85,8 @@ export const VoucherListItem: React.FunctionComponent<VoucherListItemProps> =
                             {voucher.Expiration &&
                                 <React.Fragment>
                                     <span>Expiration date: </span>
-                                    <FormattedDate
+                                    <PrettyDate
                                         value={` ${new Date(voucher.Expiration)}`}
-                                        {...formatedDateOptions}
                                     />
                                 </React.Fragment>}
 

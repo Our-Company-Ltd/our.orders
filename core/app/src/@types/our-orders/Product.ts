@@ -12,6 +12,8 @@ export type Product = ModelBase & {
     SKU?: string;
     Categories?: string[];
     BasePrice?: Price[];
+    PurchasePrice?: Price[];
+    Supplier?: string; 
     MinQuantity?: number | null;
     MaxQuantity?: number | null;
     Options?: ProductOption[];

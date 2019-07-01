@@ -46,6 +46,10 @@ namespace our.orders.Dtos
 
         public IEnumerable<Price> BasePrice { get; set; } = new Price[] { };
 
+        public IEnumerable<Price> PurchasePrice { get; set; } = new Price[] { };
+
+        public string Supplier { get; set; }
+
         public int? MinQuantity { get; set; }
 
         public int? MaxQuantity { get; set; }

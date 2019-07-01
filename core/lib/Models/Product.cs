@@ -27,6 +27,11 @@ namespace our.orders.Models
 
         IEnumerable<Price> BasePrice { get; set; }
 
+        IEnumerable<Price> PurchasePrice { get; set; }
+
+        string Supplier { get; set; }
+
+
         int? MinQuantity { get; set; }
 
         int? MaxQuantity { get; set; }
@@ -69,6 +74,10 @@ namespace our.orders.Models
 
         [JsonField]
         public IEnumerable<Price> BasePrice { get; set; }
+
+        public IEnumerable<Price> PurchasePrice { get; set; }
+
+        public string Supplier { get; set; }
 
         public int? MinQuantity { get; set; }
 
