@@ -175,7 +175,9 @@ namespace our.orders.Controllers
                     PrettyUnitPrice = sample.PrettyUnitPrice,
                     PrettyTotalPrice = (sample.UnitPrice * quantity).ToString("0.00", CultureInfo.InvariantCulture),
                     Sku = sample.SKU,
-                    OptionTitle = sample.Option?.Value ?? sample.Option?.Title
+                    OptionTitle = string.IsNullOrEmpty(sample.Option?.Value) ? 
+                        string.IsNullOrEmpty(sample.Option?.Title) ? "No information" : sample.Option?.Title :
+                        sample.Option.Value
                 };
             }
         }
@@ -190,7 +192,10 @@ namespace our.orders.Controllers
                     PrettyUnitPrice = item.PrettyUnitPrice,
                     PrettyTotalPrice = (item.UnitPrice * item.Quantity).ToString("0.00", CultureInfo.InvariantCulture),
                     Sku = item.SKU,
-                    OptionTitle = item.Option?.Value ?? item.Option?.Title
+                    // OptionTitle = item?.Option?.Value ?? item?.Option?.Title ?? "No information"
+                    OptionTitle = string.IsNullOrEmpty(item.Option?.Value) ? 
+                        string.IsNullOrEmpty(item.Option?.Title) ? "No information" : item.Option?.Title :
+                        item.Option.Value
                 };
             }
         }
