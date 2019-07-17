@@ -11126,7 +11126,7 @@ function (_React$Component) {
       }, React.createElement(_ItemPreview.Line, null, React.createElement("span", {
         className: "forms__order-payment-preview-amount"
       }, React.createElement(_reactIntl.FormattedNumber, {
-        value: current.Amount || 0,
+        value: leftToPay || 0,
         style: "currency",
         currency: current.Currency
       }))), React.createElement(_ItemPreview.Line, null, actionDelete)));

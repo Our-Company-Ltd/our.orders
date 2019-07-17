@@ -168,7 +168,7 @@ class PaymentFields extends React.Component<PaymentFieldsProps & InjectedIntlPro
                         <Line>
                             <span className="forms__order-payment-preview-amount">
                                 <FormattedNumber
-                                    value={current.Amount || 0}
+                                    value={leftToPay || 0}
                                     style="currency"
                                     currency={current.Currency}
                                 />

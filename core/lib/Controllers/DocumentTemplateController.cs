@@ -467,8 +467,8 @@ namespace our.orders.Controllers
 
                 if (productMatchingStockUnit != null)
                 {
-                    var sellingPrice = productMatchingStockUnit?.BasePrice.Where(p => p.Currency == "CHF").FirstOrDefault() ?? new Price { };
-                    var purchasePrice = productMatchingStockUnit?.PurchasePrice.Where(p => p.Currency == "CHF").FirstOrDefault() ?? new Price { };
+                    var sellingPrice = productMatchingStockUnit?.BasePrice?.Where(p => p.Currency == "CHF").FirstOrDefault() ?? new Price { };
+                    var purchasePrice = productMatchingStockUnit?.PurchasePrice?.Where(p => p.Currency == "CHF").FirstOrDefault() ?? new Price { };
 
                     yield return new StocksBinding
                     {

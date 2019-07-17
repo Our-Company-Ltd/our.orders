@@ -173,7 +173,7 @@ namespace our.orders.Services
 
                 _UpdatePaid(order);
                 _UpdateStatus(order);
-                
+
                 if (order.Status != oldStatus)
                 {
                     appEvents.OnOrderStatusChanged(this, order);
@@ -416,10 +416,13 @@ namespace our.orders.Services
                         currentEnd = current.AddYears(1);
                         break;
                     case TimeInterval.Month:
-                        if(!DateTime.TryParse(string.Format("{0}-{1}-{2}", current.Year, current.Month + 1, currentDay), out DateTime nextDate)) {
+                        var str = string.Format("{0}-{1}-{2}-{3}-{4}", current.Year.ToString("0000"), (current.Month + 1).ToString("00"), currentDay.ToString("00"), current.Hour.ToString("00"), current.Minute.ToString("00"));
+                        if (!DateTime.TryParseExact(str, "yyyy-MM-dd-HH-mm", System.Globalization.CultureInfo.InvariantCulture,
+                           System.Globalization.DateTimeStyles.None, out DateTime nextDate))
+                        {
                             nextDate = current.AddMonths(1);
                         }
-                        currentEnd =  nextDate;
+                        currentEnd = nextDate;
                         break;
                     case TimeInterval.Day:
                         currentEnd = current.AddDays(1);
