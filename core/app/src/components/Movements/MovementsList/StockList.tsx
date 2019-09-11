@@ -356,6 +356,8 @@ class StockList extends React.Component<StockListProps, State> {
         }
         const filterDef = { filters, operator: 'and' } as FilterDefinition;
 
+        this.setState(() => ({ fetching: true }));
+
         DocumentTemplates
             .Stocks(
                 id,
@@ -375,6 +377,7 @@ class StockList extends React.Component<StockListProps, State> {
                     cssStyles: res.styles,
                     copyStyles: false
                 }).Print();
+                this.setState(() => ({ fetching: false }));
             });
     }
 }

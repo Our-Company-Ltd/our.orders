@@ -6,6 +6,7 @@ namespace our.orders.Models
 {
     public class Price
     {
+        public string Id { get; set; }
         public string Currency { get; set; }
 
         public decimal Value { get; set; }
