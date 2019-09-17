@@ -175,7 +175,7 @@ namespace our.orders.Controllers
                     PrettyUnitPrice = sample.PrettyUnitPrice,
                     PrettyTotalPrice = (sample.UnitPrice * quantity).ToString("0.00", CultureInfo.InvariantCulture),
                     Sku = sample.SKU,
-                    OptionTitle = string.IsNullOrEmpty(sample.Option?.Value) ? 
+                    OptionTitle = string.IsNullOrEmpty(sample.Option?.Value) ?
                         string.IsNullOrEmpty(sample.Option?.Title) ? "No information" : sample.Option?.Title :
                         sample.Option.Value
                 };
@@ -193,7 +193,7 @@ namespace our.orders.Controllers
                     PrettyTotalPrice = (item.UnitPrice * item.Quantity).ToString("0.00", CultureInfo.InvariantCulture),
                     Sku = item.SKU,
                     // OptionTitle = item?.Option?.Value ?? item?.Option?.Title ?? "No information"
-                    OptionTitle = string.IsNullOrEmpty(item.Option?.Value) ? 
+                    OptionTitle = string.IsNullOrEmpty(item.Option?.Value) ?
                         string.IsNullOrEmpty(item.Option?.Title) ? "No information" : item.Option?.Title :
                         item.Option.Value
                 };
@@ -451,8 +451,11 @@ namespace our.orders.Controllers
             public string Title { get; set; }
             public string Supplier { get; set; }
             public int Stock { get; set; }
-            public string SellingPrice { get; set; }
-            public string PurchasePrice { get; set; }
+            public IEnumerable<string> Categories { get; set; }
+            public decimal SellingPrice { get; set; }
+            public decimal PurchasePrice { get; set; }
+            public string PrettySellingPrice { get; set; }
+            public string PrettyPurchasePrice { get; set; }
             public decimal Total { get; set; }
             public string PrettyTotal { get; set; }
         };
@@ -475,11 +478,14 @@ namespace our.orders.Controllers
                         Title = productMatchingStockUnit.Title ?? "",
                         SKU = sku,
                         Stock = stockUnit.Units[warehouseId],
+                        Categories = productMatchingStockUnit.Categories,
                         Supplier = productMatchingStockUnit.Supplier ?? "No supplier was added",
-                        SellingPrice = (sellingPrice?.Value ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
-                        PurchasePrice = (purchasePrice?.Value ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
-                        Total = (purchasePrice?.Value ?? 0) * stockUnit.Units[warehouseId],
-                        PrettyTotal = (purchasePrice?.Value ?? 0 * stockUnit.Units[warehouseId]).ToString("0.00", CultureInfo.InvariantCulture)
+                        SellingPrice = (sellingPrice?.Value ?? 0),
+                        PurchasePrice = (purchasePrice?.Value ?? 0),
+                        PrettySellingPrice = (sellingPrice?.Value ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                        PrettyPurchasePrice = (purchasePrice?.Value ?? 0).ToString("0.00", CultureInfo.InvariantCulture),
+                        Total = stockUnit.Units[warehouseId] >= 0 ? (purchasePrice?.Value ?? 0) * stockUnit.Units[warehouseId] : 0,
+                        PrettyTotal = ((purchasePrice?.Value ?? 0) * stockUnit.Units[warehouseId]).ToString("0.00", CultureInfo.InvariantCulture)
                     };
                 }
             }
@@ -491,6 +497,8 @@ namespace our.orders.Controllers
           [FromServices]IService<DocumentTemplate> templateService,
           [FromServices]IService<StockUnit> stocksService,
           [FromServices]IService<IProduct> productService,
+          [FromServices]IService<Category> categoryService,
+          [FromServices]IService<Warehouse> warehouseService,
           [FromRoute]string templateId,
           [FromRoute]string id,
           [FromRoute]int min,
@@ -517,21 +525,58 @@ namespace our.orders.Controllers
                 stockUnits = stockUnits.Where(v => v.Units[id] >= min);
             }
 
-            var stockUnitsOrdered = stockUnits.OrderByDescending(s => s.Units[id]);
-
             // all product
             var allProducts = await productService.FindAsync(cancellationToken: cancellationToken);
 
-            var stockToExport = _StockToExport(stockUnitsOrdered, allProducts, id);
+            var stockToExport = _StockToExport(stockUnits, allProducts, id);
 
             var bigTotal = stockToExport.Sum(s => s.Total).ToString("0.00", CultureInfo.InvariantCulture);
+
+            //Create categories
+            var categories = (await categoryService.FindAsync(cancellationToken: cancellationToken)).ToArray();
+
+            var productsPerCategory =
+                categories.ToDictionary(
+                    c => c,
+                    c => stockToExport.Where(
+                        p => p.Categories != null && p.Categories.Contains(c.Id))
+                    .OrderByDescending(s => s.SKU)
+                    .ToArray());
+
+            var categoriesToDisplay = productsPerCategory.Where(kvp => kvp.Value.Any()).Select(kvp => new
+            {
+                title = kvp.Key.Title,
+                products = kvp.Value,
+                catTotal = kvp.Value.Sum(i => i.Total)
+            });
+
+            var itemsWithNoCategory = new Dictionary<string, StocksBinding[]>();
+            itemsWithNoCategory.Add("No category", stockToExport.Where(i => i.Categories == null || i.Categories.Count() == 0).ToArray());
+
+            var noCategoriesToDisplay = itemsWithNoCategory.Where(kvp => kvp.Value.Any()).Select(kvp => new
+            {
+                title = kvp.Key,
+                products = kvp.Value,
+                catTotal = kvp.Value.Sum(i => i.Total)
+            });
+
+            var dislpayALL = categoriesToDisplay.ToArray().Concat(noCategoriesToDisplay.ToArray());
 
             var template = await templateService.GetByIdAsync(templateId, cancellationToken);
             var compiled = Handlebars.Compile(template.Template);
 
             var today = DateTime.UtcNow.ToString("dd.MM.yyyy");
 
-            var html = compiled(new { currentDate = today, stocks = stockToExport.ToArray(), Total = bigTotal});
+            var warehouse = await warehouseService.GetByIdAsync(id, cancellationToken);
+
+            var html = compiled(
+                new
+                {
+                    currentDate = today,
+                    categories = dislpayALL.ToArray(),
+                    Warehouse = warehouse.Name,
+                    Total = bigTotal
+                });
 
             return Ok(ApiModel.AsSuccess(new { html = html, styles = template.Styles }));
         }

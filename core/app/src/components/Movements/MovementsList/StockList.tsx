@@ -16,7 +16,7 @@ import { Movement, Cashbox } from 'src/@types/our-orders';
 import Fabs, { FabBtnProps } from 'src/components/Fabs/Fabs';
 
 import {
-    Cached, Print
+    Print
 } from '@material-ui/icons';
 
 import {
@@ -227,11 +227,7 @@ class StockList extends React.Component<StockListProps, State> {
                 </Dialog>
                 <Fabs
                     map={
-                        [loading ? {
-                            icon: <Cached />,
-                            legend: 'loading',
-                            themeColor: 'gray'
-                        } : ordersTemplatesBtn]
+                        [loading ? 'loading' : ordersTemplatesBtn]
                     }
                 />
             </GridContainer>);

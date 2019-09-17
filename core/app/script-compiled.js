@@ -14550,11 +14550,7 @@ function (_React$Component) {
         color: "default",
         onClick: this._handelClose
       }, "Close"))), React.createElement(_Fabs.default, {
-        map: [loading ? {
-          icon: React.createElement(_icons.Cached, null),
-          legend: 'loading',
-          themeColor: 'gray'
-        } : ordersTemplatesBtn]
+        map: [loading ? 'loading' : ordersTemplatesBtn]
       }));
     }
   }, {
@@ -14698,6 +14694,8 @@ function (_React$Component) {
   }, {
     key: "_printOrders",
     value: function _printOrders(templateId) {
+      var _this7 = this;
+
       var _this$props4 = this.props,
           id = _this$props4.id,
           min = _this$props4.min,
@@ -14713,6 +14711,11 @@ function (_React$Component) {
         filters: filters,
         operator: 'and'
       };
+      this.setState(function () {
+        return {
+          fetching: true
+        };
+      });
 
       _services.DocumentTemplates.Stocks(id, filterDef, min === undefined ? -1 : min, max === undefined ? -1 : max, templateId).then(function (res) {
         new _print.Printer({
@@ -14727,6 +14730,12 @@ function (_React$Component) {
           cssStyles: res.styles,
           copyStyles: false
         }).Print();
+
+        _this7.setState(function () {
+          return {
+            fetching: false
+          };
+        });
       });
     }
   }]);
