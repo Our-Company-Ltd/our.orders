@@ -165,6 +165,27 @@ namespace our.orders.Payments.PostFinance
 
                         return order;
                     }
+                    
+                case '9':
+                    // payment requested 
+                    {
+                        var payment = new Payment()
+                        {
+                            Title = "PostFinance Payment",
+                            Provider = Name,
+                            Reference = $"{response.PaymentID}",
+                            Status = PaymentStatus.Paid,
+                            Date = DateTime.UtcNow,
+                            Method = PaymentMethod.Electronic,
+                            Details = $"Payment Order #{order.Reference ?? order.Id} (requested)",
+                            Currency = order.Currency,
+                            Amount = bindings.Amount
+                        };
+
+                        await orderService.AddPayment(order, payment, cancellationToken);
+
+                        return order;
+                    }
 
                 default:
                     // error
