@@ -17,6 +17,8 @@ import { Filter } from 'src/_helpers/Filter';
 import { FilterDefinition } from 'src/_types/FilterDefinition';
 import { IsAdminOrInRole } from 'src/_helpers/roles';
 import { InjectedAuthProps } from 'src/_context';
+import { Button } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 
 export type StockProps = InjectedSettingsProps & InjectedWarehouseProps & InjectedAuthProps & {
 
@@ -24,7 +26,7 @@ export type StockProps = InjectedSettingsProps & InjectedWarehouseProps & Inject
 };
 type State = {
     loading: boolean;
-    units: { [sku: string]: StockUnit | undefined };
+    units: { [sku: string]: StockUnit | undefined }[];
     page: number;
 };
 
@@ -32,9 +34,10 @@ export class Stock extends React.Component<StockProps, State> {
     constructor(props: StockProps) {
         super(props);
         this._onChange = this._onChange.bind(this);
+        this._onDelete = this._onDelete.bind(this);
         this._handleChangePage = this._handleChangePage.bind(this);
-        const units: { [sku: string]: StockUnit | undefined } = {};
-        props.skus.forEach(sku => units[sku.sku] = undefined);
+        const units: { [sku: string]: StockUnit | undefined }[] = [];
+        props.skus.forEach(sku => units.push({ [sku.sku]: undefined }));
         this.state = {
             loading: false,
             units: units,
@@ -46,14 +49,14 @@ export class Stock extends React.Component<StockProps, State> {
         this._fetch();
     }
     render() {
-        const { warehouseCtx, skus, authCtx: {user} } = this.props;
+        const { warehouseCtx, skus, authCtx: { user } } = this.props;
         const { units, page } = this.state;
 
-        const rowCount = Object.keys(units).length;
+        const rowCount = units.length;
         const rowsPerPage = 10;
 
         const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
-        
+
         return (
             <React.Fragment>
                 <Table aria-labelledby="tableTitle">
@@ -76,6 +79,9 @@ export class Stock extends React.Component<StockProps, State> {
                                     </TableCell>
                                 );
                             })}
+                            <TableCell>
+                                delete
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -83,11 +89,12 @@ export class Stock extends React.Component<StockProps, State> {
                             .filter((sku, i) => i >= page * rowsPerPage && i < (page + 1) * rowsPerPage)
                             .map(sku => {
                                 const title = sku.legend || sku.sku;
-                                const unit = units[sku.sku] ||
-                                    { Id: '', Name: '', SKU: sku.sku, Units: {}, Detail: '' } as StockUnit;
-                                const { SKU } = unit;
-                                return (
-                                    <TableRow
+                                return units.map(u => {
+                                    const unit = u[sku.sku] ||
+                                        { Id: '', Name: '', SKU: sku.sku, Units: {}, Detail: '' } as StockUnit;
+                                    const { SKU } = unit;
+
+                                    return (<TableRow
                                         hover={true}
                                         role="checkbox"
                                         tabIndex={-1}
@@ -116,8 +123,15 @@ export class Stock extends React.Component<StockProps, State> {
                                                     />
                                                 </TableCell>
                                             );
+
                                         })}
+                                        <TableCell>
+                                            <Button onClick={() => this._onDelete(unit)}>
+                                                <Delete />
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>);
+                                });
                             }
                             )}
 
@@ -142,7 +156,7 @@ export class Stock extends React.Component<StockProps, State> {
 
     private _fetch() {
         const { skus } = this.props;
-        const { loading, units } = this.state;
+        const { loading } = this.state;
         if (loading) {
             return;
         }
@@ -152,8 +166,10 @@ export class Stock extends React.Component<StockProps, State> {
         this.setState(() => ({ loading: true }), () => {
             StockUnits.Find(def, 0, 999999)
                 .then(result => {
-                    result.Values.forEach(v => units[v.SKU] = v);
-                    this.setState(() => ({ units, loading: false }));
+                    const newUnits = result.Values.map(v => ({ [v.SKU]: v }));
+                    if (newUnits.length > 0) {
+                        this.setState(() => ({ units: newUnits, loading: false }));
+                    }
                 });
         });
 
@@ -174,6 +190,23 @@ export class Stock extends React.Component<StockProps, State> {
                     this.setState((prev) => ({ loading: false, units: { ...prev.units, [sku]: newUnit } }));
                 });
             }
+        });
+
+    }
+
+    private _onDelete(unit: StockUnit) {
+        const { units } = this.state;
+        var confirm = window.confirm('Do you want to continue ?');
+
+        this.setState(() => ({ loading: true }), () => {
+
+            if (confirm) {
+                StockUnits.Delete(unit.Id).then(() => {
+                    const updatedUnits = units.filter(u => u[unit.SKU] !== unit);
+                    this.setState((prev) => ({ loading: false, units: updatedUnits }));
+                });
+            }
+
         });
 
     }
