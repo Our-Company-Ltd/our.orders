@@ -33894,6 +33894,217 @@ function (_React$Component) {
 var _default = React.memo((0, _styles.withStyles)(SideDialogStyles)(SideDialog));
 
 exports.default = _default;
+// import { Button } from '@material-ui/core';
+// import Table from '@material-ui/core/Table';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import TableHead from '@material-ui/core/TableHead';
+// import TablePagination from '@material-ui/core/TablePagination';
+// import TableRow from '@material-ui/core/TableRow';
+// import TextField from '@material-ui/core/TextField';
+// import { Delete } from '@material-ui/icons';
+// import * as React from 'react';
+// import { StockUnit } from 'src/@types/our-orders';
+// import { InjectedAuthProps } from 'src/_context';
+// import { Filter } from 'src/_helpers/Filter';
+// import { IsAdminOrInRole } from 'src/_helpers/roles';
+// import { FilterDefinition } from 'src/_types/FilterDefinition';
+// import { InjectedSettingsProps } from '../../_context/Settings';
+// import { InjectedWarehouseProps } from '../../_context/Warehouse';
+// import { StockUnits } from '../../_services';
+// export type StockProps = InjectedSettingsProps & InjectedWarehouseProps & InjectedAuthProps & {
+//     skus: { sku: string; legend: string }[];
+// };
+// type State = {
+//     loading: boolean;
+//     units: StockUnit[];
+//     page: number;
+// };
+// export class Stock extends React.Component<StockProps, State> {
+//     constructor(props: StockProps) {
+//         super(props);
+//         this._onChange = this._onChange.bind(this);
+//         this._onDelete = this._onDelete.bind(this);
+//         this._handleChangePage = this._handleChangePage.bind(this);
+//         const units = this.props.skus.map(s =>
+//             ({ SKU: s.sku, Units: {}, Detail: '' } as StockUnit));
+//         this.state = {
+//             loading: false,
+//             units: units,
+//             page: 0
+//         };
+//     }
+//     componentDidMount() {
+//         this._fetch();
+//     }
+//     render() {
+//         const { warehouseCtx, skus, authCtx: { user } } = this.props;
+//         const { units, page } = this.state;
+//         const rowCount = units.length;
+//         const rowsPerPage = 10;
+//         const hasRights = IsAdminOrInRole(user, 'CRUD_PRODUCTS');
+//         return (
+//             <React.Fragment>
+//                 <Table aria-labelledby="tableTitle">
+//                     <TableHead>
+//                         <TableRow>
+//                             <TableCell numeric={false}>Product name</TableCell>
+//                             {warehouseCtx.Warehouses.map((s, i) => {
+//                                 return (
+//                                     <TableCell
+//                                         key={s.Id}
+//                                         numeric={true}
+//                                     >
+//                                         {s.Name}
+//                                     </TableCell>
+//                                 );
+//                             })}
+//                             <TableCell>
+//                                 delete
+//                             </TableCell>
+//                         </TableRow>
+//                     </TableHead>
+//                     <TableBody>
+//                         {
+//                             skus
+//                                 .filter((sku, i) => i >= page * rowsPerPage && i < (page + 1) * rowsPerPage)
+//                                 .map(sku => {
+//                                     const title = sku.legend || sku.sku;
+//                                     const mappedUnits = units.filter(u => u.SKU === sku.sku);
+//                                     return mappedUnits.map(unit => {
+//                                         const { SKU } = unit;
+//                                         return (<TableRow
+//                                             hover={true}
+//                                             role="checkbox"
+//                                             tabIndex={-1}
+//                                             key={SKU}
+//                                         >
+//                                             <TableCell component="th" scope="row" padding="none">
+//                                                 {title}
+//                                             </TableCell>
+//                                             {warehouseCtx.Warehouses.map((s) => {
+//                                                 var c = unit.Units && unit.Units[s.Id];
+//                                                 return (
+//                                                     <TableCell
+//                                                         key={s.Id}
+//                                                         numeric={true}
+//                                                     >
+//                                                         <TextField
+//                                                             value={c === null ? '' : c}
+//                                                             type="number"
+//                                                             fullWidth={true}
+//                                                             disabled={!hasRights}
+//                                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+//                                                                 var val = e.target.value;
+//                                                                 var stock = val === '' ? null : parseInt(val, 10);
+//                                                                 this._onChange(unit, SKU, s.Id, stock);
+//                                                             }}
+//                                                         />
+//                                                     </TableCell>
+//                                                 );
+//                                             })}
+//                                             <TableCell>
+//                                                 <Button onClick={() => this._onDelete(unit)}>
+//                                                     <Delete />
+//                                                 </Button>
+//                                             </TableCell>
+//                                         </TableRow>);
+//                                     });
+//                                 })
+//                         }
+//                     </TableBody>
+//                 </Table>
+//                 {rowCount > rowsPerPage && <TablePagination
+//                     component="div"
+//                     count={rowCount}
+//                     rowsPerPage={rowsPerPage}
+//                     rowsPerPageOptions={[]}
+//                     page={page}
+//                     backIconButtonProps={{
+//                         'aria-label': 'Previous Page',
+//                     }}
+//                     nextIconButtonProps={{
+//                         'aria-label': 'Next Page',
+//                     }}
+//                     onChangePage={this._handleChangePage}
+//                 />}
+//             </React.Fragment>);
+//     }
+//     private _fetch() {
+//         const { skus } = this.props;
+//         const { loading } = this.state;
+//         if (loading) {
+//             return;
+//         }
+//         const filters = skus.map(sku => Filter.Eq('SKU', sku.sku));
+//         const def: FilterDefinition = { filters, operator: 'or', query: '', sort: '' };
+//         // TODO: infinte scroll or get them all;
+//         this.setState(() => ({ loading: true }), async () => {
+//             const stockResult = await StockUnits.Find(def, 0, 999999);
+//             if (stockResult.Values.length <= 0) {
+//                 return;
+//             }
+//             this.setState((prev) => {
+//                 const mergedUnits = prev.units;
+//                 for (var i = 0, l = mergedUnits.length; i < l; i++) {
+//                     for (var j = 0, ll = stockResult.Values.length; j < ll; j++) {
+//                         if (mergedUnits[i].SKU === stockResult.Values[j].SKU && !mergedUnits[i].Id) {
+//                             mergedUnits.splice(i, 1, stockResult.Values[j]);
+//                             break;
+//                         } else {
+//                             mergedUnits.push(stockResult.Values[j]);
+//                         }
+//                     }
+//                 }
+//                 return { loading: false, units: [...mergedUnits] };
+//             });
+//         });
+//     }
+//     private _onChange(unit: StockUnit, sku: string, shopId: string, value: number | null) {
+//         const { units } = this.state;
+//         const oldUnitObj = units.find(u => u.SKU === unit.SKU);
+//         const old = oldUnitObj ? oldUnitObj : { SKU: sku, Units: {} } as StockUnit;
+//         old.Units[shopId] = value || 0;
+//         this.setState(() => ({ loading: true }), () => {
+//             if (old.Id) {
+//                 StockUnits.Patch(old.Id, old).then((newUnit) => {
+//                     this.setState((prev) => {
+//                         const newUnits = [...prev.units.filter(u => u.Id !== newUnit.Id), newUnit];
+//                         // tslint:disable-next-line:no-console
+//                         console.log(newUnits);
+//                         return { loading: false, units: newUnits };
+//                     });
+//                 });
+//             } else {
+//                 StockUnits.Create(old).then((newUnit) => {
+//                     this.setState((prev) => {
+//                         const newUnits = [...prev.units.filter(u => u.SKU !== newUnit.SKU), newUnit];
+//                         // tslint:disable-next-line:no-console
+//                         console.log(newUnits);
+//                         return { loading: false, units: newUnits };
+//                     });
+//                 });
+//             }
+//         });
+//     }
+//     private _onDelete(unit: StockUnit) {
+//         const { units } = this.state;
+//         var confirm = window.confirm('Do you want to continue ?');
+//         this.setState(() => ({ loading: true }), () => {
+//             if (confirm) {
+//                 StockUnits.Delete(unit.Id).then(() => {
+//                     const updatedUnits = units.filter(u => u.Id !== unit.Id);
+//                     this.setState((prev) => ({ loading: false, units: updatedUnits }));
+//                 });
+//             }
+//         });
+//     }
+//     private _handleChangePage(event: React.MouseEvent<HTMLButtonElement> | null, page: number) {
+//         this.setState({ page });
+//     }
+// }
+// export default Stock;
+"use strict";
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -33927,15 +34138,21 @@ var _core = require("@material-ui/core");
 
 var _icons = require("@material-ui/icons");
 
+var _throttleDebounce = require("throttle-debounce");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -33964,12 +34181,15 @@ function (_React$Component) {
     _classCallCheck(this, Stock);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Stock).call(this, props));
-    _this._onChange = _this._onChange.bind(_assertThisInitialized(_this));
+    _this._onChange = (0, _throttleDebounce.debounce)(300, _this._onChange);
     _this._onDelete = _this._onDelete.bind(_assertThisInitialized(_this));
     _this._handleChangePage = _this._handleChangePage.bind(_assertThisInitialized(_this));
     var units = [];
     props.skus.forEach(function (sku) {
-      return units.push(_defineProperty({}, sku.sku, undefined));
+      return units.push({
+        Units: {},
+        SKU: sku.sku
+      });
     });
     _this.state = {
       loading: false,
@@ -34009,51 +34229,45 @@ function (_React$Component) {
           key: s.Id,
           numeric: true
         }, s.Name);
-      }), React.createElement(_TableCell.default, null, "delete"))), React.createElement(_TableBody.default, null, skus.filter(function (sku, i) {
+      }), React.createElement(_TableCell.default, null, "delete"))), React.createElement(_TableBody.default, null, units.filter(function (unit, i) {
         return i >= page * rowsPerPage && i < (page + 1) * rowsPerPage;
-      }).map(function (sku) {
-        var title = sku.legend || sku.sku;
-        return units.map(function (u) {
-          var unit = u[sku.sku] || {
-            Id: '',
-            Name: '',
-            SKU: sku.sku,
-            Units: {},
-            Detail: ''
-          };
-          var SKU = unit.SKU;
-          return React.createElement(_TableRow.default, {
-            hover: true,
-            role: "checkbox",
-            tabIndex: -1,
-            key: SKU
-          }, React.createElement(_TableCell.default, {
-            component: "th",
-            scope: "row",
-            padding: "none"
-          }, title), warehouseCtx.Warehouses.map(function (s) {
-            var c = unit.Units && unit.Units[s.Id];
-            return React.createElement(_TableCell.default, {
-              key: s.Id,
-              numeric: true
-            }, React.createElement(_TextField.default, {
-              value: c === null ? '' : c,
-              type: "number",
-              fullWidth: true,
-              disabled: !hasRights,
-              onChange: function onChange(e) {
-                var val = e.target.value;
-                var stock = val === '' ? null : parseInt(val, 10);
-
-                _this2._onChange(SKU, s.Id, stock);
-              }
-            }));
-          }), React.createElement(_TableCell.default, null, React.createElement(_core.Button, {
-            onClick: function onClick() {
-              return _this2._onDelete(unit);
-            }
-          }, React.createElement(_icons.Delete, null))));
+      }).map(function (unit) {
+        var l = skus.find(function (s) {
+          return s.sku === unit.SKU;
         });
+        var title = l && l.legend || l && l.sku;
+        var SKU = unit.SKU;
+        return React.createElement(_TableRow.default, {
+          hover: true,
+          role: "checkbox",
+          tabIndex: -1,
+          key: SKU
+        }, React.createElement(_TableCell.default, {
+          component: "th",
+          scope: "row",
+          padding: "none"
+        }, title), warehouseCtx.Warehouses.map(function (s) {
+          var c = unit.Units && unit.Units[s.Id];
+          return React.createElement(_TableCell.default, {
+            key: s.Id,
+            numeric: true
+          }, React.createElement(_TextField.default, {
+            value: c === null ? '' : c,
+            type: "number",
+            fullWidth: true,
+            disabled: !hasRights,
+            onChange: function onChange(e) {
+              var val = e.target.value;
+              var stock = val === '' ? null : parseInt(val, 10);
+
+              _this2._onChange(unit, s.Id, stock);
+            }
+          }));
+        }), React.createElement(_TableCell.default, null, React.createElement(_core.Button, {
+          onClick: function onClick() {
+            return _this2._onDelete(unit);
+          }
+        }, React.createElement(_icons.Delete, null))));
       }))), rowCount > rowsPerPage && React.createElement(_TablePagination.default, {
         component: "div",
         count: rowCount,
@@ -34097,31 +34311,50 @@ function (_React$Component) {
         };
       }, function () {
         _services.StockUnits.Find(def, 0, 999999).then(function (result) {
-          var newUnits = result.Values.map(function (v) {
-            return _defineProperty({}, v.SKU, v);
-          });
+          _this3.setState(function (prev) {
+            var newUnits = [];
 
-          if (newUnits.length > 0) {
-            _this3.setState(function () {
-              return {
-                units: newUnits,
-                loading: false
-              };
-            });
-          }
+            var _loop = function _loop(i) {
+              var unit = result.Values[i];
+              var similar = prev.units.findIndex(function (u) {
+                return u.SKU === unit.SKU;
+              });
+
+              if (similar >= 0) {
+                prev.units.splice(similar, 1);
+              }
+
+              newUnits.push(unit);
+            };
+
+            for (var i = 0; i < result.Values.length; i++) {
+              _loop(i);
+            }
+
+            return {
+              loading: false,
+              units: [].concat(_toConsumableArray(prev.units), newUnits)
+            };
+          });
         });
       });
     }
   }, {
     key: "_onChange",
-    value: function _onChange(sku, shopId, value) {
+    value: function _onChange(unit, shopId, value) {
       var _this4 = this;
 
       var units = this.state.units;
-      var old = units[sku] || {
-        SKU: sku,
-        Units: {}
-      };
+      var old = units.find(function (u) {
+        return u === unit;
+      });
+
+      if (!old) {
+        // tslint:disable-next-line:no-console
+        console.error('problem finding unit');
+        return;
+      }
+
       old.Units[shopId] = value || 0;
       this.setState(function () {
         return {
@@ -34131,18 +34364,20 @@ function (_React$Component) {
         if (old.Id) {
           _services.StockUnits.Patch(old.Id, old).then(function (newUnit) {
             _this4.setState(function (prev) {
+              prev.units.splice(prev.units.indexOf(old), 1, newUnit);
               return {
                 loading: false,
-                units: _objectSpread({}, prev.units, _defineProperty({}, sku, newUnit))
+                units: _toConsumableArray(prev.units)
               };
             });
           });
         } else {
           _services.StockUnits.Create(old).then(function (newUnit) {
             _this4.setState(function (prev) {
+              prev.units.splice(prev.units.indexOf(old), 1, newUnit);
               return {
                 loading: false,
-                units: _objectSpread({}, prev.units, _defineProperty({}, sku, newUnit))
+                units: _toConsumableArray(prev.units)
               };
             });
           });
@@ -34161,18 +34396,32 @@ function (_React$Component) {
           loading: true
         };
       }, function () {
-        if (confirm) {
+        if (confirm && unit.Id) {
           _services.StockUnits.Delete(unit.Id).then(function () {
             var updatedUnits = units.filter(function (u) {
-              return u[unit.SKU] !== unit;
+              return u !== unit;
             });
 
-            _this5.setState(function (prev) {
+            _this5.setState(function () {
               return {
                 loading: false,
                 units: updatedUnits
               };
             });
+          });
+        } // to be explicit
+
+
+        if (confirm && !unit.Id) {
+          var updatedUnits = units.filter(function (u) {
+            return u !== unit;
+          });
+
+          _this5.setState(function () {
+            return {
+              loading: false,
+              units: updatedUnits
+            };
           });
         }
       });
